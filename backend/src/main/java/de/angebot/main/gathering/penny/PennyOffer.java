@@ -129,5 +129,9 @@ public class PennyOffer implements Gathering {
     }
 
 
+    @Override
+    public String getDiscountName() {
+        return "Penny";
+    }
 }
 
