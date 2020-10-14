@@ -11,7 +11,4 @@ export class HomeComponent {
   constructor(private router: Router) {
   }
 
-  goToPostPage() {
-    this.router.navigate(['/posts']);
-  }
 }

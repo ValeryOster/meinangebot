@@ -80,6 +80,8 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.6.RELEASE" />
           <element id="library" level="project" name="Maven: org.junit.platform:junit-platform-commons:1.5.2" />
           <element id="library" level="project" name="Maven: org.apiguardian:apiguardian-api:1.1.0" />
+          <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-inject-bean:1.4.2" />
+          <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-guice:noaop:2.1.7" />
         </element>
       </element>
       <element id="directory" name="META-INF">

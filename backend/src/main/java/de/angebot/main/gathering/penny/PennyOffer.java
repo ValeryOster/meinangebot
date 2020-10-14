@@ -12,7 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,19 +27,19 @@ import java.util.stream.Collectors;
 @Log
 @Setter
 @Component
-@ConfigurationProperties(prefix = "penny")
+@Configuration
 public class PennyOffer implements Gathering {
     @Value("${penny.montag}")
-    private String montag;
+    private String montag="angebotszeitraum-ab-montag";
 
     @Value("${penny.donnerstag}")
-    private String donnerstag;
+    private String donnerstag="angebotszeitraum-ab-donnerstag";
 
     @Value("${penny.freitag}")
-    private String freitag;
+    private String freitag="angebotszeitraum-ab-freitag";
 
     @Value("${penny.mainUrl}")
-    private String mainUrl;
+    private String mainUrl="https://www.penny.de";
 
     @Autowired
     private PennyRepo pennyRepo;
@@ -63,40 +63,38 @@ public class PennyOffer implements Gathering {
 
             Document offer = getDocument(mainUrl + angebot);
             String price = offer.select("div.bubble__wrap-inner>span").text();
-//            String origPrice = offer.select("div.bubble__small-value>span").text();
             String origPrice = offer.select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > div > div > div > span")
-                    .text()
-                    .replaceAll("[a-zA-Z]", "").trim();
-//            If star, facke offer, go to next
-            if (price.isEmpty() || price.contains("*")) {
-                return;
-            }
+                    .text().replaceAll("[a-zA-Z]", "").trim();
+
+//          If star, facke offer, go to next
+            if (price.isEmpty() || price.contains("*")) { return; }
 
             String offerName = offer.select("h1.detail-block__hdln")
                     .first()
                     .html()
                     .replace("*", "");
-            System.out.println(offerName + ", "+ price+" , orig = " +(origPrice.isEmpty() ? "0":origPrice));
             List<String> strings = Utils.splittToNameOrMaker(offerName);
-            String imagLink = offer.select("div.detail-block__carousel-slide>img")
-                    .attr("src");
-            if (imagLink == null || imagLink.isEmpty()) {
-                Elements select = offer.select("#offer-image-slide-0>img");
-                imagLink = select
-                        .attr("src");
-            }
+
+            //Look for a image link
+            String imagLink = getImageLink(offer);
+
             penny.setImageLink(Utils.downloadImage(imagLink,"penny", endDate));
             penny.setProduktMaker(strings.get(0));
             penny.setProduktName(strings.get(1));
             penny.setProduktPrise(price);
             penny.setProduktRegularPrise(origPrice);
-//            System.out.println("Hersteller: " + penny.getProduktMaker() + ", Name:" + penny.getProduktName() + " - "
-//                    + penny.getProduktPrise() + " /nBild: " + penny.getImageLink());
-            
             
             pennyRepo.save(penny);
-            System.out.println("Gespeichert: " + penny.getProduktName());
+            System.out.println("Gespeichert: " + penny.getProduktName() + "--> "+penny.getImageLink());
         });
+    }
+
+    private String getImageLink(Document offer) {
+        Element select = offer.select("div.detail-block__carousel-slide>noscript>img").first();
+        if (select == null) {
+            select = offer.getElementById("offer-image-slide-0").select("img").first();
+        }
+        return select.attr("src");
     }
 
     //to get Date, neen to know date of week
@@ -127,7 +125,6 @@ public class PennyOffer implements Gathering {
         }
         return document;
     }
-
 
     @Override
     public String getDiscountName() {

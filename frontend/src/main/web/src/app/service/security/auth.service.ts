@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
 @Injectable({providedIn: 'root'})
-export class AuthService {
+export class AuthService{
   private isAuth = false;
   private url = 'http://localhost:8080/';
 
@@ -20,4 +20,5 @@ export class AuthService {
       }, 1000);
     });
   }
+
 }

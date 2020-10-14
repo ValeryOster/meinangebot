@@ -16,5 +16,9 @@ public class CommonGather {
     private LocalDate gatherDate;
 
     @ElementCollection
-    Map<String, Boolean> dicount;
+    Map<String, String> discount;
+
+    private Long duration;
+
+    private LocalDate expiryDate;
 }

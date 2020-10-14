@@ -17,13 +17,13 @@ export class Bewerbung {
 
 @Injectable({providedIn: 'root'})
 export class BwbService {
-  private url = 'http://localhost:8080/';
+  private url = 'http://localhost:8080/home';
 
   constructor(private http: HttpClient) {
   }
 
   getTitle(): Observable<string> {
-    return this.http.get<string>(this.url + 'home');
+    return this.http.get<string>(this.url + 'penny');
   }
 
 
