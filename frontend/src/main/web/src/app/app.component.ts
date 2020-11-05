@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {BwbService} from "./service/bwb.service";
 import {AuthService} from "./service/security/auth.service";
 export interface Post {
   title: string
@@ -14,13 +13,10 @@ export interface Post {
 export class AppComponent implements OnInit{
   title = 'Hier entsteht Seite mit Angeboten von allen Märkte';
 
-  constructor(public bwbService:BwbService, public auth:AuthService) {
+  constructor( public auth:AuthService) {
   }
 
   ngOnInit(): void {
-    this.bwbService.getTitle().subscribe(srv=>{
-      console.log(srv);
-    })
   }
 
 }

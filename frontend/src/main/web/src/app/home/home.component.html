@@ -1,5 +1,28 @@
-<h1>Home page</h1>
+
+
+<div class="container">
+  <h3>Aktiviere Checkbox um die entsprechende Angebotte zu bekommen</h3>
+  <div>
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label formArrayName="dicounters" *ngFor="let dicounter of ordersFormArray.controls;let i = index">
+        <input type="checkbox" [formControlName]="i" >
+        {{discounterBox[i].name}}
+      </label>
+      <button class="btn">Zeigen</button>
+    </form>
+  </div>
+
+  <br>
+
+  <label>Sortiere nach:</label>
+  <select id="selectvalue">
+    <option>Markt</option>
+    <option>Preis</option>
+    <option>Namen</option>
+  </select>
+  <hr>
+</div>
 
 <div>
-  <button class="btn">Go to Posts</button>
+  <app-offers></app-offers>
 </div>

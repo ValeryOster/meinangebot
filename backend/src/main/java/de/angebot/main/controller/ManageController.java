@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ManageController {
     }
 
     @GetMapping("/start")
-    public List<CommonGather> getAll() {
+    public List<CommonGather> getAll(MultipartFile file) {
         return gatherRepo.findAll();
     }
 }

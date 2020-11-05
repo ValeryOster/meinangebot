@@ -8,13 +8,14 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #fff;
+  background-color: #f5f5f5;
   color: #333;
 }
 .container {
   max-width: 1300px;
   margin: 0 auto;
   padding: 1rem;
+  background-color: #ffffff;
 }
 a {
   text-decoration: none;
@@ -49,7 +50,7 @@ img {
   opacity: 0.8;
 }
 .btn.btn-danger {
-  background: #dc3545;
+  background: #A3C4BC;
   color: #fff;
 }
 .form-control {
@@ -105,7 +106,7 @@ hr {
   width: 100%;
   opacity: 0.9;
   margin-bottom: 1rem;
-  background: #dc3545;
+  background: #45615c;
   color: #fff;
 }
 .navbar ul {

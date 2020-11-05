@@ -1,0 +1,24 @@
+select{
+  display: inline;
+  width: 30%;
+}
+label{
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  display: inline;
+  cursor: pointer;
+}
+input {
+  display: inline;
+  width: 2%;
+}
+
+.penny{
+  background: #fb3b49;
+}
+.lidl{
+ background: #0074D9;
+}

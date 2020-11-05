@@ -3,6 +3,8 @@ package de.angebot.main.utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.URL;
@@ -14,10 +16,16 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+@Component
 public class Utils {
 
-    private static final String IMAGE_DESTINATION_FOLDER = "C:/Users/Valera/IdeaProjects/angebote/src/main" +
-            "/resources/bilder";
+    private static String IMAGE_DESTINATION_FOLDER;
+
+    @Value("${main.bilder}")
+    public void setFoder(String folder) {
+        Utils.IMAGE_DESTINATION_FOLDER = folder;
+    }
+
 
     public static void saveHtmlToDisk(Document document) {
         final File f = new File("c:/Users/Valera/Desktop/Dokument.html");
@@ -33,9 +41,9 @@ public class Utils {
         StringBuilder maker = new StringBuilder();
         String[] myAr = mixed.split(" ");
 
-        for (int i = 0; i < myAr.length; i++) {
-            if (StringUtils.isAllUpperCase(myAr[i])) {
-                maker.append(" " + myAr[i]);
+        for (String s : myAr) {
+            if (StringUtils.isAllUpperCase(s)) {
+                maker.append(" " + s);
             } else {
                 name = mixed.substring(maker.length());
                 break;
@@ -58,17 +66,20 @@ public class Utils {
             byte[] buffer = new byte[4096];
             int n = -1;
 
-            String path = IMAGE_DESTINATION_FOLDER + "/" + storageName + "/" + endDate;
+            String path = IMAGE_DESTINATION_FOLDER + "\\" + storageName + "\\" + endDate;
             //Create Directory if not exists
-            String bild = Files.createDirectories(Paths.get(path)).toString() + "/" + strImageName;
-            OutputStream os = new FileOutputStream(bild);
+            String image = Files.createDirectories(Paths.get(path)).toString() + "\\" + strImageName;
+            OutputStream os = new FileOutputStream(image);
 
             //write bytes to the output stream
             while ((n = in.read(buffer)) != -1) {
                 os.write(buffer, 0, n);
             }
             os.close();
-            return path;
+
+            String pathDB = "/" + storageName + "/" + endDate + "/" + strImageName;
+
+            return pathDB;
         } catch (IOException e) {
             e.printStackTrace();
         }

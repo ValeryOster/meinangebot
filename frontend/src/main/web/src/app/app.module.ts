@@ -9,6 +9,7 @@ import {HomeComponent} from "./home/home.component";
 import {AboutComponent} from "./about/about.component";
 import { ManageComponent } from './manage/manage.component';
 import {AuthGuard} from "./service/security/auth.guard";
+import { OffersComponent } from './offers/offers.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import {AuthGuard} from "./service/security/auth.guard";
     AppComponent,
     HomeComponent,
     AboutComponent,
-    ManageComponent
+    ManageComponent,
+    OffersComponent
   ],
   imports: [
     BrowserModule,
