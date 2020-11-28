@@ -10,6 +10,10 @@ import {AboutComponent} from "./about/about.component";
 import { ManageComponent } from './manage/manage.component';
 import {AuthGuard} from "./service/security/auth.guard";
 import { OffersComponent } from './offers/offers.component';
+import { GatheringComponent } from './manage/gathering/gathering.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatCardModule} from "@angular/material/card";
 
 
 @NgModule({
@@ -18,14 +22,18 @@ import { OffersComponent } from './offers/offers.component';
     HomeComponent,
     AboutComponent,
     ManageComponent,
-    OffersComponent
+    OffersComponent,
+    GatheringComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatTabsModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

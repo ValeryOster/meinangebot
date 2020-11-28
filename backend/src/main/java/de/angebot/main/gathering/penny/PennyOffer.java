@@ -8,8 +8,10 @@ import de.angebot.main.utils.Utils;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Log
 @Setter
@@ -59,15 +62,20 @@ public class PennyOffer implements Gathering {
         angebotLinks.forEach(angebot -> {
             Penny penny = new Penny();
             penny.setVonDate(startDate);
-            LocalDate endDate = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+            LocalDate endDate = LocalDate.now()
+                    .with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
             penny.setBisDate(endDate);
 
-            Document offer = getDocument(mainUrl + angebot);
+            String url = mainUrl + angebot;
+            Document offer = getDocument(url);
             if (offer != null) {
-                String price = offer.select("div.bubble__wrap-inner>span").text();
+                String price = offer.select("div.bubble__wrap-inner>span")
+                        .text();
                 String origPrice = offer.select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " +
                         "div > div > div > span")
-                        .text().replaceAll("[a-zA-Z]", "").trim();
+                        .text()
+                        .replaceAll("[a-zA-Z]", "")
+                        .trim();
 
 //          If star, facke offer, go to next
                 if (price.isEmpty() || price.contains("*")) {
@@ -88,11 +96,48 @@ public class PennyOffer implements Gathering {
                 penny.setProduktName(strings.get(1));
                 penny.setProduktPrise(price);
                 penny.setProduktRegularPrise(origPrice);
+                penny.setKategorie(getCategory(offer));
+                penny.setUrl(url);
 
                 pennyRepo.save(penny);
-                System.out.println("Gespeichert: " + penny.getProduktName() + "--> " + penny.getImageLink());
+                System.out.println("Gespeichert: " + penny.getKategorie());
             }
         });
+    }
+
+    private String getCategory(Element weekdayOffer) {
+        Elements scriptElements = weekdayOffer.getElementsByTag("script");
+        String kategorie = "";
+        for (Element element : scriptElements) {
+            for (DataNode node : element.dataNodes()) {
+                String wholeData = node.getWholeData();
+                if (wholeData.contains("window.pageData.products")) {
+                    String category = wholeData.substring(wholeData.indexOf("category"));
+                    kategorie = category.substring(0, category.indexOf(','))
+                            .split(":")[1].replace("\"", "");
+                }
+            }
+        }
+        return textPrettyPrint(kategorie);
+    }
+
+    private String textPrettyPrint(String kategorie) {
+        List<String> konnektor = Stream.of("und", "fuer", "seit")
+                .collect(Collectors.toList());
+        StringBuilder prettyKategorie = new StringBuilder();
+        String[] split = kategorie.replaceAll("-", " ")
+                .split(" ");
+        for (String word : split) {
+            if (!konnektor.contains(word)) {
+                prettyKategorie.append(" " + word.substring(0, 1)
+                        .toUpperCase())
+                        .append(word.substring(1));
+            } else {
+                prettyKategorie.append(" " + word);
+            }
+        }
+        return prettyKategorie.toString()
+                .trim();
     }
 
     private String getImageLink(Document offer) {

@@ -23,6 +23,8 @@ public class Penny {
     private String imageLink;
     private LocalDate vonDate;
     private LocalDate bisDate;
+    private String kategorie;
+    private String url;
 
     @Transient
     @JsonProperty

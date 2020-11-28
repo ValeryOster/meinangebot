@@ -1,10 +1,13 @@
 package de.angebot.main.controller;
 
 
+import de.angebot.main.common.ItemsCategory;
 import de.angebot.main.enities.CommonGather;
+import de.angebot.main.enities.Penny;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.penny.PennyOffer;
 import de.angebot.main.repositories.CommonGatherRepo;
+import de.angebot.main.repositories.PennyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,9 @@ public class ManageController {
     @Autowired
     private CommonGatherRepo gatherRepo;
 
+    @Autowired
+    private PennyRepo pennyRepo;
+
     @GetMapping("/gather")
     public void startGathering() {
         mainGather.setGatherRepo(gatherRepo);
@@ -37,5 +43,10 @@ public class ManageController {
     @GetMapping("/start")
     public List<CommonGather> getAll(MultipartFile file) {
         return gatherRepo.findAll();
+    }
+
+    @GetMapping("/sortkategorie")
+    public List<Penny> getUnsortingKategorie() {
+        return pennyRepo.findAllNotDefaultCategorieName(ItemsCategory.getKategorieList());
     }
 }
