@@ -1,12 +1,14 @@
 package de.angebot.main.gathering.penny;
 
 import de.angebot.main.enities.Penny;
-import de.angebot.main.errors.ErrorMessenger;
+import de.angebot.main.enities.ProductMaker;
+import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.PennyRepo;
+import de.angebot.main.repositories.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.Setter;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
@@ -15,6 +17,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,26 +30,23 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Log
+@Slf4j
 @Setter
 @Component
 @Configuration
-public class PennyOffer implements Gathering {
-    @Value("${penny.montag}")
-    private String montag = "angebotszeitraum-ab-montag";
-
-    @Value("${penny.donnerstag}")
-    private String donnerstag = "angebotszeitraum-ab-donnerstag";
-
-    @Value("${penny.freitag}")
-    private String freitag = "angebotszeitraum-ab-freitag";
+public class PennyOffer implements Gathering, ErrorHandler {
 
     @Value("${penny.mainUrl}")
-    private String mainUrl = "https://www.penny.de";
+    private String mainUrl;
+
+    @Value("#{${map.of.penny.days}}")
+    Map<Integer, List<String>> mapOfDaysElement;
 
     @Autowired
     private PennyRepo pennyRepo;
-    private ErrorMessenger errorMessage = new ErrorMessenger();
+
+    @Autowired
+    private ProductMakerRepo productMakerRepo;
 
     @Override
     public void startGathering() {
@@ -57,7 +57,6 @@ public class PennyOffer implements Gathering {
     }
 
     private void saveOffers(LocalDate startDate, Element weekdayOffer) {
-
         List<String> angebotLinks = getOffersLinks(weekdayOffer);
         angebotLinks.forEach(angebot -> {
             Penny penny = new Penny();
@@ -69,8 +68,7 @@ public class PennyOffer implements Gathering {
             String url = mainUrl + angebot;
             Document offer = getDocument(url);
             if (offer != null) {
-                String price = offer.select("div.bubble__wrap-inner>span")
-                        .text();
+                String price = offer.select("div.bubble__wrap-inner>span").text();
                 String origPrice = offer.select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " +
                         "div > div > div > span")
                         .text()
@@ -87,12 +85,15 @@ public class PennyOffer implements Gathering {
                         .html()
                         .replace("*", "");
                 List<String> strings = Utils.splittToNameOrMaker(offerName);
+                String produktMaker = strings.get(0);
+                saveProduktMaker(produktMaker);
+
 
                 //Look for a image link
                 String imagLink = getImageLink(offer);
 
                 penny.setImageLink(Utils.downloadImage(imagLink, "penny", endDate));
-                penny.setProduktMaker(strings.get(0));
+                penny.setProduktMaker(produktMaker);
                 penny.setProduktName(strings.get(1));
                 penny.setProduktPrise(price);
                 penny.setProduktRegularPrise(origPrice);
@@ -103,6 +104,16 @@ public class PennyOffer implements Gathering {
                 System.out.println("Gespeichert: " + penny.getKategorie());
             }
         });
+    }
+
+    private void saveProduktMaker(String produktMaker) {
+        try {
+            ProductMaker maker = new ProductMaker();
+            maker.setMakerName(produktMaker);
+            productMakerRepo.save(maker);
+        } catch (DataIntegrityViolationException e) {
+            log.info("Der Hersteller: " + produktMaker + " ist in DB ");
+        }
     }
 
     private String getCategory(Element weekdayOffer) {
@@ -154,19 +165,33 @@ public class PennyOffer implements Gathering {
     //to get Date, neen to know date of week
     private Map<LocalDate, Element> getWeekParts(Document offer) {
         Map<LocalDate, Element> weekArray = new HashMap<>();
-        weekArray.put(Utils.getDate(2), offer.getElementById(montag));
-        weekArray.put(Utils.getDate(5), offer.getElementById(donnerstag));
-        weekArray.put(Utils.getDate(6), offer.getElementById(freitag));
+        mapOfDaysElement.forEach((Integer dayOfWeek, List<String> elementTags) ->{
+            for (String tag : elementTags) {
+                Element elementById = offer.getElementById(tag);
+                if (elementById != null) {
+                    weekArray.put(Utils.getDate(dayOfWeek), elementById);
+                    return;
+                }else {
+                    log.error("!!! ID: " + tag + " gibt es nicht !!!");
+                }
+            }
+        });
+
         return weekArray;
     }
 
-
     private List<String> getOffersLinks(Element document) {
-        return document.getElementsByClass("tile__link--cover ellipsis")
-                .stream()
-                .map(element -> element.attr("href"))
-                .filter(s -> s.contains("/angebote/"))
-                .collect(Collectors.toList());
+        Elements elementsByClass = document.getElementsByClass("tile__link--cover ellipsis");
+        if (!elementsByClass.isEmpty()) {
+            return elementsByClass
+                    .stream()
+                    .map(element -> element.attr("href"))
+                    .filter(s -> s.contains("/angebote/"))
+                    .collect(Collectors.toList());
+        }else {
+            log.error("Es wurde keine Angebote gefunden");
+            return null;
+        }
     }
 
     private Document getDocument(String url) {

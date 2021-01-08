@@ -10,8 +10,10 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -20,12 +22,6 @@ import java.util.List;
 public class Utils {
 
     private static String IMAGE_DESTINATION_FOLDER;
-
-    @Value("${main.bilder}")
-    public void setFoder(String folder) {
-        Utils.IMAGE_DESTINATION_FOLDER = folder;
-    }
-
 
     public static void saveHtmlToDisk(Document document) {
         final File f = new File("c:/Users/Valera/Desktop/Dokument.html");
@@ -68,7 +64,8 @@ public class Utils {
 
             String path = IMAGE_DESTINATION_FOLDER + "\\" + storageName + "\\" + endDate;
             //Create Directory if not exists
-            String image = Files.createDirectories(Paths.get(path)).toString() + "\\" + strImageName;
+            String image = Files.createDirectories(Paths.get(path))
+                    .toString() + "\\" + strImageName;
             OutputStream os = new FileOutputStream(image);
 
             //write bytes to the output stream
@@ -93,4 +90,22 @@ public class Utils {
                 .minusDays(today - var);
     }
 
+    public static LocalDate getLastMonday() {
+        return LocalDate.now(ZoneId.of("Europe/Paris"))
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+    }
+    public static LocalDate getNextMonday() {
+        return LocalDate.now(ZoneId.of("Europe/Paris"))
+                .with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+    }
+
+    public static LocalDate getNextSaturday() {
+        return LocalDate.now(ZoneId.of("Europe/Paris"))
+                .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+    }
+
+    @Value("${main.bilder}")
+    public void setFoder(String folder) {
+        Utils.IMAGE_DESTINATION_FOLDER = folder;
+    }
 }

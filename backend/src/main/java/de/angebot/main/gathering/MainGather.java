@@ -3,6 +3,7 @@ package de.angebot.main.gathering;
 import de.angebot.main.enities.CommonGather;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.CommonGatherRepo;
+import lombok.extern.java.Log;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Log
 @Component
 @Configuration
 public class MainGather {
@@ -27,6 +29,7 @@ public class MainGather {
             gatherList.forEach(Gathering::startGathering);
             long duration = System.currentTimeMillis() - start;
             saveGatheringReport(duration);
+            log.info("Gathering is done: " + LocalDate.now() + ", duration: " + duration);
         }
     }
 

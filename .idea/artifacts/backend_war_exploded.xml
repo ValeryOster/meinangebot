@@ -82,6 +82,8 @@
           <element id="library" level="project" name="Maven: org.apiguardian:apiguardian-api:1.1.0" />
           <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-inject-bean:1.4.2" />
           <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-guice:noaop:2.1.7" />
+          <element id="library" level="project" name="Maven: org.assertj:assertj-core:3.13.2" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:2.0.1.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">
