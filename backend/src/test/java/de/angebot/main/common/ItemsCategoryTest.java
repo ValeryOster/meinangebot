@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ItemsCategoryTest {
-    @Test
+//    @Test
     void getKategorie() {
         List<String> collect = Stream.of(ItemsCategory.values())
                 .map(ItemsCategory::getKategorie)
@@ -25,7 +25,7 @@ class ItemsCategoryTest {
         }
     }
 
-    @Test
+//    @Test
     void testAllINeed() {
         AtomicLong al = new AtomicLong();
         al.set(-1L);

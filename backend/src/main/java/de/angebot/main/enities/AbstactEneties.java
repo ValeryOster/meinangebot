@@ -4,8 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Entity
-@Inheritance
+@MappedSuperclass
 @Data
 public class AbstactEneties {
 

@@ -14,16 +14,16 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @ToString
-public class Lidl {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Lidl extends AbstactEneties{
 
     private String produktName;
     private String produktMaker;
     private String produktPrise;
     private String produktRegularPrise;
+
+    @Column(name = "produkt_description", columnDefinition = "LONGVARCHAR")
     private String produktDescription;
+
     private String imageLink;
     private LocalDate vonDate;
     private LocalDate bisDate;

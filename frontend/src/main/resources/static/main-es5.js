@@ -1374,7 +1374,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               });
 
               _this4.map.set(kategori, offers1);
-            }); // console.log(map);
+            });
           });
         }
       }]);
@@ -1766,6 +1766,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "getPenny",
         value: function getPenny() {
           var url = this.url + 'penny';
+          return this.http.get(url);
+        }
+      }, {
+        key: "getLidl",
+        value: function getLidl() {
+          var url = this.url + 'lidl';
           return this.http.get(url);
         }
       }]);

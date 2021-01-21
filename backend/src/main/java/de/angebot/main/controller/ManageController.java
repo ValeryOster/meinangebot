@@ -5,8 +5,10 @@ import de.angebot.main.common.ItemsCategory;
 import de.angebot.main.enities.CommonGather;
 import de.angebot.main.enities.Penny;
 import de.angebot.main.gathering.MainGather;
+import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
 import de.angebot.main.repositories.CommonGatherRepo;
+import de.angebot.main.repositories.LidlRepo;
 import de.angebot.main.repositories.PennyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,6 +30,9 @@ public class ManageController {
     private PennyOffer pennyOffer;
 
     @Autowired
+    private LidlOffer lidlOffer;
+
+    @Autowired
     private CommonGatherRepo gatherRepo;
 
     @Autowired
@@ -37,6 +42,7 @@ public class ManageController {
     public void startGathering() {
         mainGather.setGatherRepo(gatherRepo);
         mainGather.addToGatherList(pennyOffer);
+        mainGather.addToGatherList(lidlOffer);
         mainGather.startGather();
     }
 

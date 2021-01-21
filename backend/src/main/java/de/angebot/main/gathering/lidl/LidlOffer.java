@@ -13,8 +13,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,9 +45,8 @@ public class LidlOffer implements Gathering, ErrorHandler {
         kategorieList.addAll(getLidlKategorieList("angebote"));
         kategorieList.forEach(lidl -> {
             Document doc = getDocument(lidl.getUrl());
-            if (lidl.getUrl()
-                    .contains("frische")) {
-                //saveFrischeProducte(lidl, doc);
+            if (lidl.getUrl().contains("frische")) {
+                saveFrischeProducte(lidl, doc);
             } else {
                 saveOtherItems(lidl, doc);
             }
@@ -54,27 +55,64 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
     private void saveOtherItems(Lidl lidl, Document doc) {
         possibleMakers = productMakerRepo.findAll()
-                .stream().filter(productMaker -> productMaker.getValid())
+                .stream()
+                .filter(productMaker -> productMaker.getValid())
                 .map(ProductMaker::getMakerName)
                 .collect(Collectors.toList());
         List<String> allItemsUrl = getAllItemsUrl(doc);
         allItemsUrl.forEach(itemUrl -> {
             Document document = getDocument(itemUrl);
-            getItemName(document, lidl);
+
+            Lidl newItem = copyNewLidl(lidl);
+            getItemName(document, newItem);
             String description = getItemDescription(document);
             String prise = getItemPrise(document);
             String oldPrise = getItemOldPrise(document);
+            getImageUrl(document, newItem);
 
-            lidl.setProduktDescription(description);
-            lidl.setProduktPrise(prise);
-            lidl.setProduktRegularPrise(oldPrise);
-            lidl.setUrl(itemUrl);
+            newItem.setProduktDescription(description);
+            newItem.setProduktPrise(prise);
+            newItem.setProduktRegularPrise(oldPrise);
+            newItem.setUrl(itemUrl);
 
-            if (lidl.getProduktMaker().isEmpty()) {
-                System.out.println(lidl.getProduktName().toUpperCase() + "\n" + lidl.getUrl() + "\n");
+            try {
+                lidlRepo.save(newItem);
+                System.out.println(newItem.getProduktName() + " save");
+            } catch (DataIntegrityViolationException e) {
+                log.error(newItem.getUrl());
             }
         });
 
+    }
+
+    @NotNull
+    private Lidl copyNewLidl(Lidl lidl) {
+        Lidl newLidl = new Lidl();
+        newLidl.setBisDate(lidl.getBisDate());
+        newLidl.setDiscounterName(lidl.getDiscounterName());
+        newLidl.setKategorie(lidl.getKategorie());
+        newLidl.setImageLink(lidl.getImageLink());
+        newLidl.setProduktMaker(lidl.getProduktMaker());
+        newLidl.setProduktName(lidl.getProduktName());
+        newLidl.setProduktRegularPrise(lidl.getProduktRegularPrise());
+        newLidl.setProduktPrise(lidl.getProduktPrise());
+        newLidl.setProduktDescription(lidl.getProduktDescription());
+        newLidl.setUrl(lidl.getUrl());
+        newLidl.setVonDate(newLidl.getVonDate());
+
+        return newLidl;
+    }
+
+    private void getImageUrl(Document document, Lidl lidl) {
+        Elements select = document.getElementsByClass("carousel-product-detail");
+        if (!select.isEmpty()) {
+            String href = "https://www.lidl.de" + select.select("a")
+                    .first()
+                    .attr("href");
+            lidl.setImageLink(Utils.downloadImage(href, "lidl", Utils.getNextSaturday()));
+        } else {
+            log.error("Image is not founded " + lidl.getUrl());
+        }
     }
 
     private String getItemOldPrise(Document document) {
@@ -124,7 +162,8 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
     private String getMakerFromString(String descriptionName) {
         List<String> collect = possibleMakers.stream()
-                .filter(s -> descriptionName.toUpperCase().contains(s.toUpperCase()))
+                .filter(s -> descriptionName.toUpperCase()
+                        .contains(s.toUpperCase()))
                 .limit(1)
                 .collect(Collectors.toList());
         if (collect.size() > 0) {
@@ -225,19 +264,23 @@ public class LidlOffer implements Gathering, ErrorHandler {
         Elements elementsByClass = document.getElementsByClass("offerteaser__itemlink");
         for (Element el : elementsByClass) {
             Lidl lidl = new Lidl();
-            String offer = (mainUrl + el.attr("href"));
-            if (!offer.contains("test") && !offer.contains("de//de")) {
-                String kategorie = el.getElementsByClass("offerteaser__headline")
-                        .first()
-                        .text();
-                String dateFromHtml = el.getElementsByClass("offerteaser__subheadline")
-                        .first()
-                        .text();
-                lidl.setVonDate(getDatum(dateFromHtml));
-                lidl.setBisDate(Utils.getNextSaturday());
-                lidl.setUrl(offer);
-                lidl.setKategorie(kategorie);
-                lidlKategorie.add(lidl);
+            String link = el.attr("href");
+            if (!link.contains("https")) {
+                String offer = (mainUrl + link);
+                if (!offer.contains("test") && !offer.contains("de//de")) {
+                    String kategorie = el.getElementsByClass("offerteaser__headline")
+                            .first()
+                            .text();
+                    String dateFromHtml = el.getElementsByClass("offerteaser__subheadline")
+                            .first()
+                            .text();
+                    lidl.setVonDate(getDatum(dateFromHtml));
+                    lidl.setBisDate(Utils.getNextSaturday());
+                    lidl.setUrl(offer);
+                    lidl.setKategorie(kategorie);
+
+                    lidlKategorie.add(lidl);
+                }
             }
         }
     }

@@ -64,8 +64,7 @@ public class Utils {
 
             String path = IMAGE_DESTINATION_FOLDER + "\\" + storageName + "\\" + endDate;
             //Create Directory if not exists
-            String image = Files.createDirectories(Paths.get(path))
-                    .toString() + "\\" + strImageName;
+            String image = Files.createDirectories(Paths.get(path)).toString() + "\\" + strImageName;
             OutputStream os = new FileOutputStream(image);
 
             //write bytes to the output stream
@@ -107,5 +106,10 @@ public class Utils {
     @Value("${main.bilder}")
     public void setFoder(String folder) {
         Utils.IMAGE_DESTINATION_FOLDER = folder;
+    }
+
+    @Value("${spring.resources.static-locations}")
+    public void setImageDestinationFolder(String folder) {
+        System.out.println(false);
     }
 }

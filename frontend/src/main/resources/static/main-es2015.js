@@ -676,7 +676,6 @@ class OffersComponent {
                 let offers1 = this.offers.filter(value1 => value1.kategorie == kategori);
                 this.map.set(kategori, offers1);
             });
-            // console.log(map);
         });
     }
 }
@@ -860,6 +859,10 @@ class StartService {
     }
     getPenny() {
         let url = this.url + 'penny';
+        return this.http.get(url);
+    }
+    getLidl() {
+        let url = this.url + 'lidl';
         return this.http.get(url);
     }
 }

@@ -14,6 +14,7 @@ import { GatheringComponent } from './manage/gathering/gathering.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatCardModule} from "@angular/material/card";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {MatCardModule} from "@angular/material/card";
     HttpClientModule,
     BrowserAnimationsModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

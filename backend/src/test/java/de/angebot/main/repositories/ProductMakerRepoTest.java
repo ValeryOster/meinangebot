@@ -1,35 +1,32 @@
 package de.angebot.main.repositories;
 
 import de.angebot.main.enities.ProductMaker;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Arrays;
 import java.util.List;
 
-@SpringBootTest
+//@SpringBootTest
 class ProductMakerRepoTest {
 
     @Autowired
     private ProductMakerRepo productMakerRepo;
 
-    @Test
+//    @Test
     public void shouldNotAllowToPresistNullStrings() {
         List<String> strings = Arrays.asList(
-                "PAMPERS",
-                "FINISH",
-                "GRANINI",
-                "VEMONDO",
-                "VALESS",
-                "MIOMARE",
-                "MERADISO",
-                "PANASONIC",
-                "YUM YUM",
-                "GOLDEN SUN",
-                "ALWAYS"
+                "HP",
+                "LENOVO",
+                "HUAWEI",
+                "GARMIN",
+                "NINTENDO",
+                "XIAOMI",
+                "LEDLENSER",
+                "BRAUN",
+                "FACE-2-FACE",
+                "NORTON"
         );
 
         for (String s : strings) {
@@ -37,11 +34,7 @@ class ProductMakerRepoTest {
             maker.setMakerName(s);
             maker.setValid(true);
 
-                productMakerRepo.save(maker);
-
-
+            productMakerRepo.save(maker);
         }
-
-
     }
 }

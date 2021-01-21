@@ -10,11 +10,7 @@ import java.time.LocalDate;
 
 @Entity
 @Setter@Getter@NoArgsConstructor
-public class Penny {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Penny extends AbstactEneties {
 
     private String produktName;
     private String produktMaker;

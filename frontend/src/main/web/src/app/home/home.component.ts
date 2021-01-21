@@ -1,6 +1,7 @@
 import {Component} from '@angular/core'
 import {Router} from "@angular/router";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {faArrowUp} from "@fortawesome/free-solid-svg-icons/faArrowUp";
 
 @Component({
   selector: 'app-home',
@@ -8,6 +9,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+  arrowUp = faArrowUp;
   form: FormGroup;
   discounterBox = [
     {id: 100, name: 'PENNY.'},

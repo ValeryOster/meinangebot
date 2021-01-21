@@ -110,6 +110,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
         try {
             ProductMaker maker = new ProductMaker();
             maker.setMakerName(produktMaker);
+            maker.setValid(true);
             productMakerRepo.save(maker);
         } catch (DataIntegrityViolationException e) {
             log.info("Der Hersteller: " + produktMaker + " ist in DB ");
