@@ -38,8 +38,8 @@ public class HomeController {
     @GetMapping(path = "/all")
     public Map<String, List<? extends AbstactEneties>> getAllDiscouters() {
         Map<String, List<? extends AbstactEneties>> discounters = new HashMap<>();
-        discounters.put("lidl", getLidl());
-        discounters.put("penny", getPenny());
+        discounters.put("Lidl", getLidl());
+        discounters.put("Penny", getPenny());
         return discounters;
     }
     @GetMapping(path = "/apenny")

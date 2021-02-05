@@ -98,7 +98,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
         newLidl.setProduktPrise(lidl.getProduktPrise());
         newLidl.setProduktDescription(lidl.getProduktDescription());
         newLidl.setUrl(lidl.getUrl());
-        newLidl.setVonDate(newLidl.getVonDate());
+        newLidl.setVonDate(lidl.getVonDate());
 
         return newLidl;
     }
@@ -137,7 +137,6 @@ public class LidlOffer implements Gathering, ErrorHandler {
         } else {
             log.error("!!! Preise werden nicht erkannt. !!!");
         }
-
         return "null";
     }
 
@@ -167,10 +166,8 @@ public class LidlOffer implements Gathering, ErrorHandler {
                 .limit(1)
                 .collect(Collectors.toList());
         if (collect.size() > 0) {
-            //System.out.println(collect.get(0) +" -> " + descriptionName);
             return collect.get(0);
         }
-//        System.out.println(descriptionName.toUpperCase());
         return "";
     }
 
@@ -191,18 +188,19 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private void saveFrischeProducte(Lidl lidl, Document doc) {
         Elements itemsTop = doc.getElementsByClass("product-frische-tag");
         itemsTop.forEach(element -> {
+            Lidl newItem = copyNewLidl(lidl);
             String imageUrl = getImage(element);
             String price = getPreise(element);
             String priceOld = getOldPreise(element);
             String itemName = getItemName(element);
-            setDateOtherDateIfExists(lidl, element);
+            setDateOtherDateIfExists(newItem, element);
 
-            lidl.setProduktName(itemName);
-            lidl.setImageLink(imageUrl);
-            lidl.setProduktPrise(price);
-            lidl.setProduktRegularPrise(priceOld);
+            newItem.setProduktName(itemName);
+            newItem.setImageLink(imageUrl);
+            newItem.setProduktPrise(price);
+            newItem.setProduktRegularPrise(priceOld);
 
-            lidlRepo.save(lidl);
+            lidlRepo.save(newItem);
         });
     }
 
