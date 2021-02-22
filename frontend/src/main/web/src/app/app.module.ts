@@ -8,13 +8,17 @@ import {HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from "./home/home.component";
 import {AboutComponent} from "./about/about.component";
 import { ManageComponent } from './manage/manage.component';
-import {AuthGuard} from "./service/security/auth.guard";
 import { OffersComponent } from './offers/offers.component';
 import { GatheringComponent } from './manage/gathering/gathering.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatCardModule} from "@angular/material/card";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {LoginComponent} from "./login/login.component";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+import {authInterceptorProviders} from "./service/security/helper/auth.interceptor";
 
 
 @NgModule({
@@ -24,7 +28,8 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     AboutComponent,
     ManageComponent,
     OffersComponent,
-    GatheringComponent
+    GatheringComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -35,9 +40,12 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     BrowserAnimationsModule,
     MatTabsModule,
     MatCardModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

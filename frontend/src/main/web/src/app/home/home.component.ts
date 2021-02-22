@@ -8,6 +8,7 @@ import {faArrowUp} from "@fortawesome/free-solid-svg-icons/faArrowUp";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+
 export class HomeComponent {
   arrowUp = faArrowUp;
   form: FormGroup;

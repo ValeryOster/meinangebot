@@ -11,6 +11,7 @@ import de.angebot.main.repositories.CommonGatherRepo;
 import de.angebot.main.repositories.LidlRepo;
 import de.angebot.main.repositories.PennyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,7 @@ public class ManageController {
     private PennyRepo pennyRepo;
 
     @GetMapping("/gather")
+    @PreAuthorize("hasRole('ADMIN')")
     public void startGathering() {
         mainGather.setGatherRepo(gatherRepo);
         mainGather.addToGatherList(pennyOffer);
@@ -47,11 +49,13 @@ public class ManageController {
     }
 
     @GetMapping("/start")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<CommonGather> getAll(MultipartFile file) {
         return gatherRepo.findAll();
     }
 
     @GetMapping("/sortkategorie")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Penny> getUnsortingKategorie() {
         return pennyRepo.findAllNotDefaultCategorieName(ItemsCategory.getKategorieList());
     }

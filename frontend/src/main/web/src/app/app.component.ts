@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "./service/security/auth.service";
+import {Router} from "@angular/router";
+import {TokenStorageService} from "./service/security/token-storage.service";
 export interface Post {
   title: string
   text: string
@@ -13,10 +14,13 @@ export interface Post {
 export class AppComponent implements OnInit{
   title = 'Hier entsteht Seite mit Angeboten von allen Märkte';
 
-  constructor( public auth:AuthService) {
+  constructor( public auth:TokenStorageService, private router:Router) {
   }
 
   ngOnInit(): void {
   }
 
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
 }

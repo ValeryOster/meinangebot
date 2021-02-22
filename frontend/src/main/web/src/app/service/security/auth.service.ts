@@ -1,24 +1,33 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
-export class AuthService{
-  private isAuth = false;
-  private url = 'http://localhost:8080/';
+const AUTH_API = 'http://localhost:8080/api/auth/';
 
-  login() {
-    this.isAuth = true;
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+
+  constructor(private http: HttpClient) { }
+
+  login(credentials): Observable<any> {
+    console.log("ashedf");
+    return this.http.post(AUTH_API + 'signin', {
+      username: credentials.username,
+      password: credentials.password
+    }, httpOptions);
   }
 
-  logout() {
-    this.isAuth = false;
+  register(user): Observable<any> {
+    return this.http.post(AUTH_API + 'signup', {
+      username: user.username,
+      email: user.email,
+      password: user.password
+    }, httpOptions);
   }
-
-  isAuthenticated(): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      setTimeout(() => {
-        resolve(this.isAuth);
-      }, 1000);
-    });
-  }
-
 }

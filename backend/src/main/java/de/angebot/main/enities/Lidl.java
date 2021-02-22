@@ -1,19 +1,14 @@
 package de.angebot.main.enities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
-@ToString
 public class Lidl extends AbstactEneties{
 
     private String produktName;
