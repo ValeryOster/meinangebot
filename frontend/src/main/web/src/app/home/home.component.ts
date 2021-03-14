@@ -14,11 +14,7 @@ export class HomeComponent {
   form: FormGroup;
   discounterBox = [
     {id: 100, name: 'PENNY.'},
-    {id: 200, name: 'LIDL'},
-    {id: 300, name: 'NETTO'},
-    {id: 400, name: 'REWE'},
-    {id: 500, name: 'KAUFLAND'},
-    {id: 600, name: 'ALDI'}
+    {id: 200, name: 'LIDL'}
   ];
 
   get ordersFormArray() {
@@ -35,18 +31,14 @@ export class HomeComponent {
 
   private addCheckboxes() {
     this.discounterBox.forEach( value =>{
-      if (value.id == 100) {
-        this.ordersFormArray.push(new FormControl(true));
-      }else {
-        this.ordersFormArray.push(new FormControl(false));
-      }
+      this.ordersFormArray.push(new FormControl(true));
     });
   }
 
   submit() {
     const selectedOrderIds = this.form.value.dicounters
-      .map((checked, i) => checked ? this.discounterBox[i].id : null)
+      .map((checked, i) => checked ? this.discounterBox[i].name : null)
       .filter(v => v !== null);
-    console.log(selectedOrderIds);
+
   }
 }

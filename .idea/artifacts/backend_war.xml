@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="tutorial-app.war">
+    <root id="archive" name="alleangebote.war">
       <element id="artifact" artifact-name="backend:war exploded" />
     </root>
   </artifact>

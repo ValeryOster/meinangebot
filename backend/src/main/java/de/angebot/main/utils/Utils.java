@@ -1,9 +1,14 @@
 package de.angebot.main.utils;
 
+import de.angebot.main.enities.ProductMaker;
+import de.angebot.main.repositories.ProductMakerRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -49,10 +54,12 @@ public class Utils {
                 .trim(), name.trim());
     }
 
-    public static String downloadImage(String strImageURL, String storageName, LocalDate endDate) {
+    public static String downloadImage(String strImageURL, String storageName, LocalDate endDate, String imageName) {
 
         //get file name from image path
-        String strImageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
+        if (imageName == null || imageName.isEmpty()) {
+            imageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
+        }
 
         try {
             //open the stream from URL
@@ -61,10 +68,9 @@ public class Utils {
 
             byte[] buffer = new byte[4096];
             int n = -1;
-
             String path = IMAGE_DESTINATION_FOLDER + "\\" + storageName + "\\" + endDate;
             //Create Directory if not exists
-            String image = Files.createDirectories(Paths.get(path)).toString() + "\\" + strImageName;
+            String image = Files.createDirectories(Paths.get(path)).toString() + "\\" + imageName;
             OutputStream os = new FileOutputStream(image);
 
             //write bytes to the output stream
@@ -73,7 +79,7 @@ public class Utils {
             }
             os.close();
 
-            String pathDB = "/" + storageName + "/" + endDate + "/" + strImageName;
+            String pathDB = "/" + storageName + "/" + endDate + "/" + imageName;
 
             return pathDB;
         } catch (IOException e) {
@@ -93,6 +99,7 @@ public class Utils {
         return LocalDate.now(ZoneId.of("Europe/Paris"))
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     }
+
     public static LocalDate getNextMonday() {
         return LocalDate.now(ZoneId.of("Europe/Paris"))
                 .with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));

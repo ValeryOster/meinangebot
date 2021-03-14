@@ -109,7 +109,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
             String href = "https://www.lidl.de" + select.select("a")
                     .first()
                     .attr("href");
-            lidl.setImageLink(Utils.downloadImage(href, "lidl", Utils.getNextSaturday()));
+            lidl.setImageLink(Utils.downloadImage(href, "lidl", Utils.getNextSaturday(), ""));
         } else {
             log.error("Image is not founded " + lidl.getUrl());
         }
@@ -248,7 +248,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
         String img = element.select("img")
                 .first()
                 .attr("src");
-        return Utils.downloadImage("https://www.lidl.de" + img, "lidl", Utils.getNextSaturday());
+        return Utils.downloadImage("https://www.lidl.de" + img, "lidl", Utils.getNextSaturday(), "");
     }
 
     private List<Lidl> getLidlKategorieList(String url) {

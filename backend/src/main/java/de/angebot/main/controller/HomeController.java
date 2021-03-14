@@ -1,11 +1,15 @@
 package de.angebot.main.controller;
 
 import de.angebot.main.enities.AbstactEneties;
+import de.angebot.main.enities.Aldi;
 import de.angebot.main.enities.Lidl;
 import de.angebot.main.enities.Penny;
+import de.angebot.main.repositories.AldiRepo;
 import de.angebot.main.repositories.LidlRepo;
 import de.angebot.main.repositories.PennyRepo;
+import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,31 +24,25 @@ import java.util.Map;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HomeController {
     @Autowired
-    private PennyRepo pennyRepo;
-    @Autowired
-    private LidlRepo lidlRepo;
+    private DiscounterService service;
 
     @GetMapping(path = "/penny")
     public List<Penny> getPenny() {
-        List<Penny> currentOffers = pennyRepo.findCurrentOffers();
-        return currentOffers;
+        return service.pennyCurrentOffers();
     }
 
     @GetMapping(path = "/lidl")
     public List<Lidl> getLidl() {
-        return lidlRepo.findCurrentOffers();
+        return service.lidlCurrentOffers();
+    }
+
+    @GetMapping(path = "/aldi")
+    public List<Aldi> getAldi() {
+        return service.aldiCurrentOffers();
     }
 
     @GetMapping(path = "/all")
     public Map<String, List<? extends AbstactEneties>> getAllDiscouters() {
-        Map<String, List<? extends AbstactEneties>> discounters = new HashMap<>();
-        discounters.put("Lidl", getLidl());
-        discounters.put("Penny", getPenny());
-        return discounters;
-    }
-    @GetMapping(path = "/apenny")
-    public List<Penny> getAPenny() {
-        List<Penny> currentOffers = pennyRepo.findAll();
-        return currentOffers;
+        return service.getAllCurrentOffers();
     }
 }

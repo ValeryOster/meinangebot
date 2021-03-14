@@ -4,18 +4,11 @@ package de.angebot.main.controller;
 import de.angebot.main.common.ItemsCategory;
 import de.angebot.main.enities.CommonGather;
 import de.angebot.main.enities.Penny;
-import de.angebot.main.gathering.MainGather;
-import de.angebot.main.gathering.lidl.LidlOffer;
-import de.angebot.main.gathering.penny.PennyOffer;
-import de.angebot.main.repositories.CommonGatherRepo;
-import de.angebot.main.repositories.LidlRepo;
 import de.angebot.main.repositories.PennyRepo;
+import de.angebot.main.services.GatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,33 +18,21 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ManageController {
     @Autowired
-    private MainGather mainGather;
-
-    @Autowired
-    private PennyOffer pennyOffer;
-
-    @Autowired
-    private LidlOffer lidlOffer;
-
-    @Autowired
-    private CommonGatherRepo gatherRepo;
+    private GatherService service;
 
     @Autowired
     private PennyRepo pennyRepo;
 
-    @GetMapping("/gather")
+    @PostMapping("/gather")
     @PreAuthorize("hasRole('ADMIN')")
-    public void startGathering() {
-        mainGather.setGatherRepo(gatherRepo);
-        mainGather.addToGatherList(pennyOffer);
-        mainGather.addToGatherList(lidlOffer);
-        mainGather.startGather();
+    public void startGathering(@RequestBody List<String> string) {
+        service.startGather(string);
     }
 
     @GetMapping("/start")
     @PreAuthorize("hasRole('ADMIN')")
     public List<CommonGather> getAll(MultipartFile file) {
-        return gatherRepo.findAll();
+        return service.findAll();
     }
 
     @GetMapping("/sortkategorie")

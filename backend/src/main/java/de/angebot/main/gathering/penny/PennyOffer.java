@@ -1,11 +1,10 @@
 package de.angebot.main.gathering.penny;
 
 import de.angebot.main.enities.Penny;
-import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.PennyRepo;
-import de.angebot.main.repositories.ProductMakerRepo;
+import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -46,7 +44,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
     private PennyRepo pennyRepo;
 
     @Autowired
-    private ProductMakerRepo productMakerRepo;
+    SaveUtil saveUtil;
 
     @Override
     public void startGathering() {
@@ -85,15 +83,11 @@ public class PennyOffer implements Gathering, ErrorHandler {
                         .html()
                         .replace("*", "");
                 List<String> strings = Utils.splittToNameOrMaker(offerName);
-                String produktMaker = strings.get(0);
-                saveProduktMaker(produktMaker);
-
 
                 //Look for a image link
                 String imagLink = getImageLink(offer);
-
-                penny.setImageLink(Utils.downloadImage(imagLink, "penny", endDate));
-                penny.setProduktMaker(produktMaker);
+                penny.setImageLink(Utils.downloadImage(imagLink, "penny", endDate, ""));
+                penny.setProduktMaker(saveItemMaker(strings.get(0)));
                 penny.setProduktName(strings.get(1));
                 penny.setProduktPrise(price);
                 penny.setProduktRegularPrise(origPrice);
@@ -106,15 +100,9 @@ public class PennyOffer implements Gathering, ErrorHandler {
         });
     }
 
-    private void saveProduktMaker(String produktMaker) {
-        try {
-            ProductMaker maker = new ProductMaker();
-            maker.setMakerName(produktMaker);
-            maker.setValid(true);
-            productMakerRepo.save(maker);
-        } catch (DataIntegrityViolationException e) {
-            log.info("Der Hersteller: " + produktMaker + " ist in DB ");
-        }
+    private String saveItemMaker(String strings) {
+        saveUtil.saveProduktMaker(strings);
+        return strings;
     }
 
     private String getCategory(Element weekdayOffer) {

@@ -14,7 +14,7 @@
     <bytecodeTargetLevel>
       <module name="backend" target="1.8" />
       <module name="frontend" target="1.5" />
-      <module name="meinangebot" target="1.5" />
+      <module name="meinangebot" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
