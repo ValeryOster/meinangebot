@@ -158,7 +158,7 @@
                             <outputDirectory>${project.build.directory}/classes/resources/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.parent.basedir}/frontend/</directory>
+                                    <directory>${project.parent.basedir}/frontend/dist/frakton/</directory>
                                 </resource>
                             </resources>
                         </configuration>
