@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from "./home/home.component";
-import {AboutComponent} from "./about/about.component";
 import { ManageComponent } from './manage/manage.component';
 import { OffersComponent } from './offers/offers.component';
 import { GatheringComponent } from './manage/gathering/gathering.component';
@@ -25,7 +24,6 @@ import {authInterceptorProviders} from "./service/security/helper/auth.intercept
   declarations: [
     AppComponent,
     HomeComponent,
-    AboutComponent,
     ManageComponent,
     OffersComponent,
     GatheringComponent,

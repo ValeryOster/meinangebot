@@ -33,8 +33,12 @@ public class AldiOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
+        log.info("********Aldi parsing is starting.********");
+
         Document document = getDocument(mainUrl);
         getStartDay(document);
+
+        log.info("********Aldi parsing is ended.********");
     }
 
     private void getStartDay(Document document) {

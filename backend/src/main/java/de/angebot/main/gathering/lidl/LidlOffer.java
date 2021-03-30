@@ -41,16 +41,21 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
+        log.info("********Lidl parsing is starting.********");
+
         List<Lidl> kategorieList = getLidlKategorieList("filial-angebote");
         kategorieList.addAll(getLidlKategorieList("angebote"));
         kategorieList.forEach(lidl -> {
             Document doc = getDocument(lidl.getUrl());
-            if (lidl.getUrl().contains("frische")) {
+            if (lidl.getUrl()
+                    .contains("frische")) {
                 saveFrischeProducte(lidl, doc);
             } else {
                 saveOtherItems(lidl, doc);
             }
         });
+
+        log.info("********Lidl parsing is ended.********");
     }
 
     private void saveOtherItems(Lidl lidl, Document doc) {

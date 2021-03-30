@@ -48,10 +48,12 @@ public class PennyOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
+        log.info("********Penny parsing is starting.********");
         Document document = getDocument(mainUrl + "/angebote");
         if (document != null) {
             getWeekParts(document).forEach(this::saveOffers);
         }
+        log.info("********Penny parsing is ended.********");
     }
 
     private void saveOffers(LocalDate startDate, Element weekdayOffer) {
