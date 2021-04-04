@@ -1,0 +1,19 @@
+table {
+  width: 100%;
+}
+
+th {
+  height: 50px;
+}
+th, td {
+  padding: 15px;
+  text-align: left;
+}
+th, td {
+  border-bottom: 1px solid #ddd;
+}
+
+input{
+  display: inline;
+  width: 5%;
+}

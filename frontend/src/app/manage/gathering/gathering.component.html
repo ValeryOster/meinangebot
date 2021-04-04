@@ -1,0 +1,35 @@
+
+<div>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label formArrayName="dicounters" *ngFor="let dicounter of ordersFormArray.controls;let i = index">
+      <input type="checkbox" [formControlName]="i" >
+      {{discounterBox[i].name}}
+    </label>
+    <div>
+      <label for="aktivate">
+        Aktiviere -><input id="aktivate" type="checkbox" (change)="buttonActive = !buttonActive" >
+      </label>
+      <button class="btn" [disabled]="buttonActive"> Sammeln</button>
+    </div>
+  </form>
+</div>
+<hr>
+
+<div>
+  <table>
+    <tr>
+      <th>Gather date</th>
+      <th>Expiry date</th>
+      <th>Discounts</th>
+    </tr>
+    <tr *ngFor="let disc of discounters">
+      <td>{{disc.gatherDate}}</td>
+      <td>{{disc.expiryDate}}</td>
+      <td>
+        {{disc.discount.Penny}},
+        {{disc.discount.Netto}},
+        {{disc.discount.Lidl}}
+      </td>
+    </tr>
+  </table>
+</div>

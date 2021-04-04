@@ -1,0 +1,153 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 7px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: calc(25% - 20px);
+  padding: 5px 16px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card:hover img {
+  transform: scale(1.1);
+}
+
+.container {
+  padding: 2px 16px;
+  max-width: 1350px;
+}
+
+.prise {
+  /*border: 1px solid #ACB0B4;*/
+  color: #fb3b49;
+  display: inline-block;
+  margin: 10px;
+  padding: 5px;
+}
+
+.oldprise {
+  color: #231f20;
+  text-decoration: line-through;
+  font-weight: bold;
+}
+
+.actuelprise {
+  font-size: 2em;
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.name {
+  color: #404b5b;
+  overflow: hidden;
+}
+
+.actuelVon {
+  font-weight: bold;
+  color: #000;
+}
+
+.actuelBis {
+  font-weight: bold;
+  color: #000;
+  margin-left: 5px;
+}
+
+.actuel {
+  color: #4ca167;
+  margin-left: -25px;
+  margin-bottom: 5px;
+}
+
+.kategorie {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  margin: 5px;
+  padding: 5px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+}
+
+.kategorieName {
+  font-size: 4em;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+  margin-bottom: .5rem;
+  color: #374229;
+}
+
+.forCard {
+  display: compact;
+}
+
+.simple-card {
+  width: 300px;
+  height: 350px;
+  margin: 4px;
+}
+
+.simple-header-image {
+  background-size: cover;
+
+}
+
+.simple-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.simple-card:hover img {
+  transform: scale(1.3);
+  transition: 0.5s;
+}
+
+.border {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ul{
+  white-space: nowrap;
+  display: flex;
+}
+.border li {
+  font-family: "Trebuchet MS", "Lucida Sans";
+  margin-bottom: 10px;
+  margin-left: 5px;
+  border-radius: 5px;
+  border-left: 10px solid #f05d22;
+  box-shadow: 2px -2px 5px 0 rgba(0, 0, 0, .1),
+  -2px -2px 5px 0 rgba(0, 0, 0, .1),
+  2px 2px 5px 0 rgba(0, 0, 0, .1),
+  -2px 2px 5px 0 rgba(0, 0, 0, .1);
+  font-size: 17px;
+  display: inline-block;
+  overflow: hidden;
+  transition: 1s;
+  max-width: 100px;
+  min-width: 10px;
+  white-space: nowrap;
+}
+.border li:hover {
+  max-width: 100%;
+  background-color: #f39ca1;
+}
+
+.kategorieLinks{
+  padding-top: 20px;
+}
+
+::ng-deep .mat-tab-group.mat-primary .mat-ink-bar{
+  background-color: rgb(86, 112, 107) !important;
+}
+
+.logoImage{
+  width: 90px;
+}
