@@ -8,7 +8,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Lidl extends AbstactEneties{
 

@@ -2,12 +2,15 @@ package de.angebot.main.enities;
 
 import de.angebot.main.common.ERole;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Role {
 	@Id
