@@ -18,7 +18,7 @@ public class Lidl extends AbstactEneties{
     private String produktPrise;
     private String produktRegularPrise;
 
-    @Column(name = "produkt_description", columnDefinition = "LONGVARCHAR")
+    @Column(name = "produkt_description")
     private String produktDescription;
 
     private String imageLink;
