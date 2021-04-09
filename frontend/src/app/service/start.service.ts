@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
 
 export class Offer {
   id: number;
@@ -23,7 +24,7 @@ export class Offer {
   providedIn: 'root'
 })
 export class StartService {
-  private url = 'http://localhost:8080/home/';
+  private url = environment.apiUrl+'home/';
 
   constructor(private http: HttpClient) {
   }

@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
 
 export class Discounter {
   id: number;
@@ -23,7 +24,7 @@ export class Discounter {
 })
 export class DiscounterService {
 
-  private url = 'http://localhost:8080/manage/';
+  private url = environment.apiUrl+'manage/';
 
   constructor(private http: HttpClient) {
   }
