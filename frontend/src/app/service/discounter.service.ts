@@ -24,7 +24,7 @@ export class Discounter {
 })
 export class DiscounterService {
 
-  private url = environment.apiUrl+'manage/';
+  private url = environment.apiUrl+'/manage/';
 
   constructor(private http: HttpClient) {
   }

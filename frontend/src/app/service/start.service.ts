@@ -24,7 +24,7 @@ export class Offer {
   providedIn: 'root'
 })
 export class StartService {
-  private url = environment.apiUrl+'home/';
+  private url = environment.apiUrl+'/home/';
 
   constructor(private http: HttpClient) {
   }
