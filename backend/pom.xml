@@ -12,6 +12,37 @@
     <artifactId>backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <!-- this profile is active by default -->
+                <activeByDefault>true</activeByDefault>
+                <!-- activate if system properties 'env=dev' -->
+                <property>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <properties>
+                <db.password>777matriza</db.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <!-- activate if system properties 'env=prod' -->
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <properties>
+                <db.password>777@Matriza</db.password>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>de.oster</groupId>
@@ -123,6 +154,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <finalName>angebotapp</finalName>
         <plugins>
             <plugin>
