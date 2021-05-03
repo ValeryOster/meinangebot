@@ -68,9 +68,9 @@ public class Utils {
 
             byte[] buffer = new byte[4096];
             int n = -1;
-            String path = IMAGE_DESTINATION_FOLDER + "\\" + storageName + "\\" + endDate;
+            String path = IMAGE_DESTINATION_FOLDER + "/" + storageName + "/" + endDate;
             //Create Directory if not exists
-            String image = Files.createDirectories(Paths.get(path)).toString() + "\\" + imageName;
+            String image = Files.createDirectories(Paths.get(path)).toString() + "/" + imageName;
             OutputStream os = new FileOutputStream(image);
 
             //write bytes to the output stream

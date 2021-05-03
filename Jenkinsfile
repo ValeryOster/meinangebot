@@ -1,23 +1,27 @@
 pipeline {
     agent any
-    tools {
-            maven 'mvn3.6.0'
-            jdk 'jdk8'
-        }
-        stages {
-            stage ('Initialize') {
-                steps {
-                    sh '''
-                        echo "PATH = ${PATH}"
-                        echo "M2_HOME = ${M2_HOME}"
-                    '''
-                }
-            }
+     tools {
+        maven 'M3'
+        jdk 'jdk8'
+    }
 
     stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: 'github-ssh-key',
+                    url:'git@github.com:ValeryOster/meinangebot.git'
+            }
+        }
         stage('Build') {
             steps {
-               echo 'This is a minimal pipeline.'
+                // Run Maven on a Unix agent.
+                sh "mvn install"
+                sh "java -version"
+            }
+        }
+        stage('Deploy'){
+            steps{
+                sh "mv backend/target/angebotapp.jar /var/www/http"
             }
         }
     }
