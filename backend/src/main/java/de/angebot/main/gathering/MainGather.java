@@ -26,7 +26,12 @@ public class MainGather {
     public void startGather() {
         if (!gatherList.isEmpty()) {
             Long start = System.currentTimeMillis();
-            gatherList.forEach(Gathering::startGathering);
+            for (Gathering gathering : gatherList) {
+                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
+                gathering.startGathering();
+                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
+
+            }
             long duration = System.currentTimeMillis() - start;
             saveGatheringReport(duration);
             log.info("Gathering is done: " + LocalDate.now() + ", duration: " + duration);

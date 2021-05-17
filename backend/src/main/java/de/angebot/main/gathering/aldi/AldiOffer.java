@@ -145,7 +145,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
         String href = "";
         try {
             href = itemDoc.getElementsByClass("mod-gallery-article__media").first()
-                    .attr("href");
+                    .attr("data-srcset").split(" ")[0];
         } catch (RuntimeException e) {
             log.error("!!! Aldi - ImageUrl ist nicht gefunden.");
             errorMessage.send(e.getMessage());

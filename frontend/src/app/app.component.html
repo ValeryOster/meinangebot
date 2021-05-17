@@ -6,6 +6,7 @@
     <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
       <a [routerLink]="['/']">Home</a>
     </li>
+    <li routerLinkActive="active"><a routerLink="/auswahl">Auswahl</a></li>
     <li *ngIf="auth.isAuthenticated()" routerLinkActive="active"><a [routerLink]="['/manage']">Managing</a></li>
     <li *ngIf="!auth.isAuthenticated()"><button class="btn" (click)="goToLogin()">Login</button></li>
     <li *ngIf="auth.isAuthenticated()"><button class="btn" (click)="auth.signOut()">Logout</button></li>

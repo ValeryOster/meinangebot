@@ -18,6 +18,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {authInterceptorProviders} from "./service/security/helper/auth.interceptor";
+import {MatIconModule} from "@angular/material/icon";
+import { AuswahlComponent } from './auswahl/auswahl.component';
 
 
 @NgModule({
@@ -27,22 +29,24 @@ import {authInterceptorProviders} from "./service/security/helper/auth.intercept
     ManageComponent,
     OffersComponent,
     GatheringComponent,
-    LoginComponent
+    LoginComponent,
+    AuswahlComponent
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatTabsModule,
-    MatCardModule,
-    FontAwesomeModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatTabsModule,
+        MatCardModule,
+        FontAwesomeModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule
+    ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })

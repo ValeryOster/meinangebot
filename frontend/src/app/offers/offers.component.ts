@@ -44,4 +44,8 @@ export class OffersComponent implements OnInit {
 
         return discounterMap;
     }
+
+  addToBucket(id: any) {
+    console.log("Id: " + id);
+  }
 }
