@@ -2,6 +2,7 @@ import {Component} from '@angular/core'
 import {Router} from "@angular/router";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {faArrowUp} from "@fortawesome/free-solid-svg-icons/faArrowUp";
+import {AuswahlComponent} from "../auswahl/auswahl.component";
 
 @Component({
   selector: 'app-home',
@@ -22,11 +23,12 @@ export class HomeComponent {
   }
 
   constructor(private router: Router,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder, private auswahlComponent:AuswahlComponent) {
     this.form = this.formBuilder.group({
       dicounters: new FormArray([])
     });
     this.addCheckboxes();
+
   }
 
   private addCheckboxes() {

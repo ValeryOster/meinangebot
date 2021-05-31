@@ -19,7 +19,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {authInterceptorProviders} from "./service/security/helper/auth.interceptor";
 import {MatIconModule} from "@angular/material/icon";
-import { AuswahlComponent } from './auswahl/auswahl.component';
+import {AuswahlComponent} from './auswahl/auswahl.component';
 
 
 @NgModule({
@@ -47,7 +47,7 @@ import { AuswahlComponent } from './auswahl/auswahl.component';
         MatInputModule,
         MatIconModule
     ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, AuswahlComponent,OffersComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

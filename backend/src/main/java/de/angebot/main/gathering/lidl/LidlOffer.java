@@ -121,9 +121,13 @@ public class LidlOffer implements Gathering, ErrorHandler {
     }
 
     private String getItemOldPrise(Document document) {
-        Element pricelabel = document.getElementsByClass("pricelabel__price")
-                .first()
+        Elements pricelabel__price = document.getElementsByClass("pricelabel__price");
+        Element pricelabel = pricelabel__price.first()
                 .getElementById("oldPriceId");
+        if (pricelabel == null) {
+            pricelabel = pricelabel__price.first()
+                    .getElementById("recommendedPriceId");
+        }
         if (pricelabel != null) {
             return pricelabel.text();
         }

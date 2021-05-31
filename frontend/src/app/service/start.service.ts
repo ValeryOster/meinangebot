@@ -1,3 +1,4 @@
+
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -19,7 +20,6 @@ export class Offer {
   discounterLogo: string;
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -35,15 +35,31 @@ export class StartService {
     return this.http.get<Offer[]>(url)
   }
 
+  getPennyById(id: any): Observable<Offer> {
+    let url = this.url + 'penny/'+id;
+    console.log(url);
+    return this.http.get<Offer>(url);
+  }
+
+  getLidlById(id: any): Observable<Offer> {
+    let url = this.url + 'lidl/'+id;
+    console.log(url);
+    return this.http.get<Offer>(url);
+  }
+
+  getAldiById(id: any): Observable<Offer> {
+    let url = this.url + 'aldi/${id}';
+    console.log(url);
+    return this.http.get<Offer>(url);
+  }
+
   getLidl(): Observable<Offer[]> {
     let url = this.url + 'lidl';
-
-    return this.http.get<Offer[]>(url)
+    return this.http.get<Offer[]>(url);
   }
 
   getAll(): Observable<Offer[]> {
     let url = this.url + 'all';
-
-    return this.http.get<Offer[]>(url)
+    return this.http.get<Offer[]>(url);
   }
 }

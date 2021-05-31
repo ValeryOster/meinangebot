@@ -1,1 +1,36 @@
-<p>auswahl works!</p>
+<div class="title">
+  <h3>Ausgewahlte ProduktenListe</h3>
+</div>
+<div>
+  <a href="whatsapp://send?text=" data-text="Liste" class="whatsapp">
+    Auswahl an Whatsapp senden
+  </a>
+</div>
+<div>
+  <table>
+    <tr>
+      <th>Bild</th>
+      <th>Discounter</th>
+      <th>Produkt Name</th>
+      <th>Hersteller</th>
+      <th>Preis</th>
+      <th>Von</th>
+      <th>bis</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let offer of auswahlListe">
+      <td><img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy"></td>
+      <td>{{offer.discounterName}}</td>
+      <td>{{offer.produktName}}</td>
+      <td>{{offer.produktMaker}}</td>
+      <td>
+        <p class="prise">{{offer.produktPrise}} &#8364;</p>
+      </td>
+      <td>{{offer.vonDate}}</td>
+      <td>{{offer.bisDate}}</td>
+      <td>
+        <button class="btn" (click)="loeschen(offer)">Löschen</button>
+      </td>
+    </tr>
+  </table>
+</div>

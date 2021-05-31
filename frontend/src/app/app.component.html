@@ -2,7 +2,7 @@
   <h1>
     <a [routerLink]="['/']">Discounter Angebote</a>
   </h1>
-  <ul>
+  <ul [ngClass]="{'smart-menu':toggle}" (click)="openMenu()">
     <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
       <a [routerLink]="['/']">Home</a>
     </li>
@@ -11,6 +11,9 @@
     <li *ngIf="!auth.isAuthenticated()"><button class="btn" (click)="goToLogin()">Login</button></li>
     <li *ngIf="auth.isAuthenticated()"><button class="btn" (click)="auth.signOut()">Logout</button></li>
   </ul>
+  <button class="menu-open">
+    <img src="assets/menu.svg" alt="Open menu" (click)="openMenu()">
+  </button>
 </nav>
 
 <div class="container">

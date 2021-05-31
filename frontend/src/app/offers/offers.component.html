@@ -2,25 +2,21 @@
   <div *ngFor="let discounter of discounters|keyvalue" class="mainOffer">
     <mat-tab>
       <ng-template mat-tab-label>
-
         <ng-template [ngIf]="discounter.key === 'Lidl'">
           <div class="logos">
             <h1 class="lidlLogo">L<span class="lidlLogoI">i</span>DL</h1>
           </div>
         </ng-template>
-
         <ng-template [ngIf]="discounter.key === 'Penny'">
           <div class="logos">
             <h1 class="pennyLogo">PENNY<span class=pennyLogoDot>.</span></h1>
           </div>
         </ng-template>
-
         <ng-template [ngIf]="discounter.key === 'Aldi'">
           <div class="logos">
             <h1 class="aldiLogo">ALDI</h1>
           </div>
         </ng-template>
-
       </ng-template>
 
       <div class="kategorieLinks" id="monitorAb1026">
@@ -38,25 +34,26 @@
         <div class="cards">
           <div *ngFor="let offer of kategori.value">
 
-              <mat-card class="simple-card" role="group">
-                <mat-card-header>
-                  <div class="actuel">
-                    <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{offer.vonDate | date:'dd.MM'}}
-                    <span class="actuelBis">bis: </span> {{offer.bisDate | date:'dd.MM'}}
-                    <mat-icon class="addIcon" (click)="addToBucket(offer.id)">playlist_add</mat-icon>
-                    <span class="advice">add</span>
-                    <a href="{{offer.url}}" class="dicounterLinkIcon">
-                      <mat-icon>link ikon</mat-icon>
-                    </a>
-                  </div>
-                </mat-card-header>
-                <!-- localhost fur entwicklung.In produktion entfernen.-->
-                <img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy">
-                <mat-card-content>
-                  <div class="container">
+            <mat-card class="simple-card" role="group">
+              <mat-card-header>
+                <div class="actuel">
+                  <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{offer.vonDate | date:'dd.MM'}}
+                  <span class="actuelBis">bis: </span> {{offer.bisDate | date:'dd.MM'}}
+                  <mat-icon class="addIcon" (click)="addToBucket(offer)">playlist_add</mat-icon>
+                  <span class="advice">add</span>
+                  <a href="{{offer.url}}" class="dicounterLinkIcon">
+                    <mat-icon>link ikon</mat-icon>
+                  </a>
+                </div>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="card-container">
+                  <img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy">
+
+                  <div class="card-info">
                     <div class="name">
-                      <h4>{{offer.produktName}}</h4>
-                    </div>
+                    <h4>{{offer.produktName}}</h4>
+                  </div>
                     <div class="prise">
                       <div class="oldprise" *ngIf="!(offer.produktRegularPrise === 'null')">
                         {{offer.produktRegularPrise}}
@@ -66,8 +63,9 @@
                       </div>
                     </div>
                   </div>
-                </mat-card-content>
-              </mat-card>
+                </div>
+              </mat-card-content>
+            </mat-card>
 
           </div>
         </div>

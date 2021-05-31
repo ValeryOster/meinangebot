@@ -10,10 +10,7 @@ import de.angebot.main.repositories.PennyRepo;
 import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,4 +42,23 @@ public class HomeController {
     public Map<String, List<? extends AbstactEneties>> getAllDiscouters() {
         return service.getAllCurrentOffers();
     }
+
+    @GetMapping(path = "/aldi/{id}")
+    public Aldi getAldiOfferById(@PathVariable Long id) {
+        if (id != null) return service.getAldiOfferById(id);
+        return null;
+    }
+
+    @GetMapping(path = "/lidl/{id}")
+    public Lidl getLidlOfferById(@PathVariable Long id) {
+        if (id != null) return service.getLidlOfferById(id);
+        return null;
+    }
+
+    @GetMapping(path = "/penny/{id}")
+    public Penny getPennyOfferById(@PathVariable Long id) {
+        if (id != null) return service.getPennyOfferById(id);
+        return null;
+    }
+
 }

@@ -12,9 +12,7 @@ import de.angebot.main.repositories.PennyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DiscounterService {
@@ -30,13 +28,36 @@ public class DiscounterService {
     public List<Penny> pennyCurrentOffers() {
         return pennyRepo.findCurrentOffers();
     }
+    public Penny getPennyOfferById(Long id) {
+        try {
+            return pennyRepo.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return new Penny();
+        }
+    }
 
     public List<Lidl> lidlCurrentOffers() {
         return lidlRepo.findCurrentOffers();
     }
 
+    public Lidl getLidlOfferById(Long id) {
+        try {
+            return lidlRepo.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return new Lidl();
+        }
+    }
+
     public List<Aldi> aldiCurrentOffers() {
         return aldiRepo.findCurrentOffers();
+    }
+
+    public Aldi getAldiOfferById(Long id) {
+        try {
+            return aldiRepo.findById(id).get();
+        } catch (NoSuchElementException e) {
+            return new Aldi();
+        }
     }
 
     public Map<String, List<? extends AbstactEneties>> getAllCurrentOffers() {
