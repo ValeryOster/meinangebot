@@ -12,22 +12,22 @@
       <th>Bild</th>
       <th>Discounter</th>
       <th>Produkt Name</th>
-      <th>Hersteller</th>
+      <th class="show_only" >Hersteller</th>
       <th>Preis</th>
-      <th>Von</th>
-      <th>bis</th>
+      <th class="show_only">Von</th>
+      <th class="show_only">bis</th>
       <th></th>
     </tr>
     <tr *ngFor="let offer of auswahlListe">
       <td><img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy"></td>
       <td>{{offer.discounterName}}</td>
       <td>{{offer.produktName}}</td>
-      <td>{{offer.produktMaker}}</td>
+      <td class="show_only">{{offer.produktMaker}}</td>
       <td>
         <p class="prise">{{offer.produktPrise}} &#8364;</p>
       </td>
-      <td>{{offer.vonDate}}</td>
-      <td>{{offer.bisDate}}</td>
+      <td class="show_only">{{offer.vonDate}}</td>
+      <td class="show_only">{{offer.bisDate}}</td>
       <td>
         <button class="btn" (click)="loeschen(offer)">Löschen</button>
       </td>

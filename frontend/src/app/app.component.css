@@ -31,11 +31,16 @@ button:focus{
   }
   .menu-open{
     display: block;
+    margin-left: 90%;
   }
   .navbar ul li.active a {
     color: #bb5a33;
   }
   .btn{
     font-size: 25px;
+  }
+
+  .navbar h1{
+    display: none;
   }
 }
