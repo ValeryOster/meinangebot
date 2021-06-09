@@ -7,9 +7,11 @@
     display: unset;
   }
 }
+
 .mat-tab-group {
   margin-top: 100px;
 }
+
 .cards {
   display: flex;
   flex-wrap: wrap;
@@ -249,6 +251,23 @@ ul {
   z-index: 105;
 }
 
+@media only screen and (max-width: 425px) {
+  .simple-card {
+    height: 400px;
+  }
+
+  .img{
+    margin-top: 0px !important;
+    margin-left: 65px;
+  }
+  .name{
+    margin-top: 0px !important;
+  }
+  .prise {
+    margin-top: 20px;
+  }
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .cards {
@@ -352,6 +371,7 @@ ul {
     top: 15px;
     right: 45%;
   }
+
   .logos {
     margin-bottom: 0px;
     font-size: 11px;
@@ -371,4 +391,13 @@ ul {
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
 
+}
+@media only screen and (max-width: 425px) {
+  .prise {
+    margin-top: 20px !important;
+  }
+  .card-container{
+    display: block !important;
+    margin-top: 0px !important;
+  }
 }
