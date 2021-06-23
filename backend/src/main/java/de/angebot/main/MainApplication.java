@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 public class MainApplication {
 
     public static void main(String[] args) {
-        setRedirectionHttpToHttps();
         SpringApplication.run(MainApplication.class, args);
     }
 
@@ -43,27 +42,10 @@ public class MainApplication {
 
     private Connector redirectConnector() {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-        connector.setScheme("https");
+        connector.setScheme("http");
         connector.setPort(80);
         connector.setSecure(false);
         connector.setRedirectPort(443);
         return connector;
-    }
-
-    private static void setRedirectionHttpToHttps() {
-        TLSClientHelloExtractor.USE_TLS_RESPONSE = ("<html>\n"+
-                "<head>\n" +
-                "<title> Redicting to HTTPS</title> <meta http-equiv='refresh' content=\"0; " +
-                "url=https://localhost:443/\" />" +
-                "</head>\n" +
-                "<script Language=JavaScript>\n" +
-                "Function redirectHttpToHttps()\n" +
-                "{" +
-                "window.location = 'https://localhost:443/';\n" +
-                "}" +
-                "redirectHttpToHttps();" +
-                "</script>" +
-                "</body>" +
-                "</html> ").getBytes(StandardCharsets.UTF_8);
     }
 }
