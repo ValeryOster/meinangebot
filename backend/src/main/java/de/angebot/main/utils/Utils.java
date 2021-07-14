@@ -89,10 +89,8 @@ public class Utils {
     }
 
     public static LocalDate getDate(int var) {
-        int today = Calendar.getInstance()
-                .get(Calendar.DAY_OF_WEEK);
-        return LocalDate.now(ZoneId.of("Europe/Paris"))
-                .minusDays(today - var);
+        int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        return LocalDate.now(ZoneId.of("Europe/Paris")).minusDays(today - var);
     }
 
     public static LocalDate getLastMonday() {

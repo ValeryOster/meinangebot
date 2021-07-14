@@ -4,15 +4,10 @@ import de.angebot.main.enities.AbstactEneties;
 import de.angebot.main.enities.Aldi;
 import de.angebot.main.enities.Lidl;
 import de.angebot.main.enities.Penny;
-import de.angebot.main.repositories.AldiRepo;
-import de.angebot.main.repositories.LidlRepo;
-import de.angebot.main.repositories.PennyRepo;
 import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

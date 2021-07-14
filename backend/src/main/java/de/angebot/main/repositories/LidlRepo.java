@@ -14,6 +14,9 @@ public interface LidlRepo extends CrudRepository<Lidl, Long> {
     @Query(value = "SELECT l FROM Lidl l WHERE l.bisDate >= CURRENT_DATE")
     List<Lidl> findCurrentOffers();
 
+    @Query(value= "delete from Lidl l where l.bisDate >= CURRENT_DATE")
+    void deleteAllActuel();
+
     @Override
     List<Lidl> findAll();
 }
