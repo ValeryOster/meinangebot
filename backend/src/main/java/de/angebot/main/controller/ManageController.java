@@ -40,4 +40,10 @@ public class ManageController {
     public List<Penny> getUnsortingKategorie() {
         return pennyRepo.findAllNotDefaultCategorieName(ItemsCategory.getKategorieList());
     }
+
+    @PostMapping("/del")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delLastItems(@RequestBody List<String> discounters) {
+        service.deleteLastInputs(discounters);
+    }
 }

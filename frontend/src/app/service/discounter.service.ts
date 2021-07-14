@@ -40,4 +40,8 @@ export class DiscounterService {
     return this.http.post(url, selectedOrderIds);
   }
 
+  delLastInputs(list: any[]) {
+    let url = this.url + 'del';
+    return this.http.post(url, list);
+  }
 }

@@ -20,6 +20,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {authInterceptorProviders} from "./service/security/helper/auth.interceptor";
 import {MatIconModule} from "@angular/material/icon";
 import {AuswahlComponent} from './auswahl/auswahl.component';
+import { DellastitmesComponent } from './manage/dellastitmes/dellastitmes.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {AuswahlComponent} from './auswahl/auswahl.component';
     OffersComponent,
     GatheringComponent,
     LoginComponent,
-    AuswahlComponent
+    AuswahlComponent,
+    DellastitmesComponent
   ],
     imports: [
         BrowserModule,

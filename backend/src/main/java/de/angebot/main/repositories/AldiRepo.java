@@ -14,4 +14,7 @@ public interface AldiRepo extends CrudRepository<Aldi, Long> {
 
     @Override
     List<Aldi> findAll();
+
+    @Query(value= "delete from Aldi a where a.bisDate >= CURRENT_DATE")
+    void deleteAllActuel();
 }
