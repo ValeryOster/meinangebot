@@ -35,6 +35,7 @@ public class MainGather {
             long duration = System.currentTimeMillis() - start;
             saveGatheringReport(duration);
             log.info("Gathering is done: " + LocalDate.now() + ", duration: " + duration);
+            gatherList.clear();
         }
     }
 
