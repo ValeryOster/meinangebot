@@ -21,6 +21,7 @@ import {authInterceptorProviders} from "./service/security/helper/auth.intercept
 import {MatIconModule} from "@angular/material/icon";
 import {AuswahlComponent} from './auswahl/auswahl.component';
 import { DellastitmesComponent } from './manage/dellastitmes/dellastitmes.component';
+import { FilterPipe } from './pipes/filter.pipe';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { DellastitmesComponent } from './manage/dellastitmes/dellastitmes.compon
     GatheringComponent,
     LoginComponent,
     AuswahlComponent,
-    DellastitmesComponent
+    DellastitmesComponent,
+    FilterPipe
   ],
     imports: [
         BrowserModule,

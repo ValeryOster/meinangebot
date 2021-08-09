@@ -9,7 +9,7 @@
 }
 
 .mat-tab-group {
-  margin-top: 100px;
+  margin-top: 30px;
 }
 
 .cards {
@@ -166,6 +166,11 @@
   margin: 0;
 }
 
+.suche {
+  display: inline;
+  width: 18%;
+}
+
 ul {
   white-space: nowrap;
   display: flex;
@@ -195,8 +200,21 @@ ul {
   background-color: #f39ca1;
 }
 
-.kategorieLinks {
+.kategorieLinks{
+  margin-top: 70px;
   padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center
+}
+.kategorieLinks input{
+  width: 45%;
+  margin-bottom: 0;
+}
+.kategorieLinks label{
+  margin-right: 20px;
+  bottom: 5px;
 }
 
 ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
@@ -256,13 +274,15 @@ ul {
     height: 400px;
   }
 
-  .img{
+  .img {
     margin-top: 0px !important;
     margin-left: 65px;
   }
-  .name{
+
+  .name {
     margin-top: 0px !important;
   }
+
   .prise {
     margin-top: 20px;
   }
@@ -392,11 +412,13 @@ ul {
 @media only screen and (min-width: 1200px) {
 
 }
+
 @media only screen and (max-width: 425px) {
   .prise {
     margin-top: 20px !important;
   }
-  .card-container{
+
+  .card-container {
     display: block !important;
     margin-top: 0px !important;
   }

@@ -12,6 +12,7 @@ export class OffersComponent implements OnInit {
   discounters: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
   url = environment.apiUrl;
   ausgewahl: Offer[] = [];
+  search = "";
 
   constructor(public service: StartService, public auswahlService: AuswahlService) {}
 
