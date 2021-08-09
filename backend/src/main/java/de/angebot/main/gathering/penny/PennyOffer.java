@@ -34,17 +34,14 @@ import java.util.stream.Stream;
 @Configuration
 public class PennyOffer implements Gathering, ErrorHandler {
 
-    @Value("${penny.mainUrl}")
-    private String mainUrl;
-
     @Value("#{${map.of.penny.days}}")
     Map<Integer, List<String>> mapOfDaysElement;
-
-    @Autowired
-    private PennyRepo pennyRepo;
-
     @Autowired
     SaveUtil saveUtil;
+    @Value("${penny.mainUrl}")
+    private String mainUrl;
+    @Autowired
+    private PennyRepo pennyRepo;
 
     @Override
     public void startGathering() {
@@ -61,29 +58,24 @@ public class PennyOffer implements Gathering, ErrorHandler {
         angebotLinks.forEach(angebot -> {
             Penny penny = new Penny();
             penny.setVonDate(startDate);
-            LocalDate endDate = LocalDate.now()
-                    .with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+            LocalDate endDate = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
             penny.setBisDate(endDate);
 
             String url = mainUrl + angebot;
             Document offer = getDocument(url);
             if (offer != null) {
                 String price = offer.select("div.bubble__wrap-inner>span").text();
-                String origPrice = offer.select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " +
-                        "div > div > div > span")
-                        .text()
-                        .replaceAll("[a-zA-Z]", "")
-                        .trim();
+                String origPrice = offer
+                        .select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " + "div > div >" +
+                                " div > span")
+                        .text().replaceAll("[a-zA-Z]", "").trim();
 
-//          If star, facke offer, go to next
+                //          If star, facke offer, go to next
                 if (price.isEmpty() || price.contains("*")) {
                     return;
                 }
 
-                String offerName = offer.select("h1.detail-block__hdln")
-                        .first()
-                        .html()
-                        .replace("*", "");
+                String offerName = offer.select("h1.detail-block__hdln").first().html().replace("*", "");
                 List<String> strings = Utils.splittToNameOrMaker(offerName);
 
                 //Look for a image link
@@ -114,9 +106,11 @@ public class PennyOffer implements Gathering, ErrorHandler {
             for (DataNode node : element.dataNodes()) {
                 String wholeData = node.getWholeData();
                 if (wholeData.contains("window.pageData.products")) {
-                    String category = wholeData.substring(wholeData.indexOf("category"));
-                    kategorie = category.substring(0, category.indexOf(','))
-                            .split(":")[1].replace("\"", "");
+                    int category1 = wholeData.indexOf("category");
+                    if (category1 > 0) {
+                        String category = wholeData.substring(category1);
+                        kategorie = category.substring(0, category.indexOf(',')).split(":")[1].replace("\"", "");
+                    }
                 }
             }
         }
@@ -124,31 +118,23 @@ public class PennyOffer implements Gathering, ErrorHandler {
     }
 
     private String textPrettyPrint(String kategorie) {
-        List<String> konnektor = Stream.of("und", "fuer", "seit")
-                .collect(Collectors.toList());
+        List<String> konnektor = Stream.of("und", "fuer", "seit").collect(Collectors.toList());
         StringBuilder prettyKategorie = new StringBuilder();
-        String[] split = kategorie.replaceAll("-", " ")
-                .split(" ");
+        String[] split = kategorie.replaceAll("-", " ").split(" ");
         for (String word : split) {
             if (!konnektor.contains(word)) {
-                prettyKategorie.append(" " + word.substring(0, 1)
-                        .toUpperCase())
-                        .append(word.substring(1));
+                prettyKategorie.append(" " + word.substring(0, 1).toUpperCase()).append(word.substring(1));
             } else {
                 prettyKategorie.append(" " + word);
             }
         }
-        return prettyKategorie.toString()
-                .trim();
+        return prettyKategorie.toString().trim();
     }
 
     private String getImageLink(Document offer) {
-        Element select = offer.select("div.detail-block__carousel-slide>noscript>img")
-                .first();
+        Element select = offer.select("div.detail-block__carousel-slide>noscript>img").first();
         if (select == null) {
-            select = offer.getElementById("offer-image-slide-0")
-                    .select("img")
-                    .first();
+            select = offer.getElementById("offer-image-slide-0").select("img").first();
         }
         return select.attr("src");
     }
@@ -156,13 +142,13 @@ public class PennyOffer implements Gathering, ErrorHandler {
     //to get Date, neen to know date of week
     private Map<LocalDate, Element> getWeekParts(Document offer) {
         Map<LocalDate, Element> weekArray = new HashMap<>();
-        mapOfDaysElement.forEach((Integer dayOfWeek, List<String> elementTags) ->{
+        mapOfDaysElement.forEach((Integer dayOfWeek, List<String> elementTags) -> {
             for (String tag : elementTags) {
                 Element elementById = offer.getElementById(tag);
                 if (elementById != null) {
                     weekArray.put(Utils.getDate(dayOfWeek), elementById);
                     return;
-                }else {
+                } else {
                     log.error("!!! ID: " + tag + " gibt es nicht !!!");
                 }
             }
@@ -174,12 +160,9 @@ public class PennyOffer implements Gathering, ErrorHandler {
     private List<String> getOffersLinks(Element document) {
         Elements elementsByClass = document.getElementsByClass("tile__link--cover ellipsis");
         if (!elementsByClass.isEmpty()) {
-            return elementsByClass
-                    .stream()
-                    .map(element -> element.attr("href"))
-                    .filter(s -> s.contains("/angebote/"))
+            return elementsByClass.stream().map(element -> element.attr("href")).filter(s -> s.contains("/angebote/"))
                     .collect(Collectors.toList());
-        }else {
+        } else {
             log.error("Es wurde keine Angebote gefunden");
             return null;
         }
@@ -188,8 +171,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
     private Document getDocument(String url) {
         Document document = null;
         try {
-            document = Jsoup.connect(url)
-                    .get();
+            document = Jsoup.connect(url).get();
         } catch (IOException e) {
             errorMessage.send(e.getMessage());
         }
