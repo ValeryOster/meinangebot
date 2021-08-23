@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -64,17 +65,13 @@ public class LidlOffer implements Gathering, ErrorHandler {
         Document document = getDocument(newMain);
         Elements elementsByAttributeValue = document.getElementsByAttributeValue("data-ga-label", "Filial-Angebote");
         if (elementsByAttributeValue.size() > 0) {
-            angeboteUrl = newMain + elementsByAttributeValue.first()
-                    .attr("href");
+            angeboteUrl = newMain + elementsByAttributeValue.first().attr("href");
         }
     }
 
     private void saveOtherItems(Lidl lidl, Document doc) {
-        possibleMakers = productMakerRepo.findAll()
-                .stream()
-                .filter(ProductMaker::getValid)
-                .map(ProductMaker::getMakerName)
-                .collect(Collectors.toList());
+        possibleMakers = productMakerRepo.findAll().stream().filter(ProductMaker::getValid)
+                .map(ProductMaker::getMakerName).collect(Collectors.toList());
 
         getItemName(doc, lidl);
         String description = getItemDescription(doc);
@@ -114,8 +111,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private void getImageUrl(Document document, Lidl lidl) {
         Elements select = document.select("img.gallery-image__img");
         if (select.size() > 0) {
-            String href = select.first()
-                    .attr("src");
+            String href = select.first().attr("src");
             lidl.setImageLink(Utils.downloadImage(href, "lidl", Utils.getNextSaturday(), ""));
         } else {
             log.error("Image is not founded " + lidl.getUrl());
@@ -133,44 +129,37 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private String getItemPrise(Document document) {
         Elements pricelabel = document.getElementsByClass("m-price__price");
         if (pricelabel.size() > 0) {
-            String text = pricelabel.first()
-                    .text()
-                    .replace(" ", "")
-                    .replace("-.", "0.")
-                    .replace("*", "");
+            String text = pricelabel.first().text().replace(" ", "").replace("-.", "0.").replace("*", "");
             return text;
         } else {
             log.error("!!! Preise werden nicht erkannt. !!!");
         }
-        return "null";
+        return "";
     }
 
     private String getItemDescription(Document document) {
         Elements itemDesc = document.select("div.keyfacts__description");
         if (itemDesc.size() > 0) {
-            return itemDesc.first()
-                    .text();
+            return itemDesc.first().text();
         }
         return "";
     }
 
     private void getItemName(Document document, Lidl lidl) {
-        String nameWithProducer = document.select("h1.keyfacts__title")
-                .first()
-                .text();
-        String maker = getMakerFromString(nameWithProducer);
-        String target = "(?i)" + maker;
-        String replace = nameWithProducer.replaceAll(target, "")
-                .trim();
-        lidl.setProduktName(replace);
-        lidl.setProduktMaker(maker);
+        Element first = document.select("h1.keyfacts__title").first();
+        if (first != null) {
+            String nameWithProducer = first.text();
+            String maker = getMakerFromString(nameWithProducer);
+            String target = "(?i)" + maker;
+            String replace = nameWithProducer.replaceAll(target, "").trim();
+            lidl.setProduktName(replace);
+            lidl.setProduktMaker(maker);
+        }
     }
 
     private String getMakerFromString(String descriptionName) {
-        List<String> collect = possibleMakers.stream()
-                .filter(s -> descriptionName.toUpperCase()
-                        .contains(s.toUpperCase()))
-                .limit(1)
+        Stream<String> stream = possibleMakers.stream();
+        List<String> collect = stream.filter(s -> descriptionName.toUpperCase().contains(s.toUpperCase())).limit(1)
                 .collect(Collectors.toList());
         if (collect.size() > 0) {
             return collect.get(0);
@@ -208,9 +197,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
     private void setKategorieName(Lidl lidl, Elements aTheSectionHead) {
         Element kategorieArea = aTheSectionHead.first();
-        String kategorieName = kategorieArea.select("h2")
-                .first()
-                .text();
+        String kategorieName = kategorieArea.select("h2").first().text();
         lidl.setKategorie(kategorieName);
     }
 
@@ -230,9 +217,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private List<String> getURLs() {
         Document document = getDocument(angeboteUrl);
 
-        Elements select = document.getElementsByClass("ATheHeroStage__TabPanels")
-                .first()
-                .select("section");
+        Elements select = document.getElementsByClass("ATheHeroStage__TabPanels").first().select("section");
 
         return getAllURLs(select);
     }
@@ -254,10 +239,10 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
     private void saveURLs(List<String> allURLs, Element mainElement) {
         Elements role = mainElement.getElementsByAttributeValue("role", "gridcell");
-            for (Element childElement : role) {
-                String href = childElement.select("a[href]").first().attr("href");
-                if (checkItThisOnWeek(childElement)){
-                    allURLs.add(mainUrl + href);
+        for (Element childElement : role) {
+            String href = childElement.select("a[href]").first().attr("href");
+            if (checkItThisOnWeek(childElement)) {
+                allURLs.add(mainUrl + href);
             }
         }
     }
@@ -271,11 +256,11 @@ public class LidlOffer implements Gathering, ErrorHandler {
             }
             String datum = dateText.replaceAll("(.*)(\\d{2}.\\d{2}.)", "$2");
             if (!datum.isEmpty() && Character.isDigit(datum.charAt(0))) {
-                LocalDate parse = LocalDate.parse((datum + (LocalDate.now().getYear())),
-                        DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                LocalDate parse = LocalDate
+                        .parse((datum + (LocalDate.now().getYear())), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
                 if (parse.isAfter(Utils.getNextSaturday())) {
                     return false;
-                }else {
+                } else {
                     return true;
                 }
             }
@@ -287,11 +272,11 @@ public class LidlOffer implements Gathering, ErrorHandler {
         String mainKategorie = getMainKategorie(document);
         for (GermanyDayOfWeek germanyDayOfWeek : GermanyDayOfWeek.values()) {
             String toString = germanyDayOfWeek.toString();
-           if (mainKategorie.toLowerCase().contains(toString.toLowerCase())) {
-            int ordinal = germanyDayOfWeek.getDayOfWeek()+1;
-            LocalDate date = Utils.getDate(ordinal);
-            lidl.setVonDate(date);
-           }
+            if (mainKategorie.toLowerCase().contains(toString.toLowerCase())) {
+                int ordinal = germanyDayOfWeek.getDayOfWeek() + 1;
+                LocalDate date = Utils.getDate(ordinal);
+                lidl.setVonDate(date);
+            }
         }
         String kategorie = lidl.getKategorie();
         if (kategorie == null || kategorie.isEmpty()) {
@@ -307,8 +292,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private Document getDocument(String url) {
         Document document = null;
         try {
-            document = Jsoup.connect(url)
-                    .get();
+            document = Jsoup.connect(url).get();
         } catch (IOException e) {
             log.error("!!! Lidl-Url ist nicht erreichbar");
             errorMessage.send(e.getMessage());
