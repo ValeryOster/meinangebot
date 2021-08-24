@@ -9,7 +9,6 @@ import {AuswahlService} from "../service/auswahl.service";
   styleUrls: ['./offers.component.css']
 })
 export class OffersComponent implements OnInit {
-  offers: Offer[];
   discounters: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
   url = environment.apiUrl;
   ausgewahl: Offer[] = [];
@@ -48,7 +47,9 @@ export class OffersComponent implements OnInit {
   }
 
   addToBucket(offerNew: Offer) {
-    this.ausgewahl.push(offerNew);
-    this.auswahlService.setValue(this.ausgewahl);
+    if (this.ausgewahl.indexOf(offerNew) === -1) {
+      this.ausgewahl.push(offerNew);
+      this.auswahlService.setValue(this.ausgewahl);
+    }
   }
 }

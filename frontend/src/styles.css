@@ -102,12 +102,12 @@ hr {
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 2rem;
-  z-index: 1;
+  z-index: 100;
   width: 100%;
-  opacity: 1;
   margin-bottom: 1rem;
   background: #45615c;
   color: #fff;
+  position: fixed;
 }
 .navbar ul {
   display: flex;
