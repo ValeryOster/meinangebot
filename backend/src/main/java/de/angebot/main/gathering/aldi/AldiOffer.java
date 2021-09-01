@@ -93,7 +93,8 @@ public class AldiOffer implements Gathering, ErrorHandler {
 
     private String getItemRegularPrice(Document itemDoc) {
         try {
-            return itemDoc.getElementsByClass("price__previous").first().ownText();
+            Elements price__previous = itemDoc.getElementsByClass("price__previous");
+            return price__previous.first().ownText();
         } catch (RuntimeException e) {
             log.error("!!! Aldi - ItemName ist nicht gefunden.");
             errorMessage.send(e.getMessage());
@@ -103,7 +104,8 @@ public class AldiOffer implements Gathering, ErrorHandler {
 
     private String getItemPrice(Document itemDoc) {
         try {
-            return itemDoc.getElementsByClass("price__main").first().ownText();
+
+            return itemDoc.getElementsByClass("price__wrapper").first().ownText();
         } catch (RuntimeException e) {
             log.error("!!! Aldi - ItemName ist nicht gefunden.");
             errorMessage.send(e.getMessage());
