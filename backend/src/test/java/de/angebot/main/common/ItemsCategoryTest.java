@@ -1,17 +1,15 @@
 package de.angebot.main.common;
 
 
-
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ItemsCategoryTest {
 //    @Test
@@ -25,10 +23,10 @@ class ItemsCategoryTest {
         }
     }
 
-//    @Test
+//   @Test
     void testAllINeed() {
-        AtomicLong al = new AtomicLong();
-        al.set(-1L);
-        System.out.println(al.get());
-    }
+       System.out.println(LocalDate.now(ZoneId.of("Europe/Paris"))
+               .with(TemporalAdjusters.previousOrSame(DayOfWeek.TUESDAY)));
+
+   }
 }

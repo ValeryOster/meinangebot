@@ -9,7 +9,7 @@
 }
 
 .mat-tab-group {
-  margin-top: 100px;
+  margin-top: 30px;
 }
 
 .cards {
@@ -47,6 +47,8 @@
 .name {
   color: #404b5b;
   overflow: hidden;
+  line-height: 1.5em;
+  height: 3em;
 }
 
 .actuelVon {
@@ -96,13 +98,21 @@
   height: 350px;
   margin: 4px;
 }
+.simple-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+.simple-card:hover .addIcon {
+  display: inline;
+}
 
+.simple-card:hover .dicounterLinkIcon {
+  display: inline;
+}
 .simple-header-image {
   background-size: cover;
 }
-
-.simple-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+.searchLogo{
+  width: 65px;
 }
 
 .addIcon {
@@ -142,14 +152,6 @@
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
 }
 
-.simple-card:hover .addIcon {
-  display: inline;
-}
-
-.simple-card:hover .dicounterLinkIcon {
-  display: inline;
-}
-
 .addIcon:hover {
   color: red;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
@@ -164,6 +166,11 @@
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.suche {
+  display: inline;
+  width: 18%;
 }
 
 ul {
@@ -195,8 +202,21 @@ ul {
   background-color: #f39ca1;
 }
 
-.kategorieLinks {
+.searchArea{
+  margin-top: 70px;
   padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center
+}
+.searchArea input{
+  width: 45%;
+  margin-bottom: 0;
+}
+.searchArea label{
+  margin-right: 20px;
+  bottom: 5px;
 }
 
 ::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
@@ -204,7 +224,7 @@ ul {
 }
 
 .logos {
-  margin-bottom: 10px;
+  width: 140px;
 }
 
 .lidlLogo {
@@ -256,13 +276,15 @@ ul {
     height: 400px;
   }
 
-  .img{
+  .img {
     margin-top: 0px !important;
     margin-left: 65px;
   }
-  .name{
+
+  .name {
     margin-top: 0px !important;
   }
+
   .prise {
     margin-top: 20px;
   }
@@ -305,12 +327,11 @@ ul {
   }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-
-}
-
 @media only screen and (max-width: 682px) {
+  .searchArea input{
+    width: 100%;
+  }
+
   ul {
     display: none;
   }
@@ -373,30 +394,18 @@ ul {
   }
 
   .logos {
-    margin-bottom: 0px;
-    font-size: 11px;
+    font-size: 11px
+
   }
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
 
 }
 
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
-
-}
 @media only screen and (max-width: 425px) {
   .prise {
     margin-top: 20px !important;
   }
-  .card-container{
+
+  .card-container {
     display: block !important;
     margin-top: 0px !important;
   }

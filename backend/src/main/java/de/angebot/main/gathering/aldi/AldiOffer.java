@@ -23,13 +23,11 @@ import java.util.Locale;
 @Component
 public class AldiOffer implements Gathering, ErrorHandler {
 
-    private String mainUrl = "https://www.aldi-nord.de/angebote.html";
-
-    @Autowired
-    private AldiRepo aldiRepo;
-
     @Autowired
     SaveUtil saveUtil;
+    private String mainUrl = "https://www.aldi-nord.de/angebote.html";
+    @Autowired
+    private AldiRepo aldiRepo;
 
     @Override
     public void startGathering() {
@@ -59,7 +57,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
                         Aldi newAldi = getNewAldi(aldi);
                         newAldi.setProduktName(getItemName(itemDoc));
                         newAldi.setUrl(itemUrl);
-                        newAldi.setImageLink(getImagePath(itemDoc,newAldi.getProduktName()));
+                        newAldi.setImageLink(getImagePath(itemDoc, newAldi.getProduktName()));
                         newAldi.setProduktMaker(getItemMaker(itemDoc));
                         newAldi.setProduktPrise(getItemPrice(itemDoc));
                         newAldi.setProduktRegularPrise(getItemRegularPrice(itemDoc));
@@ -143,18 +141,15 @@ public class AldiOffer implements Gathering, ErrorHandler {
         return "";
     }
 
-    private String getImagePath(Document itemDoc,String name) {
+    private String getImagePath(Document itemDoc, String name) {
         String href = "";
         try {
-            href = itemDoc.getElementsByClass("mod-gallery-article__media").first()
-                    .attr("data-srcset").split(" ")[0];
+            href = itemDoc.getElementsByClass("mod-gallery-article__media").first().attr("data-srcset").split(" ")[0];
         } catch (RuntimeException e) {
             log.error("!!! Aldi - ImageUrl ist nicht gefunden.");
             errorMessage.send(e.getMessage());
         }
-        name = name.replace(" ", "")
-                .replace("/", "")
-                .replace("-", "")+".png";
+        name = name.replace(" ", "").replace("/", "").replace("-", "") + ".png";
         return Utils.downloadImage("https://www.aldi-nord.de" + (href), "aldi", Utils.getNextSaturday(), name);
     }
 
@@ -173,20 +168,21 @@ public class AldiOffer implements Gathering, ErrorHandler {
     private String getKategorieName(Element cat) {
         Elements h2 = cat.select("h2");
         if (h2.size() > 0) {
-            return h2.first()
-                    .ownText()
-                    .split("\\p{Pd}")[1]
-                    .replace("Traditionell genießen: ", "")
-                    .replace("Frische Qualität in großer Auswahl: ", "")
-                    .replace("Jetzt zugreifen! Nur solange der Vorrat reicht: ", "")
-                    .replace("Marken aus unserem Sortiment.", "");
+            try {
+
+                return h2.first().ownText().split("\\p{Pd}")[1].replace("Traditionell genießen: ", "")
+                        .replace("Frische Qualität in großer Auswahl: ", "")
+                        .replace("Jetzt zugreifen! Nur solange der Vorrat reicht: ", "")
+                        .replace("Marken aus unserem Sortiment.", "");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                log.error("Kategorie nicht ermittelt");
+            }
         }
         return "";
     }
 
     private LocalDate getLocalDate(Element el) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                .withLocale(Locale.GERMANY);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.GERMANY);
         return LocalDate.parse(el.attr("data-rel"), dateTimeFormatter);
     }
 
@@ -198,8 +194,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
     private Document getDocument(String url) {
         Document document = null;
         try {
-            document = Jsoup.connect(url)
-                    .get();
+            document = Jsoup.connect(url).get();
         } catch (IOException e) {
             log.error("!!! Url ist nicht erreichbar");
             errorMessage.send(e.getMessage());
