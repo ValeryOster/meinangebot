@@ -1,48 +1,60 @@
-<div class="kategorieLinks" id="monitorAb1026">
-  <label>Suche nach Produktname: </label>
+<div class="searchArea">
+  <label>Produktname: </label>
   <input type="text" [(ngModel)]="search">
 </div>
 <div *ngIf="search">
-  <div class="kategorie" *ngFor="let discounter of discounters|keyvalue">
-    <div class="kategorie" *ngFor="let kategori of discounter.value|keyvalue|filter:search">
-      <div class="cards">
-        <div *ngFor="let offer of kategori.value">
+  <div class="cards">
+    <div *ngFor="let offer of allOffersList|filter:search">
+      <mat-card class="simple-card" role="group">
+        <ng-template [ngIf]="offer.discounterName.includes('LIDL.')">
+          <div  class="searchLogo">
+            <img src="assets/lidl.png" alt="image">
+          </div>
+        </ng-template>
+        <ng-template [ngIf]="offer.discounterName.includes('PENNY')" class="searchLogo">
+          <div  class="searchLogo">
+            <img src="assets/penny.png" alt="image">
+          </div>
+        </ng-template>
+        <ng-template [ngIf]="offer.discounterName.includes('Aldi')" class="searchLogo">
+          <div  class="searchLogo">
+            <img src="assets/aldi.png" alt="image">
+          </div>
+        </ng-template>
 
-          <mat-card class="simple-card" role="group">
-            <mat-card-header>
-              <div class="actuel">
-                <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{offer.vonDate | date:'dd.MM'}}
-                <span class="actuelBis">bis: </span> {{offer.bisDate | date:'dd.MM'}}
-                <mat-icon class="addIcon" (click)="addToBucket(offer)">playlist_add</mat-icon>
-                <span class="advice">add</span>
-                <a href="{{offer.url}}" class="dicounterLinkIcon">
-                  <mat-icon>link ikon</mat-icon>
-                </a>
+
+        <mat-card-header>
+          <div class="actuel">
+            <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{offer.vonDate | date:'dd.MM'}}
+            <span class="actuelBis">bis: </span> {{offer.bisDate | date:'dd.MM'}}
+            <mat-icon class="addIcon" (click)="addToBucket(offer)">playlist_add</mat-icon>
+            <span class="advice">add</span>
+            <a href="{{offer.url}}" class="dicounterLinkIcon">
+              <mat-icon>link ikon</mat-icon>
+            </a>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-container">
+            <img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy">
+
+            <div class="card-info">
+              <div class="name">
+                <h4>{{offer.produktName}}</h4>
               </div>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="card-container">
-                <img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy">
-
-                <div class="card-info">
-                  <div class="name">
-                    <h4>{{offer.produktName}}</h4>
-                  </div>
-                  <div class="prise">
-                    <div class="oldprise" *ngIf="!(offer.produktRegularPrise === 'null')">
-                      {{offer.produktRegularPrise}}
-                    </div>
-                    <div class="actuelprise">
-                      {{offer.produktPrise}}
-                    </div>
-                  </div>
+              <div class="prise">
+                <div class="oldprise" *ngIf="!(offer.produktRegularPrise === 'null')">
+                  {{offer.produktRegularPrise}}
+                </div>
+                <div class="actuelprise">
+                  {{offer.produktPrise}}
                 </div>
               </div>
-            </mat-card-content>
-          </mat-card>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -54,17 +66,17 @@
         <ng-template mat-tab-label>
           <ng-template [ngIf]="discounter.key === 'Lidl'">
             <div class="logos">
-              <h1 class="lidlLogo">L<span class="lidlLogoI">i</span>DL</h1>
+              <img src="assets/lidl.png" alt="image">
             </div>
           </ng-template>
           <ng-template [ngIf]="discounter.key === 'Penny'">
             <div class="logos">
-              <h1 class="pennyLogo">PENNY<span class=pennyLogoDot>.</span></h1>
+              <img src="assets/penny.png" alt="image">
             </div>
           </ng-template>
           <ng-template [ngIf]="discounter.key === 'Aldi'">
             <div class="logos">
-              <h1 class="aldiLogo">ALDI</h1>
+              <img src="assets/aldi.png" alt="image">
             </div>
           </ng-template>
         </ng-template>

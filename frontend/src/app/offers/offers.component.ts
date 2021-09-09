@@ -10,18 +10,23 @@ import {AuswahlService} from "../service/auswahl.service";
 })
 export class OffersComponent implements OnInit {
   discounters: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
+  allOffersList: Array<Offer> = [];
   url = environment.apiUrl;
   ausgewahl: Offer[] = [];
   search = "";
 
-  constructor(public service: StartService, public auswahlService: AuswahlService) {}
+  constructor(public service: StartService, public auswahlService: AuswahlService) {
+    this.search = ""
+  }
 
   ngOnInit(): void {
     this.service.getAll().subscribe(value => {
       let strings = Object.keys(value);
       for (let i = 0; i < strings.length; i++) {
-        let map = this.mapToDiscount(value[strings[i]]);
+        let offers = value[strings[i]];
+        let map = this.mapToDiscount(offers);
         this.discounters.set(strings[i], map);
+        Array.prototype.push.apply(this.allOffersList, offers)
       }
     })
     this.auswahlService.getValue().subscribe(value => {
@@ -29,6 +34,7 @@ export class OffersComponent implements OnInit {
         return this.ausgewahl = value;
       }
     });
+
   }
 
   mapToDiscount(offers: Offer[]) {

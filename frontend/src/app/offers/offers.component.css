@@ -47,6 +47,8 @@
 .name {
   color: #404b5b;
   overflow: hidden;
+  line-height: 1.5em;
+  height: 3em;
 }
 
 .actuelVon {
@@ -96,13 +98,21 @@
   height: 350px;
   margin: 4px;
 }
+.simple-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+.simple-card:hover .addIcon {
+  display: inline;
+}
 
+.simple-card:hover .dicounterLinkIcon {
+  display: inline;
+}
 .simple-header-image {
   background-size: cover;
 }
-
-.simple-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+.searchLogo{
+  width: 65px;
 }
 
 .addIcon {
@@ -140,14 +150,6 @@
 
 .dicounterLinkIcon:hover {
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
-}
-
-.simple-card:hover .addIcon {
-  display: inline;
-}
-
-.simple-card:hover .dicounterLinkIcon {
-  display: inline;
 }
 
 .addIcon:hover {
@@ -200,7 +202,7 @@ ul {
   background-color: #f39ca1;
 }
 
-.kategorieLinks{
+.searchArea{
   margin-top: 70px;
   padding-top: 20px;
   display: flex;
@@ -208,11 +210,11 @@ ul {
   justify-content: left;
   align-items: center
 }
-.kategorieLinks input{
+.searchArea input{
   width: 45%;
   margin-bottom: 0;
 }
-.kategorieLinks label{
+.searchArea label{
   margin-right: 20px;
   bottom: 5px;
 }
@@ -222,7 +224,7 @@ ul {
 }
 
 .logos {
-  margin-bottom: 10px;
+  width: 140px;
 }
 
 .lidlLogo {
@@ -325,12 +327,11 @@ ul {
   }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {
-
-}
-
 @media only screen and (max-width: 682px) {
+  .searchArea input{
+    width: 100%;
+  }
+
   ul {
     display: none;
   }
@@ -393,23 +394,9 @@ ul {
   }
 
   .logos {
-    margin-bottom: 0px;
-    font-size: 11px;
+    font-size: 11px
+
   }
-}
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {
-
-}
-
-/* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {
-
-}
-
-/* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1200px) {
 
 }
 
