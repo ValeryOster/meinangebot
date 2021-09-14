@@ -54,6 +54,10 @@ public class Utils {
                 .trim(), name.trim());
     }
 
+    public static String downloadImageNextSaturdayWithOutName(String strImageURL, String storageName) {
+        return downloadImage(strImageURL,storageName,getNextSaturday(), "");
+    }
+
     public static String downloadImage(String strImageURL, String storageName, LocalDate endDate, String imageName) {
 
         //get file name from image path
