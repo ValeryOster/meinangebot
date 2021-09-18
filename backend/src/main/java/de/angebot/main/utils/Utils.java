@@ -1,14 +1,9 @@
 package de.angebot.main.utils;
 
-import de.angebot.main.enities.ProductMaker;
-import de.angebot.main.repositories.ProductMakerRepo;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -22,6 +17,8 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class Utils {
@@ -50,12 +47,11 @@ public class Utils {
                 break;
             }
         }
-        return Arrays.asList(maker.toString()
-                .trim(), name.trim());
+        return Arrays.asList(maker.toString().trim(), name.trim());
     }
 
     public static String downloadImageNextSaturdayWithOutName(String strImageURL, String storageName) {
-        return downloadImage(strImageURL,storageName,getNextSaturday(), "");
+        return downloadImage(strImageURL, storageName, getNextSaturday(), "");
     }
 
     public static String downloadImage(String strImageURL, String storageName, LocalDate endDate, String imageName) {
@@ -98,19 +94,58 @@ public class Utils {
     }
 
     public static LocalDate getLastMonday() {
-        return LocalDate.now(ZoneId.of("Europe/Paris"))
-                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        return LocalDate.now(ZoneId.of("Europe/Paris")).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
     }
 
     public static LocalDate getNextMonday() {
-        return LocalDate.now(ZoneId.of("Europe/Paris"))
-                .with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+        return LocalDate.now(ZoneId.of("Europe/Paris")).with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
     }
 
     public static LocalDate getNextSaturday() {
-        return LocalDate.now(ZoneId.of("Europe/Paris"))
-                .with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        return LocalDate.now(ZoneId.of("Europe/Paris")).with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
     }
+
+    public static LocalDate getDateFromString(String str) {
+        if (str.toLowerCase().contains("montag")) {
+            return getSuitableDay(DayOfWeek.MONDAY);
+        } else if (str.toLowerCase().contains("dienstag")) {
+            return getSuitableDay(DayOfWeek.TUESDAY);
+        } else if (str.toLowerCase().contains("mittwoch")) {
+            return getSuitableDay(DayOfWeek.WEDNESDAY);
+        }else if (str.toLowerCase().contains("donnerstag")) {
+            return getSuitableDay(DayOfWeek.THURSDAY);
+        }else if (str.toLowerCase().contains("freitag")) {
+            return getSuitableDay(DayOfWeek.FRIDAY);
+        }else if (str.toLowerCase().contains("samstag")) {
+            return getNextSaturday();
+        }
+        return getNextMonday();
+    }
+
+    public static LocalDate getSuitableDay(DayOfWeek dayOfWeek) {
+        LocalDate date = LocalDate.now(ZoneId.of("Europe/Paris")).with(dayOfWeek);
+        if (LocalDate.now().isAfter(date)) {
+            return date;
+        }
+        return LocalDate.now(ZoneId.of("Europe/Paris")).with(TemporalAdjusters.nextOrSame(dayOfWeek));
+    }
+
+    public static boolean isContainExactWord(String fullString, String partWord){
+        String pattern = "\\b"+partWord+"\\b";
+        Pattern p=Pattern.compile(pattern);
+        Matcher m=p.matcher(fullString);
+        return m.find();
+    }
+
+    public static String makeAllLetterCapitalize(String replace) {
+        StringBuilder builder = new StringBuilder();
+        String[] s = replace.split("\\s");
+        for (int i = 0; i < s.length; i++) {
+            builder.append(StringUtils.capitalize(s[i] + " "));
+        }
+        return builder.toString();
+    }
+
 
     @Value("${main.bilder}")
     public void setFoder(String folder) {
