@@ -4,11 +4,9 @@ import de.angebot.main.enities.CommonGather;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.aldi.AldiOffer;
 import de.angebot.main.gathering.lidl.LidlOffer;
+import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
-import de.angebot.main.repositories.AldiRepo;
-import de.angebot.main.repositories.CommonGatherRepo;
-import de.angebot.main.repositories.LidlRepo;
-import de.angebot.main.repositories.PennyRepo;
+import de.angebot.main.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +38,12 @@ public class GatherService {
     @Autowired
     private AldiRepo aldiRepo;
 
+    @Autowired
+    private NettoOffer nettoOffer;
+
+    @Autowired
+    private NettoRepo nettoRepo;
+
     public void startGather(List<String> discounters) {
         mainGather.setGatherRepo(gatherRepo);
 
@@ -54,7 +58,10 @@ public class GatherService {
                     break;
                 case "ALDI":
                     mainGather.addToGatherList(aldiOffer);
-                break;
+                    break;
+                case "NETTO":
+                    mainGather.addToGatherList(nettoOffer);
+                    break;
             }
         }
         mainGather.startGather();

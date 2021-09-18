@@ -18,7 +18,12 @@
         </ng-template>
         <ng-template [ngIf]="offer.discounterName.includes('Aldi')" class="searchLogo">
           <div  class="searchLogo">
-            <img src="assets/aldi.png" alt="image">
+            <img src="assets/aldi.svg" alt="image">
+          </div>
+        </ng-template>
+        <ng-template [ngIf]="offer.discounterName.includes('Netto')" class="searchLogo">
+          <div  class="searchLogo">
+            <img src="assets/netto.svg" alt="image">
           </div>
         </ng-template>
 
@@ -76,7 +81,12 @@
           </ng-template>
           <ng-template [ngIf]="discounter.key === 'Aldi'">
             <div class="logos">
-              <img src="assets/aldi.png" alt="image">
+              <img src="assets/aldi.svg" alt="image">
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="discounter.key === 'Netto'">
+            <div class="logos">
+              <img src="assets/netto.svg" alt="image">
             </div>
           </ng-template>
         </ng-template>

@@ -1,9 +1,6 @@
 package de.angebot.main.controller;
 
-import de.angebot.main.enities.AbstactEneties;
-import de.angebot.main.enities.Aldi;
-import de.angebot.main.enities.Lidl;
-import de.angebot.main.enities.Penny;
+import de.angebot.main.enities.*;
 import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +28,11 @@ public class HomeController {
     @GetMapping(path = "/aldi")
     public List<Aldi> getAldi() {
         return service.aldiCurrentOffers();
+    }
+
+    @GetMapping(path = "/netto")
+    public List<Netto> getNetto() {
+        return service.nettoCurrentOffers();
     }
 
     @GetMapping(path = "/all")

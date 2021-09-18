@@ -2,14 +2,14 @@ package de.angebot.main.enities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class Lidl extends AbstactEneties{
 

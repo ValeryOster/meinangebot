@@ -225,6 +225,7 @@ ul {
 
 .logos {
   width: 140px;
+  height: 51px;
 }
 
 .lidlLogo {
@@ -261,6 +262,7 @@ ul {
   position: relative;
   z-index: 0;
 }
+
 
 .auswahl_zaehler {
   position: fixed;

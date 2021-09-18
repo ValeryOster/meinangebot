@@ -1,7 +1,6 @@
 package de.angebot.main.repositories;
 
 import de.angebot.main.enities.Aldi;
-import de.angebot.main.enities.Lidl;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 

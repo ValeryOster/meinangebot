@@ -29,8 +29,6 @@ import java.util.stream.Stream;
 @Slf4j
 @Component
 public class LidlOffer implements Gathering, ErrorHandler {
-
-    int a = 0;
     private String mainUrl = "https://www.lidl.de";
     private String angeboteUrl = "";
     private List<String> possibleMakers;
