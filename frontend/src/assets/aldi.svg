@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="84.666664mm"
+   height="28.069929mm"
+   viewBox="-2 -4 94.666664 28.069929"
+   version="1.1"
+   id="svg4433"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="aldi.svg">
+  <defs
+     id="defs4427" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.7625001"
+     inkscape:cx="160"
+     inkscape:cy="53.045535"
+     inkscape:document-units="mm"
+     inkscape:current-layer="svg4433"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata4430">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     inkscape:connector-curvature="0"
+     id="path3936"
+     style="fill:#1d3587;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.28222224"
+     d="m 17.231409,12.747189 h -4.23232 l 2.06388,-4.4788803 z m 3.68635,7.43269 h 9.14599 L 19.727869,1.5856146e-4 h -9.22579 L 0.16565856,20.179879 H 9.3121887 l 0.9719503,-2.12111 h 9.66112 z m 10.33808,0 h 17.132345 v -5.83003 H 40.467311 V 1.5856146e-4 h -9.211472 z m 33.970794,-10.09041 c 0,2.42326 -1.83437,4.38531 -4.099674,4.38531 H 59.184166 V 5.7057988 h 1.944994 c 2.265307,0 4.097473,1.9631599 4.097473,4.3836702 m 8.330893,0.002 C 73.557526,4.5185086 69.072592,-1.4385376e-6 63.540314,-1.4385376e-6 H 50.135046 V 20.179739 h 13.405268 c 5.532278,0 10.017212,-4.51741 10.017212,-10.08821 M 84.666666,8.5614624e-6 H 75.594982 V 20.179739 h 9.071684 z" />
+
+</svg>
