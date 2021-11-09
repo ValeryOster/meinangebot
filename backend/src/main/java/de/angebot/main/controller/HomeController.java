@@ -35,11 +35,6 @@ public class HomeController {
         return service.nettoCurrentOffers();
     }
 
-    @GetMapping(path = "/all")
-    public Map<String, List<? extends AbstactEneties>> getAllDiscouters() {
-        return service.getAllCurrentOffers();
-    }
-
     @GetMapping(path = "/aldi/{id}")
     public Aldi getAldiOfferById(@PathVariable Long id) {
         if (id != null) return service.getAldiOfferById(id);
@@ -58,4 +53,12 @@ public class HomeController {
         return null;
     }
 
+    @PostMapping(path = "/auswahl")
+    public Map<String, List<? extends AbstactEneties>> getAuswahlDiscouters(@RequestBody List<String> discounters) {
+        if (discounters.size() > 0) {
+            Map<String, List<? extends AbstactEneties>> auswahlDiscounters = service.getAuswahlDiscounters(discounters);
+            return auswahlDiscounters;
+        }
+        return null;
+    }
 }

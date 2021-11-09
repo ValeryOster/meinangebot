@@ -1,18 +1,13 @@
-
-
-<!--<div class="container">-->
-<!--  <h3>Aktiviere Checkbox um die entsprechende Angebotte zu bekommen</h3>-->
-<!--  <div>-->
-<!--    <form [formGroup]="form" (ngSubmit)="submit()">-->
-<!--      <label formArrayName="dicounters" *ngFor="let dicounter of ordersFormArray.controls;let i = index">-->
-<!--        <input type="checkbox" [formControlName]="i" >-->
-<!--        {{discounterBox[i].name}}-->
-<!--      </label>-->
-<!--      <button class="btn">Zeigen</button>-->
-<!--    </form>-->
-<!--  </div>-->
-
-<!--</div>-->
+<div class="auswahl_diskounter">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="checkboxForm">
+    <label formArrayName="dicounters" *ngFor="let dicounter of ordersFormArray.controls;let i = index"
+           class="discounterLabel">
+      <input type="checkbox" [formControlName]="i">
+      {{discounterBox[i].name}}
+    </label>
+    <button class="btn">Auswahl</button>
+  </form>
+</div>
 
 <div>
   <app-offers></app-offers>

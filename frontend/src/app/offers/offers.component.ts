@@ -2,6 +2,7 @@ import {Component, OnInit,} from '@angular/core';
 import {Offer, StartService} from "../service/start.service";
 import {environment} from "../../environments/environment";
 import {AuswahlService} from "../service/auswahl.service";
+import {OfferListService} from "../service/offerslist/offer-list.service";
 
 @Component({
   selector: 'app-offers',
@@ -10,31 +11,44 @@ import {AuswahlService} from "../service/auswahl.service";
 })
 export class OffersComponent implements OnInit {
   discounters: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
+
+  //for searching presentation
   allOffersList: Array<Offer> = [];
+
   url = environment.apiUrl;
   ausgewahl: Offer[] = [];
   search = "";
 
-  constructor(public service: StartService, public auswahlService: AuswahlService) {
+  //diskounter list updating
+  discountersList: Array<string> = ['Lidl','Penny','Aldi','Netto'];
+
+  constructor(public service: StartService, public auswahlService: AuswahlService, public offerService:OfferListService) {
     this.search = ""
   }
 
   ngOnInit(): void {
-    this.service.getAll().subscribe(value => {
-      let strings = Object.keys(value);
-      for (let i = 0; i < strings.length; i++) {
-        let offers = value[strings[i]];
-        let map = this.mapToDiscount(offers);
-        this.discounters.set(strings[i], map);
-        Array.prototype.push.apply(this.allOffersList, offers)
-      }
-    })
     this.auswahlService.getValue().subscribe(value => {
       if (value != null && this.ausgewahl.length == 0) {
         return this.ausgewahl = value;
       }
     });
 
+    this.offerService.getDiscounters().subscribe(value => { console.log(value)
+      this.service.getSelectedDiskounters(value).subscribe(offers => this.saveItemsToMap(offers))
+    });
+  }
+
+  saveItemsToMap(value: Object) {
+    console.log(value);
+    let strings = Object.keys(value);
+    this.discounters.clear();
+    this.allOffersList.length = 0;
+    for (let i = 0; i < strings.length; i++) {
+      let offers = value[strings[i]];
+      let map = this.mapToDiscount(offers);
+      this.discounters.set(strings[i], map);
+      Array.prototype.push.apply(this.allOffersList, offers)
+    }
   }
 
   mapToDiscount(offers: Offer[]) {
