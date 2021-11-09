@@ -6,19 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 class LidlOfferTest {
 
     @Autowired
     LidlOffer lidlOffer;
 
-    @Test
+//    @Test
     void startGathering() {
         lidlOffer.startGathering();
     }
 
-//    @Test
+    //    @Test
     void testFuture() {
         String a = "Gültig bis Mi., 16.12.";
         String dateText = a.replaceAll("(.*)(\\d{2}.\\d{2}.)", "$2");
