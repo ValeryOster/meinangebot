@@ -8,10 +8,7 @@ import de.angebot.main.repositories.PennyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 public class DiscounterService {
@@ -30,6 +27,7 @@ public class DiscounterService {
     public List<Penny> pennyCurrentOffers() {
         return pennyRepo.findCurrentOffers();
     }
+
     public Penny getPennyOfferById(Long id) {
         try {
             return pennyRepo.findById(id).get();
@@ -66,27 +64,39 @@ public class DiscounterService {
         return nettoRepo.findCurrentOffers();
     }
 
-    public Map<String, List<? extends AbstactEneties>> getAllCurrentOffers() {
-        Map<String, List<? extends AbstactEneties>> discounters = new HashMap<>();
-        List<Lidl> lidl = lidlCurrentOffers();
-        if (lidl.size() > 0) {
-            discounters.put("Lidl", lidl);
-        }
-        List<Penny> pennies = pennyCurrentOffers();
-        if (pennies.size() > 0) {
-            discounters.put("Penny", pennies);
-        }
 
-        List<Aldi> aldiList = aldiCurrentOffers();
-        if (aldiList.size() > 0) {
-            discounters.put("Aldi", aldiList);
-        }
+    public Map<String, List<? extends AbstactEneties>> getAuswahlDiscounters(List<String> discounters) {
+        return getOffersFromList(discounters);
+    }
 
-        List<Netto> nettoList = nettoCurrentOffers();
-        if (nettoList.size() > 0) {
-            discounters.put("Netto", nettoList);
+    private Map<String, List<? extends AbstactEneties>> getOffersFromList(List<String> discounters) {
+        Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
+        for (String discounter : discounters) {
+            if (discounter.toLowerCase().equals("lidl")) {
+                List<Lidl> lidl = lidlCurrentOffers();
+                if (lidl.size() > 0) {
+                    discountersMap.put("Lidl", lidl);
+                }
+            }
+            else if (discounter.toLowerCase().equals("penny")) {
+                List<Penny> pennies = pennyCurrentOffers();
+                if (pennies.size() > 0) {
+                    discountersMap.put("Penny", pennies);
+                }
+            }
+            else if (discounter.toLowerCase().equals("aldi")) {
+                List<Aldi> aldiList = aldiCurrentOffers();
+                if (aldiList.size() > 0) {
+                    discountersMap.put("Aldi", aldiList);
+                }
+            }
+            else if (discounter.toLowerCase().equals("netto")) {
+                List<Netto> nettoList = nettoCurrentOffers();
+                if (nettoList.size() > 0) {
+                    discountersMap.put("Netto", nettoList);
+                }
+            }
         }
-
-        return discounters;
+        return discountersMap;
     }
 }

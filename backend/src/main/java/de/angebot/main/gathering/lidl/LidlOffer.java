@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -252,14 +253,18 @@ public class LidlOffer implements Gathering, ErrorHandler {
             if (dateText.contains("Testergebnisse")) {
                 return false;
             }
-            String datum = dateText.replaceAll("(.*)(\\d{2}.\\d{2}.)", "$2");
+            String datum = dateText.replaceAll("(.*)(\\d{2}.\\d{2}.)", "$2").replace(" sparen", "");
             if (!datum.isEmpty() && Character.isDigit(datum.charAt(0))) {
-                LocalDate parse = LocalDate
-                        .parse((datum + (LocalDate.now().getYear())), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                if (parse.isAfter(Utils.getNextSaturday())) {
-                    return false;
-                } else {
-                    return true;
+                try {
+                    LocalDate parse = LocalDate.parse((datum + (LocalDate.now().getYear())), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                    if (parse.isAfter(Utils.getNextSaturday())) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+
+                } catch (DateTimeParseException e1) {
+                    log.error("LIDL -> Datum wird nicht erkannt -> Datum nach parsing: " + datum);
                 }
             }
         }
