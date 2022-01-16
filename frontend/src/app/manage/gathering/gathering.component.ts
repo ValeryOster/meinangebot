@@ -20,6 +20,7 @@ export class GatheringComponent implements OnInit {
   ];
   discounters: Discounter[];
   buttonActive = true;
+  checkBoxStatus = false;
   constructor(public discService:DiscounterService,
               private router: Router,
               private formBuilder: FormBuilder) {
@@ -40,14 +41,23 @@ export class GatheringComponent implements OnInit {
   }
 
   submit() {
-    let list = new Array() ;
+    this.buttonActive = true;
+    this.checkBoxStatus = true;
+    let list = [] ;
     this.form.value.dicounters.map((checked, i) =>{
         if(checked){
           var str:string;
           str = this.discounterBox[i].name
           list.push(str);
         }});
-    this.discService.startGather(list).subscribe();
+    this.discService.startGather(list).toPromise()
+      .then(value => {
+        console.log(this.buttonActive);
+        this.buttonActive = false;
+        this.checkBoxStatus = false;
+      });
+
+
   }
 
   private addCheckboxes() {

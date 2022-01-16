@@ -7,7 +7,7 @@
     </label>
     <div>
       <label for="aktivate">
-        Aktiviere -><input id="aktivate" type="checkbox" (change)="buttonActive = !buttonActive" >
+        Aktiviere -><input id="aktivate" type="checkbox" (change)="buttonActive = !buttonActive" [disabled]="checkBoxStatus">
       </label>
       <button class="btn" [disabled]="buttonActive"> Sammeln</button>
     </div>
