@@ -1,17 +1,62 @@
-<div class="header center">Log In</div>
-
-<form [formGroup]="loginForm" (ngSubmit)="login()">
-
-  <mat-form-field>
-    <input matInput type="text" id="username" placeholder="Username" autocomplete="off" formControlName="username" required>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput type="password" id="password" placeholder="Password" formControlName="password" required>
-  </mat-form-field>
-
-  <div class="actions">
-    <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">LOG IN</button>
+<div class="{{container}}">
+  <div class="app front">
+    <div class="header">
+      <span class="info">Login</span>
+      <div class="prompt">
+        <span class="ask">Habe Sie kein Benuterkonto?</span>
+        <button class="btn signup" (click)="changeView('singUp')">sign up</button>
+      </div>
+    </div>
+    <div class="main">
+      <div class="user_field">
+        <form class="_details">
+          <div class="textbox">
+            <input type="text">
+            <span class="input_detail">Username</span>
+          </div>
+          <div class="textbox">
+            <input type="password">
+            <span class="input_detail">Password</span>
+          </div>
+        </form>
+      </div>
+      <button class="btn login">anmelden</button>
+    </div>
   </div>
 
-</form>
+
+  <div class="app back">
+    <div class="header">
+      <span class="info">Sing Up</span>
+      <div class="prompt">
+        <span class="ask">Haben Sie ein Benuterkonto?</span>
+        <button class="btn login" (click)="changeView('login')">login</button>
+      </div>
+    </div>
+    <div class="main">
+      <div class="user_field">
+        <form class="_details">
+          <div class="textbox">
+            <input type="text">
+            <span class="input_detail">Username</span>
+          </div>
+          <div class="textbox">
+            <input type="email">
+            <span class="input_detail">Email</span>
+          </div>
+          <div class="textbox">
+            <input type="password">
+            <span class="input_detail">Password</span>
+          </div>
+        </form>
+      </div>
+      <button class="btn login">registrieren</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="support">
+  <a href="https://twitter.com/DevLoop01" target="_blank"><i class="fab fa-twitter-square"></i></a>
+  <a href="https://codepen.io/dev_loop/" target="_blank"><i class="fab fa-codepen"></i></a>
+</div>

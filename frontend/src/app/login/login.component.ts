@@ -13,6 +13,7 @@ import {OffersComponent} from "../offers/offers.component";
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  container = "container";
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder,
               private router: Router, private token: TokenStorageService,private offers:OffersComponent) {
@@ -45,4 +46,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  changeView(str: string) {
+
+    if (str === 'singUp') {
+      this.container = "container active";
+      console.log("singUp")
+    }else {
+      this.container = "container";
+      console.log("login")
+    }
+  }
 }

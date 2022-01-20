@@ -1,19 +1,243 @@
-:host {
-  text-align: center;
-  display: block;
-  margin-top: 10%;
-  margin-bottom: 10%;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-form {
-  max-width: 300px;
-  margin: auto;
-}
-
-mat-form-field {
+body {
   width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1800px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  background-image: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);
 }
 
-.actions {
-  text-align: center;
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 800ms ease;
+  transform-style: preserve-3d;
+}
+.container.active {
+  transform: rotateY(180deg);
+}
+
+.app {
+  background: #34495e;
+  color: #fff;
+  font-family: montserrat;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 80px 1fr;
+  overflow: hidden;
+  backface-visibility: hidden;
+  position: absolute;
+  box-shadow: -2px 5px 15px rgba(0, 0, 0, 0.35);
+}
+.app.front {
+  transform: rotateY(0deg) translateZ(0em);
+  margin-top: 410px;
+}
+.app.back {
+  transform: rotateY(180deg) translateZ(0.5px);
+  margin-top: 410px;
+}
+
+.btn {
+  height: 50px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: #1abc9c;
+  letter-spacing: 1px;
+  font-size: 18px;
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 150px 1fr;
+  background: #2c3e50;
+  padding: 0 20px;
+}
+.header .info {
+  height: 100%;
+  font-weight: 800;
+  font-size: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 2px;
+}
+.header .prompt {
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 20px;
+}
+.header .prompt .btn {
+  padding: 0 20px;
+  margin-left: 20px;
+  color: #fff;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.main .user_field {
+  width: 92%;
+  height: 100%;
+  background: rgba(44, 62, 80, 0.6);
+  padding: 10px 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.main .user_field .direct.login {
+  padding: 10px 0;
+  display: flex;
+}
+.main .user_field .direct.login .icon {
+  position: relative;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-right: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: #fff;
+  overflow: hidden;
+}
+.main .user_field .direct.login .icon:before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: all 400ms ease;
+  transform: scale(0.4);
+  background: #1abc9c;
+  z-index: 1;
+  opacity: 0;
+}
+.main .user_field .direct.login .icon i {
+  z-index: 2;
+  transition: all 300ms ease;
+  color: #000;
+  font-size: 1rem;
+}
+.main .user_field .direct.login .icon:hover:before {
+  transform: scale(1);
+  opacity: 1;
+}
+.main .user_field .direct.login .icon:hover i {
+  color: #fff;
+}
+.main .user_field .option_text {
+  font-size: 15px;
+  margin: 5px 0 10px 0;
+}
+.main .user_field ._details {
+  width: 100%;
+  height: 100%;
+}
+.main .user_field ._details .textbox {
+  position: relative;
+  margin: 10px 0 20px 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+.main .user_field ._details .textbox input {
+  position: relative;
+  height: 40px;
+  width: 70%;
+  border: none;
+  background: none;
+  border-bottom: 2px solid #fff;
+  font-size: 18px;
+  color: #fff;
+  padding: 0 10px;
+  letter-spacing: 1px;
+  outline: none;
+}
+.main .user_field ._details .textbox input:focus + .input_detail {
+  font-size: 12px;
+  left: 10px;
+  top: 15%;
+  color: #1abc9c;
+  opacity: 1;
+}
+.main .user_field ._details .textbox .input_detail {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  font-size: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  user-select: none;
+  font-weight: 800;
+  opacity: 0.7;
+  transition: all 200ms ease;
+}
+.main .btn.login {
+  position: relative;
+  color: #fff;
+  align-self: flex-end;
+  margin: 20px 20px 0 0;
+  padding: 10px 0;
+  width: 160px;
+}
+
+.app.back .header {
+  grid-template-columns: 200px 1fr;
+}
+
+.app.back .main .user_field ._details .textbox {
+  height: 40px;
+}
+
+.app.back .main .user_field ._details .textbox input:focus + .input_detail {
+  top: 0%;
+}
+
+.support {
+  z-index: -1;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 10px;
+  display: flex;
+}
+
+a {
+  margin: 0 20px;
+  color: #fff;
+  font-size: 2rem;
+  transition: all 400ms ease;
+}
+
+a:hover {
+  color: #222;
 }
