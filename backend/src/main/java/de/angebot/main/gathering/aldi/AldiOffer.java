@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Slf4j
@@ -25,7 +27,11 @@ public class AldiOffer implements Gathering, ErrorHandler {
 
     @Autowired
     SaveUtil saveUtil;
-    private String mainUrl = "https://www.aldi-nord.de/angebote.html";
+
+    String mainUrl = "https://www.aldi-nord.de";
+    private String angebotUrl = mainUrl + "/angebote.html";
+
+
     @Autowired
     private AldiRepo aldiRepo;
 
@@ -33,7 +39,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
     public void startGathering() {
         log.info("********Aldi parsing is starting.********");
 
-        Document document = getDocument(mainUrl);
+        Document document = getDocument(angebotUrl);
         getStartDay(document);
 
         log.info("********Aldi parsing is ended.********");
@@ -49,11 +55,10 @@ public class AldiOffer implements Gathering, ErrorHandler {
             Elements categories = el.getElementsByClass("mod mod-tile-group");
             for (Element categorie : categories) {
                 aldi.setKategorie(getKategorieName(categorie));
-                Elements items = categorie.getElementsByClass("mod-article-tile");
-                for (Element item : items) {
-                    String itemUrl = getItemUrl(item);
+                List<String> itemMainUrl = getItemMainUrl(categorie);
+                for (String itemUrl  : itemMainUrl) {
                     Document itemDoc = getDocument(itemUrl);
-                    if (itemDoc != null && itemDoc.getElementsByClass("mod-article-intro__header-headline") != null) {
+                    if (itemDoc != null && itemDoc.select("div.mod.mod-article-intro.ct-non-food-artikel ") != null) {
                         Aldi newAldi = getNewAldi(aldi);
                         newAldi.setProduktName(getItemName(itemDoc));
                         newAldi.setUrl(itemUrl);
@@ -67,6 +72,23 @@ public class AldiOffer implements Gathering, ErrorHandler {
                 }
             }
         }
+    }
+
+    private List<String> getItemMainUrl(Element categorie) {
+        List<String> urls = new ArrayList<>();
+        Elements elementsByClass = categorie.select("div[data-tile-url]");
+        for (Element element : elementsByClass) {
+            //get intermediary
+            String attr = mainUrl + element.attr("data-tile-url");
+            Document document = getDocument(attr);
+
+            //get itemLink
+            Element select = document.getElementsByClass("mod-article-tile__action").first();
+            if (select != null) {
+                urls.add(mainUrl +select.attr("href"));
+            }
+        }
+        return urls;
     }
 
     private Aldi getNewAldi(Aldi aldi) {
@@ -144,25 +166,14 @@ public class AldiOffer implements Gathering, ErrorHandler {
     private String getImagePath(Document itemDoc, String name) {
         String href = "";
         try {
-            href = itemDoc.getElementsByClass("mod-gallery-article__media").first().attr("data-srcset").split(" ")[0];
+            href = itemDoc.select("img.img-responsive.cq-dd-image").first().attr("data-srcset").split(" ")[0];
         } catch (RuntimeException e) {
             log.error("!!! Aldi - ImageUrl ist nicht gefunden.");
             errorMessage.send(e.getMessage());
+            return null;
         }
         name = name.replace(" ", "").replace("/", "").replace("-", "") + ".png";
         return Utils.downloadImage("https://www.aldi-nord.de" + (href), "aldi", Utils.getNextSaturday(), name);
-    }
-
-    private String getItemUrl(Element item) {
-        String href = "";
-        try {
-            Elements a = item.select("a");
-            href = "https://www.aldi-nord.de" + a.attr("href");
-        } catch (RuntimeException e) {
-            log.error("!!! Aldi-ItemUrl ist nicht gefunden.");
-            errorMessage.send(e.getMessage());
-        }
-        return href;
     }
 
     private String getKategorieName(Element cat) {
