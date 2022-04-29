@@ -224,7 +224,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private List<String> getAllURLs(Elements select) {
         List<String> allURLs = new ArrayList<>();
         for (Element e : select) {
-            Elements select1 = e.select("span:containsOwn(Filial-Angebote)");
+            Elements select1 = e.select("span:containsOwn(Lebensmittel)");
             if (select1.size() > 0) {
                 saveURLs(allURLs, e);
             }
