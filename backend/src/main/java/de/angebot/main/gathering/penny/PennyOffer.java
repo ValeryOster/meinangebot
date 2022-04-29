@@ -89,7 +89,6 @@ public class PennyOffer implements Gathering, ErrorHandler {
                 penny.setUrl(url);
 
                 pennyRepo.save(penny);
-                System.out.println("Gespeichert: " + penny.getKategorie());
             }
         });
     }
