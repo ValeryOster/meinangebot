@@ -56,6 +56,10 @@ public class Utils {
 
     public static String downloadImage(String strImageURL, String storageName, LocalDate endDate, String imageName) {
 
+        if (strImageURL == null || strImageURL.isEmpty()) {
+            return "";
+        }
+
         //get file name from image path
         if (imageName == null || imageName.isEmpty()) {
             imageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);

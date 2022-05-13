@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 //@SpringBootTest
 class NettoOfferTest {
 
-    @Autowired
+//    @Autowired
     NettoOffer nettoOffer;
 
 //    @Test

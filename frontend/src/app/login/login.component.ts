@@ -14,6 +14,9 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   container = "container";
+  singInCssClass: boolean = true;
+  newAccountCssClass: boolean = false;
+  passwortCssClass: boolean = false;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder,
               private router: Router, private token: TokenStorageService,private offers:OffersComponent) {
@@ -21,8 +24,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: [''],
-      password: ['']
+      signipUsername: [''],
+      signinPassword: ['']
     });
   }
 
@@ -31,10 +34,11 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    console.log(this.loginForm)
     this.authService.login(
       {
-        username: this.f.username.value,
-        password: this.f.password.value
+        username: this.f.signipUsername.value,
+        password: this.f.signinPassword.value
       }
     ).subscribe(success => {
       if (success) {
@@ -48,12 +52,18 @@ export class LoginComponent implements OnInit {
 
   changeView(str: string) {
 
-    if (str === 'singUp') {
-      this.container = "container active";
-      console.log("singUp")
-    }else {
-      this.container = "container";
-      console.log("login")
+    if (str === 'singIn') {
+      this.singInCssClass = true;
+      this.newAccountCssClass = false;
+      this.passwortCssClass = false;
+    }else if(str === 'newAccount'){
+      this.singInCssClass = false;
+      this.newAccountCssClass = true;
+      this.passwortCssClass = false;
+    }else if (str === 'vorgotPWD') {
+      this.singInCssClass = false;
+      this.newAccountCssClass = false;
+      this.passwortCssClass = true;
     }
   }
 }

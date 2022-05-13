@@ -66,8 +66,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
             if (offer != null) {
                 String price = offer.select("div.bubble__wrap-inner>span").text();
                 String origPrice = offer
-                        .select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " + "div > div >" +
-                                " div > span")
+                        .select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " + "div > div " + ">" + " div > span")
                         .text().replaceAll("[a-zA-Z]", "").trim();
 
                 //          If star, facke offer, go to next
@@ -79,8 +78,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
                 List<String> strings = Utils.splittToNameOrMaker(offerName);
 
                 //Look for a image link
-                String imagLink = getImageLink(offer);
-                penny.setImageLink(Utils.downloadImage(imagLink, "penny", endDate, ""));
+                penny.setImageLink(Utils.downloadImage(getImageLink(offer), "penny", endDate, ""));
                 penny.setProduktMaker(saveItemMaker(strings.get(0)));
                 penny.setProduktName(strings.get(1));
                 penny.setProduktPrise(price);
@@ -131,11 +129,21 @@ public class PennyOffer implements Gathering, ErrorHandler {
     }
 
     private String getImageLink(Document offer) {
-        Element select = offer.select("div.detail-block__carousel-slide>noscript>img").first();
-        if (select == null) {
-            select = offer.getElementById("offer-image-slide-0").select("img").first();
+        try {
+            Element elementById = offer.getElementById("offer-image-slide-0");
+            if (elementById != null) {
+                return elementById.select("img").first().attr("src");
+            }else {
+                Elements elementById1 = offer.getElementsByClass("detail-block__carousel-slide");
+                if (!elementById1.isEmpty()) {
+                    return elementById1.first().select("img").first().attr("src");
+                }
+            }
+
+        } catch (NullPointerException e) {
+
         }
-        return select.attr("src");
+        return "";
     }
 
     //to get Date, neen to know date of week

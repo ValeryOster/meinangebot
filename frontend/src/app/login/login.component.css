@@ -437,3 +437,6 @@ body {
 #login.is-selected, #signup.is-selected, #reset-password.is-selected {
   display: block;
 }
+.showSwitcherIfNotPasswortForgot{
+  display: none;
+}
