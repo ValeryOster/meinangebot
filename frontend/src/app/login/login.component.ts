@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from "../service/security/auth.service";
 import {TokenStorageService} from "../service/security/token-storage.service";
-import {OffersComponent} from "../offers/offers.component";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -13,45 +13,75 @@ import {OffersComponent} from "../offers/offers.component";
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  singupForm: FormGroup;
   container = "container";
   singInCssClass: boolean = true;
   newAccountCssClass: boolean = false;
   passwortCssClass: boolean = false;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder,
-              private router: Router, private token: TokenStorageService,private offers:OffersComponent) {
+              private router: Router, private token: TokenStorageService) {
   }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      signipUsername: [''],
-      signinPassword: ['']
+      loginUsername: [''],
+      loginPassword: ['']
+    });
+    this.singupForm = this.formBuilder.group({
+      signupUsername: [''],
+      signupEmail: [''],
+      signupPassword: ['']
     });
   }
 
-  get f() {
+  get loginF() {
     return this.loginForm.controls;
   }
 
+  get singupF() {
+    return this.singupForm.controls;
+  }
+
   login() {
-    console.log(this.loginForm)
     this.authService.login(
       {
-        username: this.f.signipUsername.value,
-        password: this.f.signinPassword.value
+        username: this.loginF.loginUsername.value,
+        password: this.loginF.loginPassword.value
       }
     ).subscribe(success => {
       if (success) {
-        console.log("is success!")
         this.token.saveToken(success.token);
         this.token.saveUser(success);
+        this.token.saveRoles(success.roles)
         this.router.navigate(['/']);
       }
+    },error => {
+      Swal.fire("Error", error.error.message.replace("Error:", " "), 'error');
+
+    });
+  }
+
+  singup() {
+    this.authService.singup(
+      {
+        username: this.singupF.signupUsername.value,
+        email: this.singupF.signupEmail.value,
+        password: this.singupF.signupPassword.value
+      }
+    ).subscribe(success => {
+      if (success) {
+        console.log(success)
+        Swal.fire("Success", success.message.replace("Success:", " "), 'success');
+        this.router.navigate(['']);
+      }
+    }, error => {
+      Swal.fire("Error", error.error.message.replace("Error:", " "), 'error');
+
     });
   }
 
   changeView(str: string) {
-
     if (str === 'singIn') {
       this.singInCssClass = true;
       this.newAccountCssClass = false;

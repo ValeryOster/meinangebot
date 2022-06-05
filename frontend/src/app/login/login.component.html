@@ -9,15 +9,16 @@
     <div id="login" [className]="singInCssClass ? 'is-selected' : ''">
       <form class="form" [formGroup]="loginForm" (ngSubmit)="login()">
         <p class="fieldset">
-          <label class="image-replace username" for="signipUsername">Username</label>
-          <input class="full-width has-padding has-border" id="signipUsername" type="text" placeholder="Username" formControlName="signipUsername">
+          <label class="image-replace username" for="loginUsername">Username</label>
+          <input class="full-width has-padding has-border" id="loginUsername" type="text" placeholder="Username"
+                 formControlName="loginUsername">
           <span class="error-message">Your username can only contain numeric and alphabetic symbols!</span>
         </p>
 
         <p class="fieldset">
-          <label class="image-replace password" for="signinPassword">Password</label>
-          <input class="full-width has-padding has-border" id="signinPassword" type="password" placeholder="Password" formControlName="signinPassword">
-          <a href="#0" class="hide-password">Show</a>
+          <label class="image-replace password" for="loginPassword">Password</label>
+          <input class="full-width has-padding has-border" id="loginPassword" type="password" placeholder="Password" formControlName="loginPassword">
+          <a href="" class="hide-password">Show</a>
           <span class="error-message">Wrong password! Try again.</span>
         </p>
 
@@ -37,29 +38,30 @@
     </div>
 
     <div id="signup"  [className]="newAccountCssClass ? 'is-selected' : ''">
-      <form class="form">
+      <form class="form" [formGroup]="singupForm" (ngSubmit)="singup()">
         <p class="fieldset">
-          <label class="image-replace username" for="signup-username">Username</label>
-          <input class="full-width has-padding has-border" id="signup-username" type="text" placeholder="Username">
+          <label class="image-replace username" for="signupUsername">Username</label>
+          <input class="full-width has-padding has-border" id="signupUsername" type="text" placeholder="Username" formControlName="signupUsername">
           <span class="error-message">Your username can only contain numeric and alphabetic symbols!</span>
         </p>
 
         <p class="fieldset">
-          <label class="image-replace email" for="signup-email">E-mail</label>
-          <input class="full-width has-padding has-border" id="signup-email" type="email" placeholder="E-mail">
+          <label class="image-replace email" for="signupEmail">E-mail</label>
+          <input class="full-width has-padding has-border" id="signupEmail" type="email" placeholder="E-mail"
+                 formControlName="signupEmail">
           <span class="error-message">Enter a valid email address!</span>
         </p>
 
         <p class="fieldset">
-          <label class="image-replace password" for="signup-password">Password</label>
-          <input class="full-width has-padding has-border" id="signup-password" type="password" placeholder="Password">
-          <a href="#0" class="hide-password">Show</a>
+          <label class="image-replace password" for="signupPassword">Password</label>
+          <input class="full-width has-padding has-border" id="signupPassword" type="password" placeholder="Password" formControlName="signupPassword">
+          <a href="" class="hide-password">Show</a>
           <span class="error-message">Your password has to be at least 6 characters long!</span>
         </p>
 
         <p class="fieldset">
           <input type="checkbox" id="accept-terms">
-          <label for="accept-terms">I agree to the <a class="accept-terms" href="#0">Terms</a></label>
+          <label for="accept-terms">I agree to the <a class="accept-terms" href="">Terms</a></label>
         </p>
 
         <p class="fieldset">
@@ -86,8 +88,8 @@
         </p>
       </form>
 
-      <p class="form-bottom-message"><a href="login">Back to log-in</a></p>
+      <p class="form-bottom-message"><a href="/login">Back to log-in</a></p>
     </div>
-    <a href="#0" class="close-form">Close</a>
+    <a href="" class="close-form">Close</a>
   </div>
 </div>
