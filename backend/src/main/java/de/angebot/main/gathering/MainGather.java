@@ -1,8 +1,8 @@
 package de.angebot.main.gathering;
 
-import de.angebot.main.enities.CommonGather;
+import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.common.Gathering;
-import de.angebot.main.repositories.CommonGatherRepo;
+import de.angebot.main.repositories.services.CommonGatherRepo;
 import lombok.extern.java.Log;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;

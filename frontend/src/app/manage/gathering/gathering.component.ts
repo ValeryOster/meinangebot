@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Discounter, DiscounterService} from "../../service/discounter.service";
+import {Discounter, DiscounterService} from "../../service/server/discounter.service";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
 

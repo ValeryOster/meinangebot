@@ -1,18 +1,20 @@
-package de.angebot.main.enities;
+package de.angebot.main.enities.discounters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import de.angebot.main.enities.AbstactEneties;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import java.time.LocalDate;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
-public class Aldi extends AbstactEneties {
+@EqualsAndHashCode(callSuper = true)
+public class Netto extends AbstactEneties {
 
     private String produktName;
     private String produktMaker;
@@ -27,5 +29,5 @@ public class Aldi extends AbstactEneties {
 
     @Transient
     @JsonProperty
-    private String discounterName = "Aldi-Nord";
+    private String discounterName = "Netto";
 }

@@ -1,9 +1,8 @@
 package de.angebot.main.repositories;
 
 import de.angebot.main.enities.ProductMaker;
-import org.junit.jupiter.api.Test;
+import de.angebot.main.repositories.services.ProductMakerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,6 +1,10 @@
 package de.angebot.main.controller;
 
 import de.angebot.main.enities.*;
+import de.angebot.main.enities.discounters.Aldi;
+import de.angebot.main.enities.discounters.Lidl;
+import de.angebot.main.enities.discounters.Netto;
+import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +60,7 @@ public class HomeController {
     @PostMapping(path = "/auswahl")
     public Map<String, List<? extends AbstactEneties>> getAuswahlDiscouters(@RequestBody List<String> discounters) {
         if (discounters.size() > 0) {
-            Map<String, List<? extends AbstactEneties>> auswahlDiscounters = service.getAuswahlDiscounters(discounters);
+            Map<String, List<? extends AbstactEneties>> auswahlDiscounters = service.getSelectedDiscounters(discounters);
             return auswahlDiscounters;
         }
         return null;

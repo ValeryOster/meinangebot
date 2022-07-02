@@ -1,7 +1,7 @@
 package de.angebot.main.security.services;
 
-import de.angebot.main.enities.User;
-import de.angebot.main.repositories.UserRepository;
+import de.angebot.main.enities.user.User;
+import de.angebot.main.repositories.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;

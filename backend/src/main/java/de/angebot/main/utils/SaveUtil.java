@@ -1,7 +1,7 @@
 package de.angebot.main.utils;
 
 import de.angebot.main.enities.ProductMaker;
-import de.angebot.main.repositories.ProductMakerRepo;
+import de.angebot.main.repositories.services.ProductMakerRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

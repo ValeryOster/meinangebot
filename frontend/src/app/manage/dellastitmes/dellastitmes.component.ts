@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {DiscounterService} from "../../service/discounter.service";
+import {DiscounterService} from "../../service/server/discounter.service";
 import {Router} from "@angular/router";
 
 @Component({

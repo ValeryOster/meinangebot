@@ -1,6 +1,6 @@
-package de.angebot.main.repositories;
+package de.angebot.main.repositories.discounters;
 
-import de.angebot.main.enities.Penny;
+import de.angebot.main.enities.discounters.Penny;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

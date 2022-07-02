@@ -1,9 +1,13 @@
 <div class="title">
   <h3>Ausgewahlte ProduktenListe</h3>
 </div>
-<div>
-  <a href="whatsapp://send?text=" data-text="Liste" class="whatsapp">
-    Auswahl an Whatsapp senden
+<div class="services" *ngIf="auth.isAuthenticated()">
+  <button class="btn" (click)="save()">Speichern alle</button>
+  <span class="v-line">|</span>
+  <a href="whatsapp://send?text=" data-text="Liste">
+    <span class="whatsapp">
+      Auswahl an Whatsapp senden
+    </span>
   </a>
 </div>
 <div>
@@ -12,7 +16,7 @@
       <th>Bild</th>
       <th>Discounter</th>
       <th>Produkt Name</th>
-      <th class="show_only" >Hersteller</th>
+      <th class="show_only">Hersteller</th>
       <th>Preis</th>
       <th class="show_only">Von</th>
       <th class="show_only">bis</th>
