@@ -28,7 +28,8 @@ public class ItemsService {
 
     @Autowired
     public ItemsService(AldiRepo aldiRepo, NettoRepo nettoRepo, LidlRepo lidlRepo, PennyRepo pennyRepo,
-                        SelectedItemsRepo itemsRepo) {this.aldiRepo = aldiRepo;
+                        SelectedItemsRepo itemsRepo) {
+        this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
         this.lidlRepo = lidlRepo;
         this.pennyRepo = pennyRepo;
@@ -37,7 +38,7 @@ public class ItemsService {
 
     public List<Object> getAllSelectedItemForWeek(Long userId) {
         List<Object> itemsList = new ArrayList<>();
-        for (SelectedItem item : itemsRepo.findCurrentOffers(userId)) {
+        for (SelectedItem item : itemsRepo.findCurrentOffersByUserId(userId)) {
             switch (item.getDiscounterName().toLowerCase()) {
                 case "aldi":
                     itemsList.add(aldiRepo.findById(item.getItemId()).get());
@@ -64,14 +65,16 @@ public class ItemsService {
             SelectedItem selectedItem = mapJsonSelectedItemToSelectedItem(item, selectedItems);
             try {
                 itemsRepo.save(selectedItem);
-            } catch (Exception e ) {
+            } catch (Exception e) {
                 log.error(e.getMessage());
             }
+
         }
     }
 
     private SelectedItem mapJsonSelectedItemToSelectedItem(Item item, JsonSelectedItemsListAndUserId selectedItems) {
-        SelectedItem selectedItem = new SelectedItem();new SelectedItem();
+        SelectedItem selectedItem = new SelectedItem();
+        new SelectedItem();
 
         selectedItem.setDiscounterName(item.getDiscounterName());
         selectedItem.setExpiryDate(item.getBisDate());
@@ -86,7 +89,7 @@ public class ItemsService {
             SelectedItem deleteItem = itemsRepo.findSelectedItemByItemId(item.getId(), selectedItems.getUserId());
             try {
                 itemsRepo.delete(deleteItem);
-            } catch (Exception e ) {
+            } catch (Exception e) {
                 log.error(e.getMessage());
             }
         }

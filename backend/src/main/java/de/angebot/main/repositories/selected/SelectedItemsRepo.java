@@ -12,7 +12,7 @@ import java.util.List;
 public interface SelectedItemsRepo extends CrudRepository<SelectedItem, Long> {
 
     @Query(value = "SELECT a FROM SelectedItem a WHERE a.expiryDate >= CURRENT_DATE and a.userId= :user")
-    List<SelectedItem> findCurrentOffers(@Param("user") Long userId);
+    List<SelectedItem> findCurrentOffersByUserId(@Param("user") Long userId);
 
 
     @Query(value = "SELECT a FROM SelectedItem a WHERE a.expiryDate >= CURRENT_DATE and a.userId= :user and " +

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,7 +16,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class SelectedItem extends AbstactEneties {
 
-    @Column(nullable = false, unique = true )
     @NotNull(message = "Name may not be null")
     private Long itemId;
 
