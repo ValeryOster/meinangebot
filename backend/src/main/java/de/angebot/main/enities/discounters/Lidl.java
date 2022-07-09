@@ -1,6 +1,7 @@
-package de.angebot.main.enities;
+package de.angebot.main.enities.discounters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.angebot.main.enities.AbstactEneties;
 import lombok.*;
 
 
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @NoArgsConstructor
-public class Lidl extends AbstactEneties{
+public class Lidl extends AbstactEneties {
 
     private String produktName;
     private String produktMaker;

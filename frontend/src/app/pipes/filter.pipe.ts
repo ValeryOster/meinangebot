@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {Offer} from "../service/start.service";
+import {Offer} from "../service/server/start.service";
 
 @Pipe({
   name: 'filter'

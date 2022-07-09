@@ -1,22 +1,25 @@
-package de.angebot.main.enities;
+package de.angebot.main.enities.discounters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
+import de.angebot.main.enities.AbstactEneties;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.time.LocalDate;
 
 @Entity
-@Setter@Getter@NoArgsConstructor
-public class Penny extends AbstactEneties {
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class Aldi extends AbstactEneties {
 
     private String produktName;
     private String produktMaker;
     private String produktPrise;
     private String produktRegularPrise;
+    private String produktDescription;
     private String imageLink;
     private LocalDate vonDate;
     private LocalDate bisDate;
@@ -25,7 +28,5 @@ public class Penny extends AbstactEneties {
 
     @Transient
     @JsonProperty
-    private String discounterName = "PENNY.";
-
-
+    private String discounterName = "Aldi";
 }

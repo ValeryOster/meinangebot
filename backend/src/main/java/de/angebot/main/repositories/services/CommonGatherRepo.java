@@ -1,6 +1,6 @@
-package de.angebot.main.repositories;
+package de.angebot.main.repositories.services;
 
-import de.angebot.main.enities.CommonGather;
+import de.angebot.main.enities.services.CommonGather;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

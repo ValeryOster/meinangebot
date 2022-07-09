@@ -1,11 +1,11 @@
 package de.angebot.main.gathering.netto;
 
-import de.angebot.main.enities.Netto;
+import de.angebot.main.enities.discounters.Netto;
 import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
-import de.angebot.main.repositories.NettoRepo;
-import de.angebot.main.repositories.ProductMakerRepo;
+import de.angebot.main.repositories.discounters.NettoRepo;
+import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;

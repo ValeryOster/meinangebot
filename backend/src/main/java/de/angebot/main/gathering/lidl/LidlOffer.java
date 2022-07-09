@@ -1,12 +1,12 @@
 package de.angebot.main.gathering.lidl;
 
 import de.angebot.main.common.GermanyDayOfWeek;
-import de.angebot.main.enities.Lidl;
+import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
-import de.angebot.main.repositories.LidlRepo;
-import de.angebot.main.repositories.ProductMakerRepo;
+import de.angebot.main.repositories.discounters.LidlRepo;
+import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

@@ -138,6 +138,9 @@
   top: -20px;
   font-size: small;
   color: #CACACA;
+  font-weight:bold;
+  text-decoration: underline;
+  border: black;
 }
 
 .dicounterLinkIcon {
@@ -264,15 +267,6 @@ ul {
 }
 
 
-.auswahl_zaehler {
-  position: fixed;
-  top: 25px;
-  right: 300px;
-  font-size: 25px;
-  color: #eaa237;
-  z-index: 105;
-}
-
 @media only screen and (max-width: 425px) {
   .simple-card {
     height: 400px;
@@ -388,11 +382,6 @@ ul {
     width: 230px;
     height: 200px;
     margin-top: 15px;
-  }
-
-  .auswahl_zaehler {
-    top: 15px;
-    right: 45%;
   }
 
   .logos {

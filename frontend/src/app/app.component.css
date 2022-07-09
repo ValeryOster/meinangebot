@@ -25,6 +25,24 @@
 button:focus{
   outline: none;
 }
+.userName{
+  color: #b69720;
+}
+.auswahl_zahl {
+  background-color: #6394F8;
+  border-radius: 10px;
+  color: white;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  padding: 3px 7px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  left: -7px;
+  top: -10px;
+  position: relative;
+}
 @media only screen and (max-width: 682px) {
   ul{
     display: none;

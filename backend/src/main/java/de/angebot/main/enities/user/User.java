@@ -1,6 +1,5 @@
-package de.angebot.main.enities;
+package de.angebot.main.enities.user;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,6 +37,9 @@ public class User {
 	@NotBlank
 	@Size(max = 120)
 	private String password;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	private Userinfo userinfo;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(	name = "user_roles", 

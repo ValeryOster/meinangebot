@@ -1,4 +1,4 @@
-package de.angebot.main.enities;
+package de.angebot.main.enities.user;
 
 import de.angebot.main.common.ERole;
 import lombok.Data;

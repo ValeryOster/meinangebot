@@ -1,10 +1,14 @@
 package de.angebot.main.services;
 
 import de.angebot.main.enities.*;
-import de.angebot.main.repositories.AldiRepo;
-import de.angebot.main.repositories.LidlRepo;
-import de.angebot.main.repositories.NettoRepo;
-import de.angebot.main.repositories.PennyRepo;
+import de.angebot.main.enities.discounters.Aldi;
+import de.angebot.main.enities.discounters.Lidl;
+import de.angebot.main.enities.discounters.Netto;
+import de.angebot.main.enities.discounters.Penny;
+import de.angebot.main.repositories.discounters.AldiRepo;
+import de.angebot.main.repositories.discounters.LidlRepo;
+import de.angebot.main.repositories.discounters.NettoRepo;
+import de.angebot.main.repositories.discounters.PennyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +69,7 @@ public class DiscounterService {
     }
 
 
-    public Map<String, List<? extends AbstactEneties>> getAuswahlDiscounters(List<String> discounters) {
+    public Map<String, List<? extends AbstactEneties>> getSelectedDiscounters(List<String> discounters) {
         return getOffersFromList(discounters);
     }
 

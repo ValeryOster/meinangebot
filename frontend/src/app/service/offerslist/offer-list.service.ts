@@ -1,6 +1,6 @@
 import {Injectable, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {Offer, StartService} from "../start.service";
+import {Offer, StartService} from "../server/start.service";
 
 class List<T> {
 }

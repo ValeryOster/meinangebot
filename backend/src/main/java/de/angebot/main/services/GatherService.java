@@ -1,12 +1,16 @@
 package de.angebot.main.services;
 
-import de.angebot.main.enities.CommonGather;
+import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.aldi.AldiOffer;
 import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
-import de.angebot.main.repositories.*;
+import de.angebot.main.repositories.discounters.AldiRepo;
+import de.angebot.main.repositories.discounters.LidlRepo;
+import de.angebot.main.repositories.discounters.NettoRepo;
+import de.angebot.main.repositories.discounters.PennyRepo;
+import de.angebot.main.repositories.services.CommonGatherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,9 @@
 package de.angebot.main.gathering.aldi;
 
-import de.angebot.main.enities.Aldi;
+import de.angebot.main.enities.discounters.Aldi;
 import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
-import de.angebot.main.repositories.AldiRepo;
+import de.angebot.main.repositories.discounters.AldiRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;

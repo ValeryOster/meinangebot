@@ -36,6 +36,16 @@ button{
   transform: scale(1.3);
   transition: 0.5s;
 }
+
+.services{
+  display: flex;
+}
+.v-line{
+  height:100%;
+  left: 50%;
+  margin: 0 10px 0 10px;
+}
+
 @media only screen and (max-width: 375px) {
   .show_only{
     display: none;

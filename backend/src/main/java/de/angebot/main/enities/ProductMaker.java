@@ -9,15 +9,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"makerName"})})
-public class ProductMaker{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class ProductMaker extends AbstactEneties{
 
     @Column(nullable = false, unique = true )
     private String makerName;

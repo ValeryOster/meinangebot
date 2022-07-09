@@ -1,7 +1,7 @@
 import {Component, OnInit,} from '@angular/core';
-import {Offer, StartService} from "../service/start.service";
+import {Offer, StartService} from "../service/server/start.service";
 import {environment} from "../../environments/environment";
-import {AuswahlService} from "../service/auswahl.service";
+import {AuswahlService} from "../service/local/auswahl.service";
 import {OfferListService} from "../service/offerslist/offer-list.service";
 
 @Component({
@@ -9,6 +9,7 @@ import {OfferListService} from "../service/offerslist/offer-list.service";
   templateUrl: './offers.component.html',
   styleUrls: ['./offers.component.css']
 })
+
 export class OffersComponent implements OnInit {
   discounters: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
 
@@ -20,11 +21,13 @@ export class OffersComponent implements OnInit {
   search = "";
 
   //diskounter list updating
-  discountersList: Array<string> = ['Lidl','Penny','Aldi','Netto'];
+  discountersList: Array<string> = ['Lidl', 'Penny', 'Aldi', 'Netto'];
 
-  constructor(public service: StartService, public auswahlService: AuswahlService, public offerService:OfferListService) {
+  constructor(public service: StartService, public auswahlService: AuswahlService, public offerService: OfferListService) {
     this.search = ""
+    auswahlService.ngOnInit();
   }
+
 
   ngOnInit(): void {
     this.auswahlService.getValue().subscribe(value => {
@@ -33,7 +36,8 @@ export class OffersComponent implements OnInit {
       }
     });
 
-    this.offerService.getDiscounters().subscribe(value => { console.log(value)
+    this.offerService.getDiscounters().subscribe(value => {
+      console.log(value)
       this.service.getSelectedDiskounters(value).subscribe(offers => this.saveItemsToMap(offers))
     });
   }
@@ -69,8 +73,11 @@ export class OffersComponent implements OnInit {
 
   addToBucket(offerNew: Offer) {
     if (this.ausgewahl.indexOf(offerNew) === -1) {
-      this.ausgewahl.push(offerNew);
-      this.auswahlService.setValue(this.ausgewahl);
+      if (this.ausgewahl.findIndex(valM => valM.id === offerNew.id) === -1) {
+        this.ausgewahl.push(offerNew);
+        this.auswahlService.addValue(this.ausgewahl);
+      }
     }
   }
 }
+

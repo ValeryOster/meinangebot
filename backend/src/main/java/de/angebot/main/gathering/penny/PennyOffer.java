@@ -1,9 +1,9 @@
 package de.angebot.main.gathering.penny;
 
-import de.angebot.main.enities.Penny;
+import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
-import de.angebot.main.repositories.PennyRepo;
+import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.Setter;

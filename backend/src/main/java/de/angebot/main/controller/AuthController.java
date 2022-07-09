@@ -1,10 +1,10 @@
 package de.angebot.main.controller;
 
 import de.angebot.main.common.ERole;
-import de.angebot.main.enities.Role;
-import de.angebot.main.enities.User;
-import de.angebot.main.repositories.RoleRepository;
-import de.angebot.main.repositories.UserRepository;
+import de.angebot.main.enities.user.Role;
+import de.angebot.main.enities.user.User;
+import de.angebot.main.repositories.users.RoleRepository;
+import de.angebot.main.repositories.users.UserRepository;
 import de.angebot.main.security.jwt.JwtUtils;
 import de.angebot.main.security.payload.request.LoginRequest;
 import de.angebot.main.security.payload.request.SignupRequest;

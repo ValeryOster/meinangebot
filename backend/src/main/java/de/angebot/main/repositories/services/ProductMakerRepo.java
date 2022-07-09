@@ -1,4 +1,4 @@
-package de.angebot.main.repositories;
+package de.angebot.main.repositories.services;
 
 import de.angebot.main.enities.ProductMaker;
 import org.springframework.data.repository.CrudRepository;

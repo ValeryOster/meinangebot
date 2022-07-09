@@ -1,6 +1,6 @@
-package de.angebot.main.repositories;
+package de.angebot.main.repositories.users;
 
-import de.angebot.main.enities.User;
+import de.angebot.main.enities.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
