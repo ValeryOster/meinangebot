@@ -16,17 +16,16 @@
       <th>Bild</th>
       <th>Discounter</th>
       <th>Produkt Name</th>
-      <th class="show_only">Hersteller</th>
-      <th>Preis</th>
+      <th>DiscounterLink</th>
       <th class="show_only">Von</th>
       <th class="show_only">bis</th>
       <th></th>
     </tr>
     <tr *ngFor="let offer of auswahlListe">
       <td><img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy"></td>
-      <td>{{offer.discounterName}}</td>
+      <td><a href="{{offer.url}}" class="discounter_link">{{offer.discounterName}}</a></td>
       <td>{{offer.produktName}}</td>
-      <td class="show_only">{{offer.produktMaker}}</td>
+      <td class="show_only"></td>
       <td>
         <p class="prise">{{offer.produktPrise}} &#8364;</p>
       </td>
