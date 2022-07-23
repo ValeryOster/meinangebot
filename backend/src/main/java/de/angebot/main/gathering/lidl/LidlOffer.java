@@ -3,6 +3,7 @@ package de.angebot.main.gathering.lidl;
 import de.angebot.main.common.GermanyDayOfWeek;
 import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.enities.ProductMaker;
+import de.angebot.main.errors.SiteParsingError;
 import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.LidlRepo;
@@ -30,7 +31,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Component
 public class LidlOffer implements Gathering, ErrorHandler {
-    private String mainUrl = "https://www.lidl.de";
+    private final String mainUrl = "https://www.lidl.de";
     private String angeboteUrl = "";
     private List<String> possibleMakers;
     @Autowired
@@ -71,21 +72,24 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private void saveOtherItems(Lidl lidl, Document doc) {
         possibleMakers = productMakerRepo.findAll().stream().filter(ProductMaker::getValid)
                 .map(ProductMaker::getMakerName).collect(Collectors.toList());
-
-        getItemName(doc, lidl);
-        String description = getItemDescription(doc);
-        String prise = getItemPrise(doc);
-        String oldPrise = getItemOldPrise(doc);
-        getImageUrl(doc, lidl);
-
-        lidl.setProduktDescription(description);
-        lidl.setProduktPrise(prise);
-        lidl.setProduktRegularPrise(oldPrise);
-        lidl.setBisDate(Utils.getNextSaturday());
         try {
-            lidlRepo.save(lidl);
-        } catch (DataIntegrityViolationException e) {
-            log.error(lidl.getUrl());
+            getItemName(doc, lidl);
+            String description = getItemDescription(doc);
+            String prise = getItemPrise(doc);
+            String oldPrise = getItemOldPrise(doc);
+            getImageUrl(doc, lidl);
+
+            lidl.setProduktDescription(description);
+            lidl.setProduktPrise(prise);
+            lidl.setProduktRegularPrise(oldPrise);
+            lidl.setBisDate(Utils.getNextSaturday());
+            try {
+                lidlRepo.save(lidl);
+            } catch (DataIntegrityViolationException e) {
+                log.error(lidl.getUrl());
+            }
+        } catch (SiteParsingError error) {
+            log.error(error.getMessage());
         }
     }
 
@@ -128,12 +132,10 @@ public class LidlOffer implements Gathering, ErrorHandler {
     private String getItemPrise(Document document) {
         Elements pricelabel = document.getElementsByClass("m-price__price");
         if (pricelabel.size() > 0) {
-            String text = pricelabel.first().text().replace(" ", "").replace("-.", "0.").replace("*", "");
-            return text;
+            return pricelabel.first().text().replace(" ", "").replace("-.", "0.").replace("*", "");
         } else {
-            log.error("!!! Preise werden nicht erkannt. !!!");
+            throw new SiteParsingError("!!! Preise werden nicht erkannt. !!!");
         }
-        return "";
     }
 
     private String getItemDescription(Document document) {
@@ -153,6 +155,8 @@ public class LidlOffer implements Gathering, ErrorHandler {
             String replace = nameWithProducer.replaceAll(target, "").trim();
             lidl.setProduktName(replace);
             lidl.setProduktMaker(maker);
+        } else {
+            throw new SiteParsingError("Name ist nicht gefunden worden");
         }
     }
 
@@ -205,7 +209,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
         aCampaignGrid__item.forEach(element -> {
             Elements product = element.getElementsByAttributeValue("data-selector", "PRODUCT");
             if (product.size() > 0) {
-                String first = product.first().attr("href");
+                String first = product.first().attr("canonicalurl");
                 Lidl newLidl = copyNewLidl(lidl);
                 newLidl.setUrl(mainUrl + first);
                 itemsUrl.add(newLidl);
@@ -257,11 +261,7 @@ public class LidlOffer implements Gathering, ErrorHandler {
             if (!datum.isEmpty() && Character.isDigit(datum.charAt(0))) {
                 try {
                     LocalDate parse = LocalDate.parse((datum + (LocalDate.now().getYear())), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                    if (parse.isAfter(Utils.getNextSaturday())) {
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return !parse.isAfter(Utils.getNextSaturday());
 
                 } catch (DateTimeParseException e1) {
                     log.error("LIDL -> Datum wird nicht erkannt -> Datum nach parsing: " + datum);
