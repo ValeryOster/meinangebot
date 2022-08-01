@@ -54,7 +54,9 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
         allItemsUrl.forEach(lidl -> {
             Document doc = getDocument(lidl.getUrl());
-            saveOtherItems(lidl, doc);
+            if (doc != null) {
+                saveOtherItems(lidl, doc);
+            }
         });
 
         log.info("********Lidl parsing is ended.********");
@@ -147,8 +149,9 @@ public class LidlOffer implements Gathering, ErrorHandler {
     }
 
     private void getItemName(Document document, Lidl lidl) {
-        Element first = document.select("h1.keyfacts__title").first();
-        if (first != null) {
+        Elements select = document.select("h1.keyfacts__title");
+        if (select != null) {
+            Element first = select.first();
             String nameWithProducer = first.text();
             String maker = getMakerFromString(nameWithProducer);
             String target = "(?i)" + maker;
