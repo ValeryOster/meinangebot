@@ -23,6 +23,7 @@ export class AuswahlService  implements OnInit {
           this.setValue(value);
         }
       });
+
     }
   }
 
@@ -35,13 +36,14 @@ export class AuswahlService  implements OnInit {
   }
 
   public addValue(value: Offer[]): void {
-    let mainValue = this.valueObs.getValue();
+    let mainValue = this.valueObs.getValue() != null ? this.valueObs.getValue() : [];
 
     value.forEach(val => {
       if(mainValue.findIndex(valM => valM.id === val.id ) === -1){
         mainValue.push(val);
       }
     });
+    this.valueObs.next(mainValue);
   }
   public saveSelectedItems() {
     if (this.auth.isAuthenticated()) {

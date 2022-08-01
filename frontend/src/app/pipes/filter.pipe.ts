@@ -7,7 +7,6 @@ import {Offer} from "../service/server/start.service";
 export class FilterPipe implements PipeTransform {
 
   transform(discounters:Array<Offer>, search: string = ''):any {
-    // console.log(discounters)
     if (!search.trim()) {
       return discounters;
     }

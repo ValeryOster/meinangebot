@@ -51,7 +51,6 @@ export class LoginComponent implements OnInit {
       }
     ).subscribe(success => {
       if (success) {
-        console.log(success)
         this.token.saveToken(success.token);
         this.token.saveUser(success);
         this.token.saveRoles(success.roles)
@@ -72,7 +71,6 @@ export class LoginComponent implements OnInit {
       }
     ).subscribe(success => {
       if (success) {
-        console.log(success)
         Swal.fire("Success", success.message.replace("Success:", " "), 'success');
         this.router.navigate(['']);
       }
