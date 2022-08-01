@@ -37,13 +37,11 @@ export class OffersComponent implements OnInit {
     });
 
     this.offerService.getDiscounters().subscribe(value => {
-      console.log(value)
       this.service.getSelectedDiskounters(value).subscribe(offers => this.saveItemsToMap(offers))
     });
   }
 
   saveItemsToMap(value: Object) {
-    console.log(value);
     let strings = Object.keys(value);
     this.discounters.clear();
     this.allOffersList.length = 0;

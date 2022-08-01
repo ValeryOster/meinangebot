@@ -43,6 +43,9 @@ button:focus{
   top: -10px;
   position: relative;
 }
+.menu_image{
+  width: auto;
+}
 @media only screen and (max-width: 682px) {
   ul{
     display: none;
