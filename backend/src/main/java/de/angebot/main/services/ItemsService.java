@@ -41,16 +41,16 @@ public class ItemsService {
         for (SelectedItem item : itemsRepo.findCurrentOffersByUserId(userId)) {
             switch (item.getDiscounterName().toLowerCase()) {
                 case "aldi":
-                    itemsList.add(aldiRepo.findById(item.getItemId()).get());
+                    aldiRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "lidl.":
-                    itemsList.add(lidlRepo.findById(item.getItemId()).get());
+                    lidlRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "netto":
-                    itemsList.add(nettoRepo.findById(item.getItemId()).get());
+                    nettoRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "penny.":
-                    itemsList.add(pennyRepo.findById(item.getItemId()).get());
+                    pennyRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
 
                 default:
