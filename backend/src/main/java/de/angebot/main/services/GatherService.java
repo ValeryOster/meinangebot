@@ -87,6 +87,9 @@ public class GatherService {
                 case "ALDI":
                     aldiRepo.deleteAllActuel();
                     break;
+                case "NETTO":
+                    nettoRepo.deleteAllActuel();
+                    break;
             }
         });
     }

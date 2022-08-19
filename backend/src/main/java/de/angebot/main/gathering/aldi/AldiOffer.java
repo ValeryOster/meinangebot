@@ -29,7 +29,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
     SaveUtil saveUtil;
 
     String mainUrl = "https://www.aldi-nord.de";
-    private String angebotUrl = mainUrl + "/angebote.html";
+    private final String angebotUrl = mainUrl + "/angebote.html";
 
 
     @Autowired
@@ -37,16 +37,11 @@ public class AldiOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
-        log.info("********Aldi parsing is starting.********");
-
         Document document = getDocument(angebotUrl);
         getStartDay(document);
-
-        log.info("********Aldi parsing is ended.********");
     }
 
     private void getStartDay(Document document) {
-        Integer a = 1;
         Elements elementsByClass = document.getElementsByClass("mod-offers__day");
         for (Element el : elementsByClass) {
             Aldi aldi = new Aldi();
@@ -164,7 +159,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
     }
 
     private String getImagePath(Document itemDoc, String name) {
-        String href = "";
+        String href;
         try {
             href = itemDoc.select("img.img-responsive.cq-dd-image").first().attr("data-srcset").split(" ")[0];
         } catch (RuntimeException e) {

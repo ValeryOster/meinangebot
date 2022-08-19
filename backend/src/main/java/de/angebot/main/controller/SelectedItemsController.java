@@ -1,8 +1,6 @@
 package de.angebot.main.controller;
 
-import de.angebot.main.controller.json.Item;
 import de.angebot.main.controller.json.JsonSelectedItemsListAndUserId;
-import de.angebot.main.enities.selected.SelectedItem;
 import de.angebot.main.services.ItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +31,7 @@ public class SelectedItemsController {
     }
 
     @PostMapping(path = "/save")
-    public void saveSelectedItem(@RequestBody JsonSelectedItemsListAndUserId items) {
-        itemsService.saveSelectedItems(items);
+    public Boolean saveSelectedItem(@RequestBody JsonSelectedItemsListAndUserId items) {
+        return itemsService.saveSelectedItems(items);
     }
 }

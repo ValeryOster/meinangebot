@@ -1,9 +1,10 @@
 package de.angebot.main.gathering;
 
 import de.angebot.main.enities.services.CommonGather;
+import de.angebot.main.errors.SiteParsingError;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.services.CommonGatherRepo;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -15,20 +16,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Log
+@Slf4j
 @Component
 @Configuration
 public class MainGather {
-    private List<Gathering> gatherList = new ArrayList<>();
+    private final List<Gathering> gatherList = new ArrayList<>();
     private CommonGatherRepo gatherRepo;
 
 
     public void startGather() {
         if (!gatherList.isEmpty()) {
-            Long start = System.currentTimeMillis();
+            long start = System.currentTimeMillis();
             for (Gathering gathering : gatherList) {
                 System.out.println("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
-                gathering.startGathering();
+                try {
+                    gathering.startGathering();
+                } catch (SiteParsingError error) {
+                    log.error("Es ist ein KRITISCHE Fehler auf Seite --> " + gathering.getDiscountName());
+                }
                 System.out.println("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
 
             }

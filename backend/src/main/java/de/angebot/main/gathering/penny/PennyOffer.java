@@ -45,50 +45,50 @@ public class PennyOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
-        log.info("********Penny parsing is starting.********");
         Document document = getDocument(mainUrl + "/angebote");
         if (document != null) {
             getWeekParts(document).forEach(this::saveOffers);
         }
-        log.info("********Penny parsing is ended.********");
     }
 
     private void saveOffers(LocalDate startDate, Element weekdayOffer) {
         List<String> angebotLinks = getOffersLinks(weekdayOffer);
-        angebotLinks.forEach(angebot -> {
-            Penny penny = new Penny();
-            penny.setVonDate(startDate);
-            LocalDate endDate = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
-            penny.setBisDate(endDate);
+        if (angebotLinks != null) {
+            angebotLinks.forEach(angebot -> {
+                Penny penny = new Penny();
+                penny.setVonDate(startDate);
+                LocalDate endDate = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+                penny.setBisDate(endDate);
 
-            String url = mainUrl + angebot;
-            Document offer = getDocument(url);
-            if (offer != null) {
-                String price = offer.select("div.bubble__wrap-inner>span").text();
-                String origPrice = offer
-                        .select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " + "div > div " + ">" + " div > span")
-                        .text().replaceAll("[a-zA-Z]", "").trim();
+                String url = mainUrl + angebot;
+                Document offer = getDocument(url);
+                if (offer != null) {
+                    String price = offer.select("div.bubble__wrap-inner>span").text();
+                    String origPrice = offer
+                            .select("div.bubble.bubble__price--yellow.detail-block__price-bubble > div > " + "div > div " + ">" + " div > span")
+                            .text().replaceAll("[a-zA-Z]", "").trim();
 
-                //          If star, facke offer, go to next
-                if (price.isEmpty() || price.contains("*")) {
-                    return;
+                    //          If star, facke offer, go to next
+                    if (price.isEmpty() || price.contains("*")) {
+                        return;
+                    }
+
+                    String offerName = offer.select("h1.detail-block__hdln").first().html().replace("*", "");
+                    List<String> strings = Utils.splittToNameOrMaker(offerName);
+
+                    //Look for a image link
+                    penny.setImageLink(Utils.downloadImage(getImageLink(offer), "penny", endDate, ""));
+                    penny.setProduktMaker(saveItemMaker(strings.get(0)));
+                    penny.setProduktName(strings.get(1));
+                    penny.setProduktPrise(price);
+                    penny.setProduktRegularPrise(origPrice);
+                    penny.setKategorie(getCategory(offer));
+                    penny.setUrl(url);
+
+                    pennyRepo.save(penny);
                 }
-
-                String offerName = offer.select("h1.detail-block__hdln").first().html().replace("*", "");
-                List<String> strings = Utils.splittToNameOrMaker(offerName);
-
-                //Look for a image link
-                penny.setImageLink(Utils.downloadImage(getImageLink(offer), "penny", endDate, ""));
-                penny.setProduktMaker(saveItemMaker(strings.get(0)));
-                penny.setProduktName(strings.get(1));
-                penny.setProduktPrise(price);
-                penny.setProduktRegularPrise(origPrice);
-                penny.setKategorie(getCategory(offer));
-                penny.setUrl(url);
-
-                pennyRepo.save(penny);
-            }
-        });
+            });
+        }
     }
 
     private String saveItemMaker(String strings) {
@@ -120,9 +120,9 @@ public class PennyOffer implements Gathering, ErrorHandler {
         String[] split = kategorie.replaceAll("-", " ").split(" ");
         for (String word : split) {
             if (!konnektor.contains(word)) {
-                prettyKategorie.append(" " + word.substring(0, 1).toUpperCase()).append(word.substring(1));
+                prettyKategorie.append(" ").append(word.substring(0, 1).toUpperCase()).append(word.substring(1));
             } else {
-                prettyKategorie.append(" " + word);
+                prettyKategorie.append(" ").append(word);
             }
         }
         return prettyKategorie.toString().trim();
@@ -141,7 +141,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
             }
 
         } catch (NullPointerException e) {
-
+            log.error(errorMessage.toString());
         }
         return "";
     }

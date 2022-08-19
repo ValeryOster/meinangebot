@@ -1,10 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Offer} from "../service/server/start.service";
-import {OffersComponent} from "../offers/offers.component";
 import {environment} from "../../environments/environment";
 import {AuswahlService} from "../service/local/auswahl.service";
 import {TokenStorageService} from "../service/security/token-storage.service";
-import {SelectedItemsService} from "../service/server/selected-items.service";
 
 @Component({
   selector: 'app-auswahl',
