@@ -32,7 +32,6 @@ import java.util.stream.Stream;
 @Component
 public class NettoOffer implements Gathering, ErrorHandler {
 
-    private String mainUrl = "https://www.netto-online.de/filialangebote";
     private List<String> possibleMakers;
     @Autowired
     private NettoRepo nettoRepo;
@@ -41,16 +40,14 @@ public class NettoOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
-        log.info("******** Netto parsing is starting. ********");
+        String mainUrl = "https://www.netto-online.de/filialangebote";
         Document document = getDocument(mainUrl);
+        assert document != null;
         Map<String, String> katerogieMap = getKategorieMap(document);
         if (katerogieMap.size() > 0) {
 
-            katerogieMap.forEach((v, k) -> saveOffers(v, k));
+            katerogieMap.forEach(this::saveOffers);
         }
-
-
-        log.info("******** Netto parsing is ended. ********");
     }
 
     private void saveOffers(String katerogieMap, String url) {
@@ -89,7 +86,7 @@ public class NettoOffer implements Gathering, ErrorHandler {
                 discriptionElements.forEach(el -> {
                     String s = el.ownText();
                     if (!s.isEmpty()) {
-                        stringBuilder.append(el.ownText() + ", ");
+                        stringBuilder.append(el.ownText()).append(", ");
                     }
                 });
                 return stringBuilder.toString();
@@ -216,7 +213,7 @@ public class NettoOffer implements Gathering, ErrorHandler {
     }
 
     private Document getDocument(String url) {
-        Document document = null;
+        Document document;
         try {
             document = Jsoup.connect(url).cookie("netto_user_stores_id", "1156").method(Connection.Method.GET).execute()
                     .parse();

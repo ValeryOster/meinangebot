@@ -60,16 +60,23 @@ public class ItemsService {
         return itemsList;
     }
 
-    public void saveSelectedItems(JsonSelectedItemsListAndUserId selectedItems) {
+    public Boolean saveSelectedItems(JsonSelectedItemsListAndUserId selectedItems) {
+        deleteAllCurrentItemsWithUserId(selectedItems.getUserId());
         for (Item item : selectedItems.getAuswahlListe()) {
             SelectedItem selectedItem = mapJsonSelectedItemToSelectedItem(item, selectedItems);
             try {
                 itemsRepo.save(selectedItem);
             } catch (Exception e) {
                 log.error(e.getMessage());
+                return false;
             }
-
         }
+        return true;
+    }
+
+    private void deleteAllCurrentItemsWithUserId(Long userId) {
+        List<SelectedItem> currentOffersByUserId = itemsRepo.findCurrentOffersByUserId(userId);
+        itemsRepo.deleteAll(currentOffersByUserId);
     }
 
     private SelectedItem mapJsonSelectedItemToSelectedItem(Item item, JsonSelectedItemsListAndUserId selectedItems) {

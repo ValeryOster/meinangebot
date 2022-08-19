@@ -3,6 +3,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import {Offer} from "../server/start.service";
 import {SelectedItemsService} from "../server/selected-items.service";
 import {TokenStorageService} from "../security/token-storage.service";
+import Swal from "sweetalert2";
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +48,13 @@ export class AuswahlService  implements OnInit {
   }
   public saveSelectedItems() {
     if (this.auth.isAuthenticated()) {
-      this.itemsService.saveSelectedItems(this.valueObs.getValue(), this.auth.getUser().id).subscribe();
+      this.itemsService.saveSelectedItems(this.valueObs.getValue(), this.auth.getUser().id).subscribe(success => {
+        if (success) {
+          Swal.fire("Success", "Erfolgreich gespeichert", 'success');
+        }
+      },error => {
+        Swal.fire("Error", error.error.message.replace("Error:", " "), 'error');
+      });
     }
   }
 

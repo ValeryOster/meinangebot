@@ -41,8 +41,6 @@ public class LidlOffer implements Gathering, ErrorHandler {
 
     @Override
     public void startGathering() {
-        log.info("********Lidl parsing is starting.********");
-
         getAngeboteUrl();
         List<Lidl> allItemsUrl = new ArrayList<>();
         List<String> urlList = getURLs();
@@ -58,8 +56,6 @@ public class LidlOffer implements Gathering, ErrorHandler {
                 saveOtherItems(lidl, doc);
             }
         });
-
-        log.info("********Lidl parsing is ended.********");
     }
 
     private void getAngeboteUrl() {
