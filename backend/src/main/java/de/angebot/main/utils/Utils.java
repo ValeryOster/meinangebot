@@ -25,8 +25,11 @@ public class Utils {
 
     private static String IMAGE_DESTINATION_FOLDER;
 
-    public static void saveHtmlToDisk(Document document) {
-        final File f = new File("c:/Users/Valera/Desktop/Dokument.html");
+    public static void saveHtmlToDisk(Document document, String pfad) {
+        if (pfad == null || pfad.isEmpty()) {
+            pfad = "c:/Users/Valera/Desktop/Dokument.html";
+        }
+        final File f = new File(pfad);
         try {
             FileUtils.writeStringToFile(f, document.outerHtml(), "UTF-8");
         } catch (IOException e) {

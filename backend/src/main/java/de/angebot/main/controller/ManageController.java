@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -22,11 +24,15 @@ public class ManageController {
 
     @Autowired
     private PennyRepo pennyRepo;
-
+    private LocalDateTime lastCollection = LocalDateTime.now();
     @PostMapping("/gather")
     @PreAuthorize("hasRole('ADMIN')")
     public void startGathering(@RequestBody List<String> string) {
-        service.startGather(string);
+        Duration between = Duration.between(lastCollection, LocalDateTime.now());
+        if (between.getSeconds() > 5) {
+            lastCollection = LocalDateTime.now();
+            service.startGather(string);
+        }
     }
 
     @GetMapping("/start")
