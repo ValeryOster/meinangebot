@@ -1,14 +1,8 @@
 package de.angebot.main.services;
 
 import de.angebot.main.enities.*;
-import de.angebot.main.enities.discounters.Aldi;
-import de.angebot.main.enities.discounters.Lidl;
-import de.angebot.main.enities.discounters.Netto;
-import de.angebot.main.enities.discounters.Penny;
-import de.angebot.main.repositories.discounters.AldiRepo;
-import de.angebot.main.repositories.discounters.LidlRepo;
-import de.angebot.main.repositories.discounters.NettoRepo;
-import de.angebot.main.repositories.discounters.PennyRepo;
+import de.angebot.main.enities.discounters.*;
+import de.angebot.main.repositories.discounters.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +10,24 @@ import java.util.*;
 
 @Service
 public class DiscounterService {
-    @Autowired
-    private PennyRepo pennyRepo;
+    private final PennyRepo pennyRepo;
+
+    private final LidlRepo lidlRepo;
+
+    private final AldiRepo aldiRepo;
+
+    private final NettoRepo nettoRepo;
+
+    private final EdekaRepo edekaRepo;
 
     @Autowired
-    private LidlRepo lidlRepo;
-
-    @Autowired
-    private AldiRepo aldiRepo;
-
-    @Autowired
-    private NettoRepo nettoRepo;
+    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo) {
+        this.pennyRepo = pennyRepo;
+        this.lidlRepo = lidlRepo;
+        this.aldiRepo = aldiRepo;
+        this.nettoRepo = nettoRepo;
+        this.edekaRepo = edekaRepo;
+    }
 
     public List<Penny> pennyCurrentOffers() {
         return pennyRepo.findCurrentOffers();
@@ -68,7 +69,13 @@ public class DiscounterService {
         return nettoRepo.findCurrentOffers();
     }
 
+    public List<Edeka> edekaCurrentOffers() {
+        return edekaRepo.findCurrentOffers();
+    }
 
+    public Edeka getEdekaOfferById(Long id) {
+        return edekaRepo.findById(id).get();
+    }
     public Map<String, List<? extends AbstactEneties>> getSelectedDiscounters(List<String> discounters) {
         return getOffersFromList(discounters);
     }
@@ -76,28 +83,34 @@ public class DiscounterService {
     private Map<String, List<? extends AbstactEneties>> getOffersFromList(List<String> discounters) {
         Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
         for (String discounter : discounters) {
-            if (discounter.toLowerCase().equals("lidl")) {
+            // TODO: 18.09.2022 Change to switch with Patter
+            if (discounter.equalsIgnoreCase("lidl")) {
                 List<Lidl> lidl = lidlCurrentOffers();
                 if (lidl.size() > 0) {
                     discountersMap.put("Lidl", lidl);
                 }
             }
-            else if (discounter.toLowerCase().equals("penny")) {
+            else if (discounter.equalsIgnoreCase("penny")) {
                 List<Penny> pennies = pennyCurrentOffers();
                 if (pennies.size() > 0) {
                     discountersMap.put("Penny", pennies);
                 }
             }
-            else if (discounter.toLowerCase().equals("aldi")) {
+            else if (discounter.equalsIgnoreCase("aldi")) {
                 List<Aldi> aldiList = aldiCurrentOffers();
                 if (aldiList.size() > 0) {
                     discountersMap.put("Aldi", aldiList);
                 }
             }
-            else if (discounter.toLowerCase().equals("netto")) {
+            else if (discounter.equalsIgnoreCase("netto")) {
                 List<Netto> nettoList = nettoCurrentOffers();
                 if (nettoList.size() > 0) {
                     discountersMap.put("Netto", nettoList);
+                }
+            } else if (discounter.equalsIgnoreCase("edeka")) {
+                List<Edeka> edekaList = edekaCurrentOffers();
+                if (edekaList.size() > 0) {
+                    discountersMap.put("Edeka", edekaList);
                 }
             }
         }

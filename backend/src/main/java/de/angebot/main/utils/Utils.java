@@ -64,7 +64,8 @@ public class Utils {
         if (imageName == null || imageName.isEmpty()) {
             imageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
         }
-
+        //delete all special character,
+        imageName = imageName.replaceAll("[^a-zA-Z0-9]+","");
         try {
             //open the stream from URL
             URL urlImage = new URL(strImageURL);
@@ -83,9 +84,7 @@ public class Utils {
             }
             os.close();
 
-            String pathDB = "/" + storageName + "/" + endDate + "/" + imageName;
-
-            return pathDB;
+            return  "/" + storageName + "/" + endDate + "/" + imageName;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,8 +143,8 @@ public class Utils {
     public static String makeAllLetterCapitalize(String replace) {
         StringBuilder builder = new StringBuilder();
         String[] s = replace.split("\\s");
-        for (int i = 0; i < s.length; i++) {
-            builder.append(StringUtils.capitalize(s[i] + " "));
+        for (String value : s) {
+            builder.append(StringUtils.capitalize(value + " "));
         }
         return builder.toString();
     }

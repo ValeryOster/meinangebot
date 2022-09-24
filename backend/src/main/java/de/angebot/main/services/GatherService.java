@@ -3,13 +3,11 @@ package de.angebot.main.services;
 import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.aldi.AldiOffer;
+import de.angebot.main.gathering.edeka.EdekaOffer;
 import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
-import de.angebot.main.repositories.discounters.AldiRepo;
-import de.angebot.main.repositories.discounters.LidlRepo;
-import de.angebot.main.repositories.discounters.NettoRepo;
-import de.angebot.main.repositories.discounters.PennyRepo;
+import de.angebot.main.repositories.discounters.*;
 import de.angebot.main.repositories.services.CommonGatherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +46,11 @@ public class GatherService {
     @Autowired
     private NettoRepo nettoRepo;
 
+    @Autowired
+    private EdekaOffer edekaOffer;
+    @Autowired
+    private EdekaRepo edekaRepo;
+
     public void startGather(List<String> discounters) {
         mainGather.setGatherRepo(gatherRepo);
 
@@ -65,6 +68,9 @@ public class GatherService {
                     break;
                 case "NETTO":
                     mainGather.addToGatherList(nettoOffer);
+                    break;
+                case "EDEKA":
+                    mainGather.addToGatherList(edekaOffer);
                     break;
             }
         }
@@ -89,6 +95,9 @@ public class GatherService {
                     break;
                 case "NETTO":
                     nettoRepo.deleteAllActuel();
+                    break;
+                case "EDEKA":
+                    edekaRepo.deleteAllActuel();
                     break;
             }
         });
