@@ -20,9 +20,6 @@ export class OffersComponent implements OnInit {
   ausgewahl: Offer[] = [];
   search = "";
 
-  //diskounter list updating
-  discountersList: Array<string> = ['Lidl', 'Penny', 'Aldi', 'Netto'];
-
   constructor(public service: StartService, public auswahlService: AuswahlService, public offerService: OfferListService) {
     this.search = ""
     auswahlService.ngOnInit();
@@ -42,6 +39,7 @@ export class OffersComponent implements OnInit {
   }
 
   saveItemsToMap(value: Object) {
+
     let strings = Object.keys(value);
     this.discounters.clear();
     this.allOffersList.length = 0;
@@ -49,6 +47,7 @@ export class OffersComponent implements OnInit {
       let offers = value[strings[i]];
       let map = this.mapToDiscount(offers);
       this.discounters.set(strings[i], map);
+      console.log(strings[i])
       Array.prototype.push.apply(this.allOffersList, offers)
     }
   }

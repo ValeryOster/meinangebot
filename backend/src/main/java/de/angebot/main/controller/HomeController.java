@@ -58,10 +58,10 @@ public class HomeController {
     }
 
     @PostMapping(path = "/auswahl")
-    public Map<String, List<? extends AbstactEneties>> getAuswahlDiscouters(@RequestBody List<String> discounters) {
+    public Map<String, List<? extends AbstactEneties>> getSelectedDiscouters(@RequestBody List<String> discounters) {
         if (discounters.size() > 0) {
-            Map<String, List<? extends AbstactEneties>> auswahlDiscounters = service.getSelectedDiscounters(discounters);
-            return auswahlDiscounters;
+            Map<String, List<? extends AbstactEneties>> selectedDiscounters = service.getSelectedDiscounters(discounters);
+            return selectedDiscounters;
         }
         return null;
     }

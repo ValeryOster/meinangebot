@@ -15,7 +15,8 @@ export class GatheringComponent implements OnInit {
     {id: 100, name: 'PENNY'},
     {id: 200, name: 'LIDL'},
     {id: 300, name: 'ALDI'},
-    {id: 400, name: 'NETTO'}
+    {id: 400, name: 'NETTO'},
+    {id: 500, name: 'EDEKA'}
 
   ];
   discounters: Discounter[];

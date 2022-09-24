@@ -7,25 +7,31 @@
     <div *ngFor="let offer of allOffersList|filter:search">
       <mat-card class="simple-card" role="group">
         <ng-template [ngIf]="offer.discounterName.includes('LIDL.')">
-          <div  class="searchLogo">
+          <div class="searchLogo">
             <img src="assets/lidl.png" alt="image">
           </div>
         </ng-template>
         <ng-template [ngIf]="offer.discounterName.includes('PENNY')" class="searchLogo">
-          <div  class="searchLogo">
+          <div class="searchLogo">
             <img src="assets/penny.png" alt="image">
           </div>
         </ng-template>
         <ng-template [ngIf]="offer.discounterName.includes('Aldi')" class="searchLogo">
-          <div  class="searchLogo">
+          <div class="searchLogo">
             <img src="assets/aldi.svg" alt="image">
           </div>
         </ng-template>
         <ng-template [ngIf]="offer.discounterName.includes('Netto')" class="searchLogo">
-          <div  class="searchLogo">
+          <div class="searchLogo">
             <img src="assets/netto.svg" alt="image">
           </div>
         </ng-template>
+        <ng-template [ngIf]="offer.discounterName.includes('Edeka')" class="searchLogo">
+          <div class="searchLogo">
+            <img src="assets/edeka.svg" alt="image">
+          </div>
+        </ng-template>
+
 
 
         <mat-card-header>
@@ -87,6 +93,11 @@
           <ng-template [ngIf]="discounter.key === 'Netto'">
             <div class="logos">
               <img src="assets/netto.svg" alt="image">
+            </div>
+          </ng-template>
+          <ng-template [ngIf]="discounter.key === 'Edeka'">
+            <div class="logos">
+              <img src="assets/edeka.svg" alt="image">
             </div>
           </ng-template>
         </ng-template>
