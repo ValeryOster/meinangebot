@@ -10,24 +10,31 @@ import {TokenStorageService} from "../service/security/token-storage.service";
   styleUrls: ['./auswahl.component.css']
 })
 export class AuswahlComponent {
-  auswahlListe: Offer[] = [];
+  selectedList: Offer[] = [];
   url = environment.apiUrl;
 
-  constructor(private auswahlService: AuswahlService , public auth: TokenStorageService) {
-    auswahlService.getValue().subscribe(value => {
-      this.auswahlListe = value;
+  constructor(private selectedService: AuswahlService , public auth: TokenStorageService) {
+
+    selectedService.getValue().subscribe(value => {
+      this.selectedList = value;
+      console.log(value);
     });
   }
 
-  loeschen(offer: Offer) {
-    this.auswahlService.delete(offer)
+  delete(offer: Offer) {
+    this.selectedService.delete(offer)
   }
 
   saveInArray(value: Offer) {
-    this.auswahlListe.push(value);
+    this.selectedList.push(value);
   }
 
   save() {
-    this.auswahlService.saveSelectedItems();
+    this.selectedService.saveSelectedItems();
+  }
+
+  getColor(offer: Offer) {
+    console.log(offer);
+    return undefined;
   }
 }

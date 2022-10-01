@@ -21,18 +21,21 @@
       <th class="show_only">bis</th>
       <th></th>
     </tr>
-    <tr *ngFor="let offer of auswahlListe">
-      <td><img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy"></td>
-      <td><a href="{{offer.url}}" class="discounter_link">{{offer.discounterName}}</a></td>
-      <td>{{offer.produktName}}</td>
-      <td>
-        <p class="prise">{{offer.produktPrise}} &#8364;</p>
-      </td>
-      <td class="show_only">{{offer.vonDate}}</td>
-      <td class="show_only">{{offer.bisDate}}</td>
-      <td>
-        <button class="btn" (click)="loeschen(offer)">Löschen</button>
-      </td>
+    <tr *ngFor="let offer of selectedList"  class="{{offer.isSaved ? 'isSaved' : 'isNotSaved' }}">
+
+        <td class=""><img class="img" mat-card-lg-image data-src="{{url + offer.imageLink}}" loading="lazy">
+        </td>
+        <td><a href="{{offer.url}}" class="discounter_link">{{offer.discounterName}}</a></td>
+        <td>{{offer.produktName}}</td>
+        <td>
+          <p class="prise">{{offer.produktPrise}} &#8364;</p>
+        </td>
+        <td class="show_only">{{offer.vonDate}}</td>
+        <td class="show_only">{{offer.bisDate}}</td>
+        <td>
+          <button class="btn" (click)="delete(offer)">Löschen</button>
+        </td>
+
     </tr>
   </table>
 </div>

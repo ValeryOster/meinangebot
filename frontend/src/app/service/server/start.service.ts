@@ -18,6 +18,7 @@ export class Offer {
   kategorie: string;
   url: string;
   discounterLogo: string;
+  isSaved:boolean
 }
 
 @Injectable({
@@ -46,7 +47,7 @@ export class StartService {
   }
 
   getAldiById(id: any): Observable<Offer> {
-    let url = this.url + 'aldi/${id}';
+    let url = this.url + 'aldi/'+id;
     return this.http.get<Offer>(url);
   }
 
