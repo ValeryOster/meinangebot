@@ -1,14 +1,12 @@
 package de.angebot.main.gathering.penny;
 
 import de.angebot.main.enities.discounters.Penny;
-import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -32,7 +29,7 @@ import java.util.stream.Stream;
 @Setter
 @Component
 @Configuration
-public class PennyOffer implements Gathering, ErrorHandler {
+public class PennyOffer extends Gathering{
 
     @Value("#{${map.of.penny.days}}")
     Map<Integer, List<String>> mapOfDaysElement;
@@ -165,7 +162,7 @@ public class PennyOffer implements Gathering, ErrorHandler {
     }
 
     private List<String> getOffersLinks(Element document) {
-        Elements elementsByClass = document.getElementsByClass("tile__link--cover ellipsis");
+        Elements elementsByClass = document.getElementsByClass("tile__link--cover");
         if (!elementsByClass.isEmpty()) {
             return elementsByClass.stream().map(element -> element.attr("href")).filter(s -> s.contains("/angebote/"))
                     .collect(Collectors.toList());
@@ -173,16 +170,6 @@ public class PennyOffer implements Gathering, ErrorHandler {
             log.error("Es wurde keine Angebote gefunden");
             return null;
         }
-    }
-
-    private Document getDocument(String url) {
-        Document document = null;
-        try {
-            document = Jsoup.connect(url).get();
-        } catch (IOException e) {
-            errorMessage.send(e.getMessage());
-        }
-        return document;
     }
 
     @Override

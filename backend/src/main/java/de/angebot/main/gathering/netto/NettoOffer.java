@@ -1,8 +1,7 @@
 package de.angebot.main.gathering.netto;
 
-import de.angebot.main.enities.discounters.Netto;
 import de.angebot.main.enities.ProductMaker;
-import de.angebot.main.gathering.common.ErrorHandler;
+import de.angebot.main.enities.discounters.Netto;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.NettoRepo;
 import de.angebot.main.repositories.services.ProductMakerRepo;
@@ -30,7 +29,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Component
-public class NettoOffer implements Gathering, ErrorHandler {
+public class NettoOffer extends Gathering{
 
     private List<String> possibleMakers;
     @Autowired
@@ -212,7 +211,8 @@ public class NettoOffer implements Gathering, ErrorHandler {
         return "Netto";
     }
 
-    private Document getDocument(String url) {
+    @Override
+    public Document getDocument(String url) {
         Document document;
         try {
             document = Jsoup.connect(url).cookie("netto_user_stores_id", "1156").method(Connection.Method.GET).execute()

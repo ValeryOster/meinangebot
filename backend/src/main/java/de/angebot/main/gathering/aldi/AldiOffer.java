@@ -1,20 +1,17 @@
 package de.angebot.main.gathering.aldi;
 
 import de.angebot.main.enities.discounters.Aldi;
-import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.AldiRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ import java.util.Locale;
 
 @Slf4j
 @Component
-public class AldiOffer implements Gathering, ErrorHandler {
+public class AldiOffer extends Gathering {
 
     @Autowired
     SaveUtil saveUtil;
@@ -51,7 +48,7 @@ public class AldiOffer implements Gathering, ErrorHandler {
             for (Element categorie : categories) {
                 aldi.setKategorie(getKategorieName(categorie));
                 List<String> itemMainUrl = getItemMainUrl(categorie);
-                for (String itemUrl  : itemMainUrl) {
+                for (String itemUrl : itemMainUrl) {
                     Document itemDoc = getDocument(itemUrl);
                     if (itemDoc != null && itemDoc.select("div.mod.mod-article-intro.ct-non-food-artikel ") != null) {
                         Aldi newAldi = getNewAldi(aldi);
@@ -80,7 +77,10 @@ public class AldiOffer implements Gathering, ErrorHandler {
             //get itemLink
             Element select = document.getElementsByClass("mod-article-tile__action").first();
             if (select != null) {
-                urls.add(mainUrl +select.attr("href"));
+                String href = select.attr("href");
+                if (!href.contains("onlineshop")) {
+                    urls.add(mainUrl + href);
+                }
             }
         }
         return urls;
@@ -197,14 +197,5 @@ public class AldiOffer implements Gathering, ErrorHandler {
         return "Aldi-Nord";
     }
 
-    private Document getDocument(String url) {
-        Document document = null;
-        try {
-            document = Jsoup.connect(url).get();
-        } catch (IOException e) {
-            log.error("!!! Url ist nicht erreichbar");
-            errorMessage.send(e.getMessage());
-        }
-        return document;
-    }
+
 }
