@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.enities.discounters.Edeka;
-import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.EdekaRepo;
 import de.angebot.main.repositories.services.ProductMakerRepo;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class EdekaOffer implements Gathering, ErrorHandler {
+public class EdekaOffer extends Gathering{
 
     @Autowired
     private ProductMakerRepo productMakerRepo;

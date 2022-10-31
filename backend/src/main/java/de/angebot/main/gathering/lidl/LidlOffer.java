@@ -4,13 +4,11 @@ import de.angebot.main.common.GermanyDayOfWeek;
 import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.errors.SiteParsingError;
-import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.LidlRepo;
 import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -19,7 +17,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -30,7 +27,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Component
-public class LidlOffer implements Gathering, ErrorHandler {
+public class LidlOffer extends Gathering {
     private final String mainUrl = "https://www.lidl.de";
     private String angeboteUrl = "";
     private List<String> possibleMakers;
@@ -244,7 +241,8 @@ public class LidlOffer implements Gathering, ErrorHandler {
         for (Element childElement : role) {
             String href = childElement.select("a[href]").first().attr("href");
             if (checkItThisOnWeek(childElement)) {
-                allURLs.add(mainUrl + href);
+                String testUrl = href.contains(mainUrl) ? "" : mainUrl;
+                allURLs.add(testUrl + href);
             }
         }
     }
@@ -291,14 +289,4 @@ public class LidlOffer implements Gathering, ErrorHandler {
         return "LIDL";
     }
 
-    private Document getDocument(String url) {
-        Document document = null;
-        try {
-            document = Jsoup.connect(url).get();
-        } catch (IOException e) {
-            log.error("!!! Lidl-Url ist nicht erreichbar");
-            errorMessage.send(e.getMessage());
-        }
-        return document;
-    }
 }
