@@ -19,6 +19,7 @@ public class Penny extends AbstactEneties {
     private String produktPrise;
     private String produktRegularPrise;
     private String imageLink;
+    private String imageMobileLink;
     private LocalDate vonDate;
     private LocalDate bisDate;
     private String kategorie;
@@ -27,6 +28,4 @@ public class Penny extends AbstactEneties {
     @Transient
     @JsonProperty
     private String discounterName = "PENNY.";
-
-
 }

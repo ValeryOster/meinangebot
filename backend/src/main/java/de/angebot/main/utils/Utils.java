@@ -149,6 +149,9 @@ public class Utils {
         return builder.toString();
     }
 
+    public static String getImageDestinationFolder() {
+        return IMAGE_DESTINATION_FOLDER;
+    }
 
     @Value("${main.bilder}")
     public void setFoder(String folder) {

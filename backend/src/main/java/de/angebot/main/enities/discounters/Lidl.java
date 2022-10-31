@@ -26,6 +26,7 @@ public class Lidl extends AbstactEneties {
     private String produktDescription;
 
     private String imageLink;
+    private String imageMobileLink;
     private LocalDate vonDate;
     private LocalDate bisDate;
     private String kategorie;

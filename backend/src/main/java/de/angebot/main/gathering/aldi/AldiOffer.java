@@ -1,17 +1,28 @@
 package de.angebot.main.gathering.aldi;
 
 import de.angebot.main.enities.discounters.Aldi;
+import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.AldiRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.imgscalr.Scalr;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -54,7 +65,9 @@ public class AldiOffer extends Gathering {
                         Aldi newAldi = getNewAldi(aldi);
                         newAldi.setProduktName(getItemName(itemDoc));
                         newAldi.setUrl(itemUrl);
-                        newAldi.setImageLink(getImagePath(itemDoc, newAldi.getProduktName()));
+                        String imagePath = getImagePath(itemDoc, newAldi.getProduktName());
+                        newAldi.setImageLink(imagePath);
+                        newAldi.setImageMobileLink(resizeImage(imagePath));
                         newAldi.setProduktMaker(getItemMaker(itemDoc));
                         newAldi.setProduktPrise(getItemPrice(itemDoc));
                         newAldi.setProduktRegularPrise(getItemRegularPrice(itemDoc));
@@ -64,6 +77,22 @@ public class AldiOffer extends Gathering {
                 }
             }
         }
+    }
+
+    private String resizeImage(String imagePath) {
+
+        try {
+            String pathname = Utils.getImageDestinationFolder() + "" + imagePath;
+            BufferedImage bufferedImage = ImageIO.read(new File(pathname));
+            BufferedImage resize = Scalr.resize(bufferedImage, 200);
+            Path path = Paths.get(imagePath);
+            String imageName = path.getFileName().toString();
+            Path root = path.getRoot();
+            ImageIO.write(resize, "png", new File(root.toString()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     private List<String> getItemMainUrl(Element categorie) {
@@ -197,5 +226,14 @@ public class AldiOffer extends Gathering {
         return "Aldi-Nord";
     }
 
-
+    private Document getDocument(String url) {
+        Document document = null;
+        try {
+            document = Jsoup.connect(url).get();
+        } catch (IOException e) {
+            log.error("!!! Url ist nicht erreichbar");
+            errorMessage.send(e.getMessage());
+        }
+        return document;
+    }
 }

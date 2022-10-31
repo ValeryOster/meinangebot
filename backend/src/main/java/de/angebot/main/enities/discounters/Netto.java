@@ -22,6 +22,7 @@ public class Netto extends AbstactEneties {
     private String produktRegularPrise;
     private String produktDescription;
     private String imageLink;
+    private String imageMobileLink;
     private LocalDate vonDate;
     private LocalDate bisDate;
     private String kategorie;

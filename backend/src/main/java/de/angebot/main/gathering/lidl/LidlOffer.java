@@ -4,11 +4,13 @@ import de.angebot.main.common.GermanyDayOfWeek;
 import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.errors.SiteParsingError;
+import de.angebot.main.gathering.common.ErrorHandler;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.LidlRepo;
 import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -17,6 +19,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -241,8 +244,8 @@ public class LidlOffer extends Gathering {
         for (Element childElement : role) {
             String href = childElement.select("a[href]").first().attr("href");
             if (checkItThisOnWeek(childElement)) {
-                String testUrl = href.contains(mainUrl) ? "" : mainUrl;
-                allURLs.add(testUrl + href);
+                String e = href.contains(mainUrl) ? "" : mainUrl;
+                allURLs.add(e + href);
             }
         }
     }

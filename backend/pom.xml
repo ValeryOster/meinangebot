@@ -182,6 +182,13 @@
             <artifactId>guava</artifactId>
             <version>31.1-jre</version>
         </dependency>
+
+        <!--To resize images for mobile devices-->
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+        </dependency>
     </dependencies>
 
     <build>
