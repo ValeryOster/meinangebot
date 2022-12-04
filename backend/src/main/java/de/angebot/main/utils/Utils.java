@@ -1,14 +1,19 @@
 package de.angebot.main.utils;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.imgscalr.Scalr;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -65,7 +70,7 @@ public class Utils {
             imageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
         }
         //delete all special character,
-        imageName = imageName.replaceAll("[^a-zA-Z0-9]+","");
+        imageName = imageName.replaceAll("[^a-zA-Z0-9.]+","");
         try {
             //open the stream from URL
             URL urlImage = new URL(strImageURL);
@@ -90,7 +95,21 @@ public class Utils {
         }
         return "";
     }
-
+    public static String resizeImage(String imagePath) {
+        try {
+            String pathname = IMAGE_DESTINATION_FOLDER + "" + imagePath;
+            BufferedImage bufferedImage = ImageIO.read(new File(pathname));
+            BufferedImage resize = Scalr.resize(bufferedImage, 100);
+            Path path = Paths.get(pathname);
+            String mobileName = "Mobile_" + path.getFileName().toString();
+            String mobilePathName = path.getParent().toString() + "/"+ mobileName;
+            ImageIO.write(resize, "png", new File(mobilePathName));
+            String mobilePath = path.getRoot().toString() + mobileName;
+            return mobilePath;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public static LocalDate getDate(int var) {
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         return LocalDate.now(ZoneId.of("Europe/Paris")).minusDays(today - var);

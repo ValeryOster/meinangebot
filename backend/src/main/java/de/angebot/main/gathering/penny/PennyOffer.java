@@ -95,6 +95,7 @@ public class PennyOffer extends Gathering {
 
                     //Look for a image link
                     penny.setImageLink(Utils.downloadImage(getImageLink(offer), "penny", endDate, ""));
+
                     penny.setProduktMaker(saveItemMaker(strings.get(0)));
                     penny.setProduktName(strings.get(1));
                     penny.setProduktPrise(price);
