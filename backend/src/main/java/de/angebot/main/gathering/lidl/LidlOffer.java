@@ -228,7 +228,7 @@ public class LidlOffer extends Gathering {
             if (select1.size() > 0) {
                 saveURLs(allURLs, e);
             }
-            select1 = e.select("span:containsOwn(Angebote diese Woche)");
+            select1 = e.select("span:containsOwn(Diese Woche)");
             if (select1.size() > 0) {
                 saveURLs(allURLs, e);
             }
