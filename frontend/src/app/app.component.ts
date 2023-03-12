@@ -4,7 +4,8 @@ import {TokenStorageService} from "./service/security/token-storage.service";
 import {AuswahlService} from "./service/local/auswahl.service";
 import { faShoppingCart} from '@fortawesome/free-solid-svg-icons';
 import {Offer} from "./service/server/start.service";
-import {newArray} from "@angular/compiler/src/util";
+
+
 
 export interface Post {
   title: string
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit{
   title = 'Hier entsteht Seite mit Angeboten von allen Märkte';
   toggle: boolean = false;
   filmIcon = faShoppingCart;
-  ausgewahl: Offer[] = newArray(0);
+  ausgewahl: Offer[] = new Array(0);
 
   constructor( public auth:TokenStorageService, private router:Router,private eRef: ElementRef, public auswahlService: AuswahlService) {
     auswahlService.getValue().subscribe(value => {
@@ -41,7 +42,5 @@ export class AppComponent implements OnInit{
   }
 
   @HostListener('document:click', ['$event'])
-  clickout(event) {
-
-  }
+  clickout(event) {}
 }
