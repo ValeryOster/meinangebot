@@ -3,10 +3,7 @@ package de.angebot.main.services;
 import de.angebot.main.controller.json.Item;
 import de.angebot.main.controller.json.JsonSelectedItemsListAndUserId;
 import de.angebot.main.enities.selected.SelectedItem;
-import de.angebot.main.repositories.discounters.AldiRepo;
-import de.angebot.main.repositories.discounters.LidlRepo;
-import de.angebot.main.repositories.discounters.NettoRepo;
-import de.angebot.main.repositories.discounters.PennyRepo;
+import de.angebot.main.repositories.discounters.*;
 import de.angebot.main.repositories.selected.SelectedItemsRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +21,17 @@ public class ItemsService {
     private final LidlRepo lidlRepo;
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
+    private final EdekaRepo edekaRepo;
     private final SelectedItemsRepo itemsRepo;
 
     @Autowired
     public ItemsService(AldiRepo aldiRepo, NettoRepo nettoRepo, LidlRepo lidlRepo, PennyRepo pennyRepo,
-                        SelectedItemsRepo itemsRepo) {
+                        EdekaRepo edekaRepo, SelectedItemsRepo itemsRepo) {
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
         this.lidlRepo = lidlRepo;
         this.pennyRepo = pennyRepo;
+        this.edekaRepo = edekaRepo;
         this.itemsRepo = itemsRepo;
     }
 
@@ -51,6 +50,9 @@ public class ItemsService {
                     break;
                 case "penny.":
                     pennyRepo.findById(item.getItemId()).ifPresent(itemsList::add);
+                    break;
+                case "edeka":
+                    edekaRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
 
                 default:
