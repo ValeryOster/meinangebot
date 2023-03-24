@@ -1,12 +1,10 @@
 package de.angebot.main.enities.user;
 
 import de.angebot.main.common.ERole;
-import lombok.Data;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 @Entity
 @Getter

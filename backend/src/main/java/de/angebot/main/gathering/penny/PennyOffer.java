@@ -7,16 +7,24 @@ import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
@@ -39,6 +47,8 @@ public class PennyOffer extends Gathering{
     private String mainUrl;
     @Autowired
     private PennyRepo pennyRepo;
+    @Value("${selenium.path}")
+    private String seleniumDriverPath;
 
     @Override
     public void startGathering() {
@@ -170,6 +180,35 @@ public class PennyOffer extends Gathering{
             log.error("Es wurde keine Angebote gefunden");
             return null;
         }
+    }
+
+    @Override
+    public Document getDocument(String url) {
+        System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox", "--headless", "--window-size=1024x768");
+        WebDriver driver = new ChromeDriver(options);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        driver.get(url);
+        driver.manage().window().maximize();
+        try {
+            Thread.sleep(3000);
+
+            driver.findElement(By.id("uc-btn-accept-banner")).click();
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            //Scroll down till the bottom of the page
+            for (int i = 0; i < 3000; i+=100) {
+                js.executeScript("window.scrollBy(0," + i + ")");
+                Thread.sleep(100);
+            }
+            Document parse = Jsoup.parse(driver.getPageSource());
+            Map<LocalDate, Element> weekParts = getWeekParts(parse);
+            weekParts.forEach(this::saveOffers);
+            return parse;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override

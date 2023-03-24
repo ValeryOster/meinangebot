@@ -2,12 +2,12 @@ package de.angebot.main.enities.discounters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.angebot.main.enities.AbstactEneties;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Transient;
 import java.time.LocalDate;
 
 @Entity

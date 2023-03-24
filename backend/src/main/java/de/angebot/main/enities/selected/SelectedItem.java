@@ -1,11 +1,11 @@
 package de.angebot.main.enities.selected;
 
 import de.angebot.main.enities.AbstactEneties;
+import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;

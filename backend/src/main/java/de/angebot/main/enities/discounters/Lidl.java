@@ -2,10 +2,13 @@ package de.angebot.main.enities.discounters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.angebot.main.enities.AbstactEneties;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-
-import javax.persistence.*;
 import java.time.LocalDate;
 
 @EqualsAndHashCode(callSuper = true)
@@ -31,23 +34,4 @@ public class Lidl extends AbstactEneties {
     @Transient
     @JsonProperty
     private String discounterName = "LIDL.";
-
-
-    @Override
-    public String toString() {
-        return "Lidl{" +
-                "id=" + id +
-                "\n produktName='" + produktName + '\'' +
-                "\n produktMaker='" + produktMaker + '\'' +
-                "\n produktPrise='" + produktPrise + '\'' +
-                "\n produktRegularPrise='" + produktRegularPrise + '\'' +
-                "\n produktDescription='" + produktDescription + '\'' +
-                "\n imageLink='" + imageLink + '\'' +
-                "\n vonDate=" + vonDate +
-                "\n bisDate=" + bisDate +
-                "\n kategorie='" + kategorie + '\'' +
-                "\n url='" + url + '\'' +
-                "\n discounterName='" + discounterName + '\'' +
-                '}';
-    }
 }
