@@ -1,10 +1,9 @@
 # Project exclude paths
 /frontend/target/
 /images/
-/.idea/libraries/
 /frontend/node/
 /package-lock.json
-/.idea/encodings.xml
-/.idea/misc.xml
 /.idea/
-/.idea/compiler.xml
+/meinangebot.iml
+/frontend/frontend.iml
+/backend/backend.iml
