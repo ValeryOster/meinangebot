@@ -1,16 +1,13 @@
 package de.angebot.main.security.jwt;
 
-import java.util.Date;
-
+import de.angebot.main.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import de.angebot.main.security.services.UserDetailsImpl;
+import java.util.Date;
 
 @Component
 @Slf4j

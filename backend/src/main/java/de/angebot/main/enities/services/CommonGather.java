@@ -1,10 +1,11 @@
 package de.angebot.main.enities.services;
 
 import de.angebot.main.enities.AbstactEneties;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Map;
 

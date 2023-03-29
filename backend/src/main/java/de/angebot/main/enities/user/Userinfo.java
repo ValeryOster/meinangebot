@@ -1,10 +1,10 @@
 package de.angebot.main.enities.user;
 
 import de.angebot.main.enities.AbstactEneties;
+import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import java.time.LocalDate;
 
 @Entity

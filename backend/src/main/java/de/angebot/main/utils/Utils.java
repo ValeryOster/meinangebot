@@ -155,7 +155,7 @@ public class Utils {
         Utils.IMAGE_DESTINATION_FOLDER = folder;
     }
 
-    @Value("${spring.resources.static-locations}")
+    @Value("${spring.web.resources.static-locations}")
     public void setImageDestinationFolder(String folder) {
         System.out.println(false);
     }
