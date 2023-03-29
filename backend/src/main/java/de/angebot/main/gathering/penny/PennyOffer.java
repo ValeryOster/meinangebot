@@ -1,5 +1,6 @@
 package de.angebot.main.gathering.penny;
 
+
 import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.PennyRepo;
@@ -17,42 +18,51 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
 @Setter
 @Component
 @Configuration
-public class PennyOffer extends Gathering{
+public class PennyOffer extends Gathering {
 
     @Value("#{${map.of.penny.days}}")
     Map<Integer, List<String>> mapOfDaysElement;
-    @Autowired
-    SaveUtil saveUtil;
+    private final SaveUtil saveUtil;
     @Value("${penny.mainUrl}")
     private String mainUrl;
-    @Autowired
-    private PennyRepo pennyRepo;
+    private final PennyRepo pennyRepo;
     @Value("${selenium.path}")
     private String seleniumDriverPath;
 
+    @Value("${first.arg}")
+    private String firstArg;
+
+    @Value("${second.arg}")
+    private String secondArg;
+
+    @Value("${third.arg}")
+    private String thirdArg;
+
+    public PennyOffer(SaveUtil saveUtil, PennyRepo pennyRepo) {
+        this.saveUtil = saveUtil;
+        this.pennyRepo = pennyRepo;
+    }
+
     @Override
     public void startGathering() {
-        Document document = getDocument(mainUrl + "/angebote");
+        Document document = getDocumentWithSelenium(mainUrl + "/angebote");
         if (document != null) {
             getWeekParts(document).forEach(this::saveOffers);
         }
@@ -122,9 +132,9 @@ public class PennyOffer extends Gathering{
     }
 
     private String textPrettyPrint(String kategorie) {
-        List<String> konnektor = Stream.of("und", "fuer", "seit").collect(Collectors.toList());
+        List<String> konnektor = Stream.of("und", "fuer", "seit").toList();
         StringBuilder prettyKategorie = new StringBuilder();
-        String[] split = kategorie.replaceAll("-", " ").split(" ");
+        String[] split = kategorie.replace("-", " ").split(" ");
         for (String word : split) {
             if (!konnektor.contains(word)) {
                 prettyKategorie.append(" ").append(word.substring(0, 1).toUpperCase()).append(word.substring(1));
@@ -140,7 +150,7 @@ public class PennyOffer extends Gathering{
             Element elementById = offer.getElementById("offer-image-slide-0");
             if (elementById != null) {
                 return elementById.select("img").first().attr("src");
-            }else {
+            } else {
                 Elements elementById1 = offer.getElementsByClass("detail-block__carousel-slide");
                 if (!elementById1.isEmpty()) {
                     return elementById1.first().select("img").first().attr("src");
@@ -171,24 +181,26 @@ public class PennyOffer extends Gathering{
         return weekArray;
     }
 
+
+
     private List<String> getOffersLinks(Element document) {
         Elements elementsByClass = document.getElementsByClass("tile__link--cover");
         if (!elementsByClass.isEmpty()) {
-            return elementsByClass.stream().map(element -> element.attr("href")).filter(s -> s.contains("/angebote/"))
-                    .collect(Collectors.toList());
+            return elementsByClass.stream().map(element -> element.attr("href")).filter(s -> s.contains("/angebote/")).toList();
         } else {
             log.error("Es wurde keine Angebote gefunden");
-            return null;
+            return Collections.emptyList();
         }
     }
 
-    @Override
-    public Document getDocument(String url) {
+    public Document getDocumentWithSelenium(String url) {
         System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--no-sandbox", "--headless", "--window-size=1024x768");
+        options.addArguments(firstArg);
+        if (!secondArg.isEmpty()) {
+            options.addArguments(secondArg,thirdArg);
+        }
         WebDriver driver = new ChromeDriver(options);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         driver.get(url);
         driver.manage().window().maximize();
         try {
@@ -197,16 +209,17 @@ public class PennyOffer extends Gathering{
             driver.findElement(By.id("uc-btn-accept-banner")).click();
             JavascriptExecutor js = (JavascriptExecutor) driver;
             //Scroll down till the bottom of the page
-            for (int i = 0; i < 3000; i+=100) {
+            for (int i = 0; i < 3000; i += 100) {
                 js.executeScript("window.scrollBy(0," + i + ")");
                 Thread.sleep(100);
             }
+
             Document parse = Jsoup.parse(driver.getPageSource());
-            Map<LocalDate, Element> weekParts = getWeekParts(parse);
-            weekParts.forEach(this::saveOffers);
+            driver.close();
             return parse;
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            return null;
         }
 
     }
