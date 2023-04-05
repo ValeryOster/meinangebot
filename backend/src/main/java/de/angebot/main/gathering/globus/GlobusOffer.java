@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class GlobusOffer implements Gathering, ErrorHandler {
+public class GlobusOffer extends Gathering implements ErrorHandler {
 
     String mainUrl = "https://www.globus.de/produkte/angebote-der-woche/";
     @Override
@@ -37,7 +37,7 @@ public class GlobusOffer implements Gathering, ErrorHandler {
         return null;
     }
 
-    private Document getDocument(String url) {
+    public Document getDocument(String url) {
         Document document = null;
         try {
             Map<String, String> cookies = new HashMap<>();
