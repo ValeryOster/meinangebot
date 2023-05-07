@@ -13,9 +13,7 @@ import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Value;
@@ -194,6 +192,7 @@ public class PennyOffer extends Gathering {
     }
 
     public Document getDocumentWithSelenium(String url) {
+        Document parse;
         System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
         ChromeOptions options = new ChromeOptions();
         options.addArguments(firstArg);
@@ -206,22 +205,20 @@ public class PennyOffer extends Gathering {
         try {
             Thread.sleep(3000);
 
-            driver.findElement(By.id("uc-btn-accept-banner")).click();
             JavascriptExecutor js = (JavascriptExecutor) driver;
             //Scroll down till the bottom of the page
             for (int i = 0; i < 3000; i += 100) {
                 js.executeScript("window.scrollBy(0," + i + ")");
                 Thread.sleep(100);
             }
-
-            Document parse = Jsoup.parse(driver.getPageSource());
-            driver.close();
-            return parse;
-        } catch (InterruptedException e) {
+            parse = Jsoup.parse(driver.getPageSource());
+        } catch (NoSuchElementException | InterruptedException e) {
             log.error(e.getMessage());
             return null;
+        }finally {
+            driver.close();
         }
-
+        return parse;
     }
 
     @Override
