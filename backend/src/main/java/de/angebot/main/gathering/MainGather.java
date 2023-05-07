@@ -1,10 +1,11 @@
 package de.angebot.main.gathering;
 
 import de.angebot.main.enities.services.CommonGather;
-import de.angebot.main.errors.SiteParsingError;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.services.CommonGatherRepo;
+import de.angebot.main.services.DiscounterService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -21,26 +22,28 @@ import java.util.stream.Collectors;
 @Configuration
 public class MainGather {
     private final List<Gathering> gatherList = new ArrayList<>();
+    @Autowired
     private CommonGatherRepo gatherRepo;
-
+    @Autowired
+    private DiscounterService discounterService;
 
     public void startGather() {
         if (!gatherList.isEmpty()) {
-            long start = System.currentTimeMillis();
-            for (Gathering gathering : gatherList) {
-                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
-                try {
-                    gathering.startGathering();
-                } catch (SiteParsingError error) {
-                    log.error("Es ist ein KRITISCHE Fehler auf Seite --> " + gathering.getDiscountName());
-                }
-                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
-
-            }
-            long duration = System.currentTimeMillis() - start;
-            saveGatheringReport(duration);
-            log.info("Gathering is done: " + LocalDate.now() + ", duration: " + duration);
-            gatherList.clear();
+//            long start = System.currentTimeMillis();
+//            for (Gathering gathering : gatherList) {
+//                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
+//                try {
+//                    gathering.startGathering();
+//                } catch (SiteParsingError error) {
+//                    log.error("Es ist ein KRITISCHE Fehler auf Seite --> " + gathering.getDiscountName());
+//                }
+//                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
+//            }
+//            long duration = System.currentTimeMillis() - start;
+//            saveGatheringReport(duration);
+//            log.info("Gathering is done: " + LocalDate.now() + ", duration: " + duration);
+//            gatherList.clear();
+            discounterService.startCollectionAllDiscounters();
         }
     }
 
@@ -66,8 +69,7 @@ public class MainGather {
         gatherRepo.save(gathering);
 
     }
-
-    public void setGatherRepo(CommonGatherRepo gatherRepo) {
-        this.gatherRepo = gatherRepo;
+    public List<CommonGather> getGatherReport() {
+        return gatherRepo.findAll();
     }
 }

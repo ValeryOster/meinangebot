@@ -8,7 +8,6 @@ import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
 import de.angebot.main.repositories.discounters.*;
-import de.angebot.main.repositories.services.CommonGatherRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,42 +17,28 @@ import java.util.List;
 public class GatherService {
     @Autowired
     private MainGather mainGather;
-
-    @Autowired
-    private CommonGatherRepo gatherRepo;
-
     @Autowired
     private PennyOffer pennyOffer;
-
     @Autowired
     private LidlOffer lidlOffer;
-
     @Autowired
     private AldiOffer aldiOffer;
-
     @Autowired
     private LidlRepo lidlRepo;
-
     @Autowired
     private PennyRepo pennyRepo;
-
     @Autowired
     private AldiRepo aldiRepo;
-
     @Autowired
     private NettoOffer nettoOffer;
-
     @Autowired
     private NettoRepo nettoRepo;
-
     @Autowired
     private EdekaOffer edekaOffer;
     @Autowired
     private EdekaRepo edekaRepo;
 
     public void startGather(List<String> discounters) {
-        mainGather.setGatherRepo(gatherRepo);
-
         // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
         for (String discounter : discounters) {
             switch (discounter) {
@@ -76,11 +61,9 @@ public class GatherService {
         }
         mainGather.startGather();
     }
-
     public List<CommonGather> findAll() {
-        return gatherRepo.findAll();
+        return mainGather.getGatherReport();
     }
-
     public void deleteLastInputs(List<String> discounters) {
         discounters.forEach(discounter -> {
             switch (discounter) {
