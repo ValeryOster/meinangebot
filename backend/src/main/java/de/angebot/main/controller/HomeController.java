@@ -39,24 +39,6 @@ public class HomeController {
         return service.nettoCurrentOffers();
     }
 
-    @GetMapping(path = "/aldi/{id}")
-    public Aldi getAldiOfferById(@PathVariable Long id) {
-        if (id != null) return service.getAldiOfferById(id);
-        return null;
-    }
-
-    @GetMapping(path = "/lidl/{id}")
-    public Lidl getLidlOfferById(@PathVariable Long id) {
-        if (id != null) return service.getLidlOfferById(id);
-        return null;
-    }
-
-    @GetMapping(path = "/penny/{id}")
-    public Penny getPennyOfferById(@PathVariable Long id) {
-        if (id != null) return service.getPennyOfferById(id);
-        return null;
-    }
-
     @PostMapping(path = "/auswahl")
     public Map<String, List<? extends AbstactEneties>> getSelectedDiscouters(@RequestBody List<String> discounters) {
         if (discounters.size() > 0) {

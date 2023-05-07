@@ -13,6 +13,10 @@ import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -23,10 +27,7 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -37,10 +38,13 @@ public class PennyOffer extends Gathering {
 
     @Value("#{${map.of.penny.days}}")
     Map<Integer, List<String>> mapOfDaysElement;
-    private final SaveUtil saveUtil;
+    @Autowired
+    private SaveUtil saveUtil;
     @Value("${penny.mainUrl}")
     private String mainUrl;
-    private final PennyRepo pennyRepo;
+    @Autowired
+    private PennyRepo pennyRepo;
+
     @Value("${selenium.path}")
     private String seleniumDriverPath;
 
@@ -52,11 +56,6 @@ public class PennyOffer extends Gathering {
 
     @Value("${third.arg}")
     private String thirdArg;
-
-    public PennyOffer(SaveUtil saveUtil, PennyRepo pennyRepo) {
-        this.saveUtil = saveUtil;
-        this.pennyRepo = pennyRepo;
-    }
 
     @Override
     public void startGathering() {
@@ -192,7 +191,6 @@ public class PennyOffer extends Gathering {
     }
 
     public Document getDocumentWithSelenium(String url) {
-        Document parse;
         System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
         ChromeOptions options = new ChromeOptions();
         options.addArguments(firstArg);
@@ -205,6 +203,15 @@ public class PennyOffer extends Gathering {
         try {
             Thread.sleep(3000);
 
+
+            By id = By.tagName("button");
+            List<WebElement> elements = driver.findElements(id);
+            for (WebElement element : elements) {
+                if (element.getText().equals("Erlauben")) {
+                    element.click();
+                    break;
+                }
+            }
             JavascriptExecutor js = (JavascriptExecutor) driver;
             //Scroll down till the bottom of the page
             for (int i = 0; i < 3000; i += 100) {

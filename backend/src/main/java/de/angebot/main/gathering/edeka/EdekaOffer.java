@@ -55,7 +55,7 @@ public class EdekaOffer extends Gathering{
                 edekaRepo.save(edeka);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
     }
 
