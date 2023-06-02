@@ -1,10 +1,10 @@
 package de.angebot.main.gathering;
 
 import de.angebot.main.enities.services.CommonGather;
-import de.angebot.main.errors.SiteParsingError;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.services.CommonGatherRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 @Configuration
 public class MainGather {
     private final List<Gathering> gatherList = new ArrayList<>();
+    @Autowired
     private CommonGatherRepo gatherRepo;
-
 
     public void startGather() {
         if (!gatherList.isEmpty()) {
@@ -31,11 +31,10 @@ public class MainGather {
                 System.out.println("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
                 try {
                     gathering.startGathering();
-                } catch (SiteParsingError error) {
+                } catch (RuntimeException error) {
                     log.error("Es ist ein KRITISCHE Fehler auf Seite --> " + gathering.getDiscountName());
                 }
                 System.out.println("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
-
             }
             long duration = System.currentTimeMillis() - start;
             saveGatheringReport(duration);
@@ -46,10 +45,6 @@ public class MainGather {
 
     public void addToGatherList(Gathering gather) {
         gatherList.add(gather);
-    }
-
-    public void deleteFromGatherList(Gathering gather) {
-        this.gatherList.remove(gather);
     }
 
     private Map<String, String> getDiscountMap() {
@@ -66,8 +61,7 @@ public class MainGather {
         gatherRepo.save(gathering);
 
     }
-
-    public void setGatherRepo(CommonGatherRepo gatherRepo) {
-        this.gatherRepo = gatherRepo;
+    public List<CommonGather> getGatherReport() {
+        return gatherRepo.findAll();
     }
 }

@@ -11,7 +11,8 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Setter@Getter@NoArgsConstructor
+@Setter@Getter
+@NoArgsConstructor
 public class Penny extends AbstactEneties {
 
     private String produktName;

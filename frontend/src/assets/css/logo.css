@@ -1,0 +1,23 @@
+.aldi {
+  border-radius: 0;
+  display: inline-block;
+  color: #ffffff;
+  font-size: 2.5em;
+  font-style: normal;
+  background-color: #1d3587;
+  padding-right: 15px;
+  padding-left: 15px;
+  font-weight: 900 ;
+}
+.edeka {
+  border-radius: 0;
+  display: inline-block;
+  color: #2b5275;
+  font-size: 2.5em;
+  font-style: normal;
+  background-color: #fdf566;
+  padding-right: 15px;
+  padding-left: 15px;
+  font-weight: 900 ;
+}
+

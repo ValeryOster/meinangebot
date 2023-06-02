@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -31,16 +32,19 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Setter
-@Component
+@Component("penny")
 @Configuration
 public class PennyOffer extends Gathering {
 
     @Value("#{${map.of.penny.days}}")
     Map<Integer, List<String>> mapOfDaysElement;
-    private final SaveUtil saveUtil;
+    @Autowired
+    private SaveUtil saveUtil;
     @Value("${penny.mainUrl}")
     private String mainUrl;
-    private final PennyRepo pennyRepo;
+    @Autowired
+    private PennyRepo pennyRepo;
+
     @Value("${selenium.path}")
     private String seleniumDriverPath;
 
@@ -53,10 +57,9 @@ public class PennyOffer extends Gathering {
     @Value("${third.arg}")
     private String thirdArg;
 
-    public PennyOffer(SaveUtil saveUtil, PennyRepo pennyRepo) {
-        this.saveUtil = saveUtil;
-        this.pennyRepo = pennyRepo;
-    }
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
 
     @Override
     public void startGathering() {
@@ -192,33 +195,51 @@ public class PennyOffer extends Gathering {
     }
 
     public Document getDocumentWithSelenium(String url) {
-        Document parse;
+        Document parse = null;
         System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
         ChromeOptions options = new ChromeOptions();
         options.addArguments(firstArg);
-        if (!secondArg.isEmpty()) {
+        if (activeProfile.equals("prod")) {
             options.addArguments(secondArg,thirdArg);
         }
-        WebDriver driver = new ChromeDriver(options);
-        driver.get(url);
-        driver.manage().window().maximize();
         try {
-            Thread.sleep(3000);
-
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            //Scroll down till the bottom of the page
-            for (int i = 0; i < 3000; i += 100) {
-                js.executeScript("window.scrollBy(0," + i + ")");
-                Thread.sleep(100);
+            WebDriver driver = new ChromeDriver(options);
+            driver.get(url);
+            driver.manage().window().maximize();
+            try {
+                Thread.sleep(3000);
+                parse = getDocumentFromChromeDriver(driver);
+            } catch (NoSuchElementException | InterruptedException e) {
+                log.error(e.getMessage());
+                return null;
             }
-            parse = Jsoup.parse(driver.getPageSource());
-        } catch (NoSuchElementException | InterruptedException e) {
+            finally {
+                driver.close();
+            }
+        }catch (SessionNotCreatedException e) {
             log.error(e.getMessage());
             return null;
-        }finally {
-            driver.close();
         }
+
         return parse;
+    }
+
+    public Document getDocumentFromChromeDriver(WebDriver driver) throws InterruptedException {
+        By id = By.tagName("button");
+        List<WebElement> elements = driver.findElements(id);
+        for (WebElement element : elements) {
+            if (element.getText().equals("Erlauben")) {
+                element.click();
+                break;
+            }
+        }
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        //Scroll down till the bottom of the page
+        for (int i = 0; i < 3000; i += 100) {
+            js.executeScript("window.scrollBy(0," + i + ")");
+            Thread.sleep(100);
+        }
+        return Jsoup.parse(driver.getPageSource());
     }
 
     @Override

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-@Component
+@Component("lidl")
 public class LidlOffer extends Gathering {
     private final String mainUrl = "https://www.lidl.de";
     private String angeboteUrl = "";
@@ -83,7 +83,7 @@ public class LidlOffer extends Gathering {
             } catch (DataIntegrityViolationException e) {
                 log.error(lidl.getUrl());
             }
-        } catch (SiteParsingError error) {
+        } catch (RuntimeException error) {
             log.error(error.getMessage());
         }
     }
@@ -145,7 +145,7 @@ public class LidlOffer extends Gathering {
         Elements select = document.select("h1.keyfacts__title");
         if (select != null) {
             Element first = select.first();
-            String nameWithProducer = first.text();
+            String nameWithProducer = first != null ? first.text() : "";
             String maker = getMakerFromString(nameWithProducer);
             String target = "(?i)" + maker;
             String replace = nameWithProducer.replaceAll(target, "").trim();
@@ -247,6 +247,7 @@ public class LidlOffer extends Gathering {
         }
     }
 
+    //Alle Kategorie durchsuchen
     private Boolean checkItThisOnWeek(Element e) {
         Elements arrayText = e.getElementsByClass("ATheHeroStage__OfferHeadlineText");
         if (arrayText.size() > 0) {

@@ -1,27 +1,29 @@
 package de.angebot.main.services;
 
-import de.angebot.main.enities.*;
+import de.angebot.main.config.Discounters;
+import de.angebot.main.enities.AbstactEneties;
 import de.angebot.main.enities.discounters.*;
 import de.angebot.main.repositories.discounters.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Service
 public class DiscounterService {
     private final PennyRepo pennyRepo;
-
     private final LidlRepo lidlRepo;
-
     private final AldiRepo aldiRepo;
-
     private final NettoRepo nettoRepo;
-
     private final EdekaRepo edekaRepo;
 
+
     @Autowired
-    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo) {
+    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo, Discounters discounters) {
         this.pennyRepo = pennyRepo;
         this.lidlRepo = lidlRepo;
         this.aldiRepo = aldiRepo;
@@ -33,36 +35,12 @@ public class DiscounterService {
         return pennyRepo.findCurrentOffers();
     }
 
-    public Penny getPennyOfferById(Long id) {
-        try {
-            return pennyRepo.findById(id).get();
-        } catch (NoSuchElementException e) {
-            return new Penny();
-        }
-    }
-
     public List<Lidl> lidlCurrentOffers() {
         return lidlRepo.findCurrentOffers();
     }
 
-    public Lidl getLidlOfferById(Long id) {
-        try {
-            return lidlRepo.findById(id).get();
-        } catch (NoSuchElementException e) {
-            return new Lidl();
-        }
-    }
-
     public List<Aldi> aldiCurrentOffers() {
         return aldiRepo.findCurrentOffers();
-    }
-
-    public Aldi getAldiOfferById(Long id) {
-        try {
-            return aldiRepo.findById(id).get();
-        } catch (NoSuchElementException e) {
-            return new Aldi();
-        }
     }
 
     public List<Netto> nettoCurrentOffers() {
@@ -73,14 +51,12 @@ public class DiscounterService {
         return edekaRepo.findCurrentOffers();
     }
 
-    public Edeka getEdekaOfferById(Long id) {
-        return edekaRepo.findById(id).get();
-    }
     public Map<String, List<? extends AbstactEneties>> getSelectedDiscounters(List<String> discounters) {
-        return getOffersFromList(discounters);
+        return  getOffersFromList(discounters);
     }
 
-    private Map<String, List<? extends AbstactEneties>> getOffersFromList(List<String> discounters) {
+
+    public Map<String, List<? extends AbstactEneties>>  getOffersFromList(List<String> discounters) {
         Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
         for (String discounter : discounters) {
             // TODO: 18.09.2022 Change to switch with Patter

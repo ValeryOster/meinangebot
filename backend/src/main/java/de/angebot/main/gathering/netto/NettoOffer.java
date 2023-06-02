@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 
 
 @Slf4j
-@Component
+@Component("netto")
 public class NettoOffer extends Gathering{
 
     private List<String> possibleMakers;
