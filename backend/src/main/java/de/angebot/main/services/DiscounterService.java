@@ -1,6 +1,6 @@
 package de.angebot.main.services;
 
-import de.angebot.main.common.Discounters;
+import de.angebot.main.config.Discounters;
 import de.angebot.main.enities.AbstactEneties;
 import de.angebot.main.enities.discounters.*;
 import de.angebot.main.repositories.discounters.*;
@@ -20,10 +20,8 @@ public class DiscounterService {
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
     private final EdekaRepo edekaRepo;
-    private final Discounters discounters;
 
 
-    Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
     @Autowired
     public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo, Discounters discounters) {
         this.pennyRepo = pennyRepo;
@@ -31,7 +29,6 @@ public class DiscounterService {
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
         this.edekaRepo = edekaRepo;
-        this.discounters = discounters;
     }
 
     public List<Penny> pennyCurrentOffers() {
@@ -55,11 +52,12 @@ public class DiscounterService {
     }
 
     public Map<String, List<? extends AbstactEneties>> getSelectedDiscounters(List<String> discounters) {
-        return discountersMap;
+        return  getOffersFromList(discounters);
     }
 
 
-    public void  getOffersFromList(List<String> discounters) {
+    public Map<String, List<? extends AbstactEneties>>  getOffersFromList(List<String> discounters) {
+        Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
         for (String discounter : discounters) {
             // TODO: 18.09.2022 Change to switch with Patter
             if (discounter.equalsIgnoreCase("lidl")) {
@@ -92,8 +90,6 @@ public class DiscounterService {
                 }
             }
         }
-    }
-    public void startCollectionAllDiscounters() {
-        getOffersFromList(discounters.getAllDiscountersName().stream().toList());
+        return discountersMap;
     }
 }

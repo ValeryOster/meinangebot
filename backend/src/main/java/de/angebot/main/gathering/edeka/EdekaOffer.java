@@ -21,10 +21,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
-@Component
+@Component("edeka")
 public class EdekaOffer extends Gathering{
 
     @Autowired
@@ -33,7 +32,7 @@ public class EdekaOffer extends Gathering{
     @Autowired
     private EdekaRepo edekaRepo;
 
-    private String mainUrl = "https://www.edeka.de/api/offers?limit=999&marketId=8002195";
+    private final String mainUrl = "https://www.edeka.de/api/offers?limit=999&marketId=8002195";
     private final String OFFER_URL = "https://www.edeka.de/eh/rhein-ruhr/edeka-frischecenter-burkowski-altendorfer-stra%C3%9Fe-230/angebote.jsp";
 
     @Override
@@ -90,7 +89,7 @@ public class EdekaOffer extends Gathering{
 
     private void setProductNameUndMaker(JsonNode offer, Edeka edeka ) {
         List<String> collect = productMakerRepo.findAll().stream().filter(ProductMaker::getValid)
-                .map(ProductMaker::getMakerName).collect(Collectors.toList());
+                .map(ProductMaker::getMakerName).toList();
         String title = offer.get("title").asText();
         for (String maker : collect) {
             if (title.toLowerCase().contains(maker.toLowerCase())) {
