@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class EdekaOffer extends Gathering{
     @Override
     public void startGathering() {
         try {
-            JsonNode jsonNode = get(new URL(mainUrl));
+            JsonNode jsonNode = getJsonFromURL(new URL(mainUrl));
             ArrayList<JsonNode> offers = Lists.newArrayList(jsonNode.get("offers").elements());
             LocalDate dateFrom = getDate(jsonNode, true);
             for (JsonNode offer : offers) {
@@ -101,9 +102,11 @@ public class EdekaOffer extends Gathering{
         }
     }
 
-    public static JsonNode get(URL url) throws IOException {
+    public static JsonNode getJsonFromURL(URL url) throws IOException {
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readTree(url);
+        return mapper.readTree(urlConnection.getInputStream());
     }
     @Override
     public String getDiscountName() {
