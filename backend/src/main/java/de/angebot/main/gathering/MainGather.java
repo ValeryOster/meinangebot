@@ -28,13 +28,13 @@ public class MainGather {
         if (!gatherList.isEmpty()) {
             long start = System.currentTimeMillis();
             for (Gathering gathering : gatherList) {
-                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
+               log.info("++++++++++++ " + gathering.getDiscountName() + " Started +++++++++++++++");
                 try {
                     gathering.startGathering();
                 } catch (RuntimeException error) {
                     log.error("Es ist ein KRITISCHE Fehler auf Seite --> " + gathering.getDiscountName());
                 }
-                System.out.println("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
+                log.info("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
             }
             long duration = System.currentTimeMillis() - start;
             saveGatheringReport(duration);

@@ -215,7 +215,19 @@ public class NettoOffer extends Gathering{
     public Document getDocument(String url) {
         Document document;
         try {
-            document = Jsoup.connect(url).cookie("netto_user_stores_id", "1156").method(Connection.Method.GET).execute()
+            document = Jsoup.connect(url)
+                    .header("Content-Type","application/x-www-form-urlencoded")
+                    .cookie("netto_user_stores_id", "9103")
+                    .data("mode", "filterReviews")
+                    .data("filterRating", "")
+                    .data("filterSegment", "")
+                    .data("filterSeasons", "")
+                    .data("filterLang", "ALL")
+                    .referrer("http://www.google.com")
+                    .header("X-Requested-With", "XMLHttpRequest")
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36")
+                    .method(Connection.Method.POST)
+                    .execute()
                     .parse();
         } catch (IOException e) {
             log.error("!!! Url ist nicht erreichbar --> " + url);
