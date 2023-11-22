@@ -2,7 +2,7 @@ package de.angebot.main.gathering.penny;
 
 
 import de.angebot.main.enities.discounters.Penny;
-import de.angebot.main.gathering.common.Gathering;
+import de.angebot.main.gathering.common.GatheringWithSelenium;
 import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
@@ -13,9 +13,10 @@ import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ import java.util.stream.Stream;
 @Setter
 @Component("penny")
 @Configuration
-public class PennyOffer extends Gathering {
+public class PennyOffer extends GatheringWithSelenium {
 
     @Value("#{${map.of.penny.days}}")
     Map<Integer, List<String>> mapOfDaysElement;
@@ -45,20 +46,6 @@ public class PennyOffer extends Gathering {
     @Autowired
     private PennyRepo pennyRepo;
 
-    @Value("${selenium.path}")
-    private String seleniumDriverPath;
-
-    @Value("${first.arg}")
-    private String firstArg;
-
-    @Value("${second.arg}")
-    private String secondArg;
-
-    @Value("${third.arg}")
-    private String thirdArg;
-
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
 
 
     @Override
@@ -194,37 +181,9 @@ public class PennyOffer extends Gathering {
         }
     }
 
-    public Document getDocumentWithSelenium(String url) {
-        Document parse = null;
-        System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments(firstArg);
-        if (activeProfile.equals("prod")) {
-            options.addArguments(secondArg,thirdArg);
-        }
-        try {
-            WebDriver driver = new ChromeDriver(options);
-            driver.get(url);
-            driver.manage().window().maximize();
-            try {
-                Thread.sleep(3000);
-                parse = getDocumentFromChromeDriver(driver);
-            } catch (NoSuchElementException | InterruptedException e) {
-                log.error(e.getMessage());
-                return null;
-            }
-            finally {
-                driver.close();
-            }
-        }catch (SessionNotCreatedException e) {
-            log.error(e.getMessage());
-            return null;
-        }
 
-        return parse;
-    }
 
-    public Document getDocumentFromChromeDriver(WebDriver driver) throws InterruptedException {
+    public Document getDocumentFromChromeDriver(WebDriver driver) {
         By id = By.tagName("button");
         List<WebElement> elements = driver.findElements(id);
         for (WebElement element : elements) {
@@ -237,7 +196,11 @@ public class PennyOffer extends Gathering {
         //Scroll down till the bottom of the page
         for (int i = 0; i < 3000; i += 100) {
             js.executeScript("window.scrollBy(0," + i + ")");
-            Thread.sleep(100);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         return Jsoup.parse(driver.getPageSource());
     }

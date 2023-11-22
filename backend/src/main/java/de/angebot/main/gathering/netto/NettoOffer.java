@@ -2,7 +2,7 @@ package de.angebot.main.gathering.netto;
 
 import de.angebot.main.enities.ProductMaker;
 import de.angebot.main.enities.discounters.Netto;
-import de.angebot.main.gathering.common.Gathering;
+import de.angebot.main.gathering.common.GatheringWithSelenium;
 import de.angebot.main.repositories.discounters.NettoRepo;
 import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
@@ -12,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Component("netto")
-public class NettoOffer extends Gathering{
-
+public class NettoOffer extends GatheringWithSelenium {
     private List<String> possibleMakers;
     @Autowired
     private NettoRepo nettoRepo;
@@ -235,5 +235,12 @@ public class NettoOffer extends Gathering{
             return null;
         }
         return document;
+    }
+
+
+    @Override
+    protected Document getDocumentFromChromeDriver(WebDriver driver) {
+
+        return null;
     }
 }

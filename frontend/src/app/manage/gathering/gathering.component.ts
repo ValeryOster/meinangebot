@@ -25,8 +25,7 @@ export class GatheringComponent implements OnInit {
               private router: Router,
               private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-      dicounters: new FormArray([])
-    });
+      dicounters: new FormArray([]) });
     this.addCheckboxes();
   }
 
@@ -53,7 +52,7 @@ export class GatheringComponent implements OnInit {
 
   private addCheckboxes() {
     this.discounterBox.forEach( value =>{
-      this.ordersFormArray.push(new FormControl(true));
+      this.ordersFormArray.push(new FormControl(false));
     });
   }
 

@@ -10,6 +10,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 public abstract class Gathering implements ErrorHandler {
+
     public abstract void startGathering() throws RuntimeException;
 
     public abstract String getDiscountName();
