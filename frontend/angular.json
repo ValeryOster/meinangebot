@@ -61,24 +61,27 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "development": {
+              "optimization": false
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "frontendApp:build"
+            "buildTarget": "frontendApp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "frontendApp:build:production"
+              "buildTarget": "frontendApp:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "frontendApp:build"
+            "buildTarget": "frontendApp:build"
           }
         },
         "test": {
@@ -124,6 +127,5 @@
           }
         }
       }
-    }},
-  "defaultProject": "frontendApp"
+    }}
 }

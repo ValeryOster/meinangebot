@@ -21,7 +21,7 @@
         <version>1.7.6</version>
         <configuration>
           <workingDirectory>./</workingDirectory>
-          <nodeVersion>v10.16.0</nodeVersion>
+          <nodeVersion>v20.10.0</nodeVersion>
           <npmVersion>6.10.2</npmVersion>
         </configuration>
         <executions>
