@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {HttpClientModule} from "@angular/common/http";
 import {HomeComponent} from "./home/home.component";
 import {ManageComponent} from './manage/manage.component';
@@ -12,7 +13,6 @@ import {GatheringComponent} from './manage/gathering/gathering.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatCardModule} from "@angular/material/card";
-import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {LoginComponent} from "./login/login.component";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -37,18 +37,18 @@ import {FilterPipe} from './pipes/filter.pipe';
     FilterPipe
   ],
   imports: [
+    FontAwesomeModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    BrowserAnimationsModule,
-    MatTabsModule,
-    MatCardModule,
-    FontAwesomeModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCardModule,
+    MatTabsModule,
+    BrowserAnimationsModule,
     MatIconModule
   ],
   providers: [authInterceptorProviders, AuswahlComponent, OffersComponent],
