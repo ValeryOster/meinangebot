@@ -12,11 +12,11 @@ export class GatheringComponent implements OnInit {
 
   form: FormGroup;
   discounterBox = [
-    {id: 100, name: 'PENNY'},
-    {id: 200, name: 'LIDL'},
-    {id: 300, name: 'ALDI'},
-    {id: 400, name: 'NETTO'},
-    {id: 500, name: 'EDEKA'}
+    {id: 100, name: 'PENNY', isAktiv:false},
+    {id: 200, name: 'LIDL', isAktiv:false},
+    {id: 300, name: 'ALDI', isAktiv:false},
+    {id: 400, name: 'NETTO', isAktiv:false},
+    {id: 500, name: 'EDEKA', isAktiv:false}
 
   ];
   discounters: Discounter[];
@@ -43,9 +43,8 @@ export class GatheringComponent implements OnInit {
   submit() {
     let list = new Array() ;
     this.form.value.dicounters.map((checked, i) =>{
-        if(checked){
-          var str:string;
-          str = this.discounterBox[i].name
+        if(this.discounterBox[i].isAktiv){
+          let str = this.discounterBox[i].name
           list.push(str);
         }});
     this.discService.startGather(list).subscribe();
@@ -59,5 +58,9 @@ export class GatheringComponent implements OnInit {
 
   get ordersFormArray() {
     return this.form.controls.dicounters as FormArray;
+  }
+
+  changeAktiviti(i: number) {
+    this.discounterBox[i].isAktiv = !this.discounterBox[i].isAktiv
   }
 }
