@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,14 +40,16 @@ public class LidlOffer extends Gathering {
     @Override
     public void startGathering() {
         getAngeboteUrl();
-        List<Lidl> allItemsUrl = new ArrayList<>();
+        List<Lidl> cacheItemsUrl = new ArrayList<>();
         List<String> urlList = getURLs();
         urlList.forEach(s -> {
             Document document = getDocument(s);
             List<Lidl> allItemsUrl1 = getAllItemsUrl(document);
-            allItemsUrl.addAll(allItemsUrl1);
+            cacheItemsUrl.addAll(allItemsUrl1);
         });
 
+        //Delete repeats records in List
+        List<Lidl> allItemsUrl = cacheItemsUrl.stream().distinct().toList();
         allItemsUrl.forEach(lidl -> {
             Document doc = getDocument(lidl.getUrl());
             if (doc != null) {
@@ -59,7 +62,7 @@ public class LidlOffer extends Gathering {
         String newMain = "https://www.lidl.de";
         Document document = getDocument(newMain);
         Elements elementsByAttributeValue = document.getElementsByAttributeValue("data-ga-label", "Filial-Angebote");
-        if (elementsByAttributeValue.size() > 0) {
+        if (!elementsByAttributeValue.isEmpty()) {
             angeboteUrl = newMain + elementsByAttributeValue.first().attr("href");
         }
     }
@@ -108,7 +111,7 @@ public class LidlOffer extends Gathering {
 
     private void getImageUrl(Document document, Lidl lidl) {
         Elements select = document.select("img.gallery-image__img");
-        if (select.size() > 0) {
+        if (!select.isEmpty()) {
             String href = select.first().attr("src");
             lidl.setImageLink(Utils.downloadImage(href, "lidl", Utils.getNextSaturday(), ""));
         } else {
@@ -118,7 +121,7 @@ public class LidlOffer extends Gathering {
 
     private String getItemOldPrise(Document document) {
         Elements oldPreis = document.getElementsByClass("m-price__rrp");
-        if (oldPreis.size() > 0) {
+        if (!oldPreis.isEmpty()) {
             return oldPreis.text();
         }
         return "null";
@@ -126,7 +129,7 @@ public class LidlOffer extends Gathering {
 
     private String getItemPrise(Document document) {
         Elements pricelabel = document.getElementsByClass("m-price__price");
-        if (pricelabel.size() > 0) {
+        if (!pricelabel.isEmpty()) {
             return pricelabel.first().text().replace(" ", "").replace("-.", "0.").replace("*", "");
         } else {
             throw new SiteParsingError("!!! Preise werden nicht erkannt. !!!");
@@ -135,7 +138,7 @@ public class LidlOffer extends Gathering {
 
     private String getItemDescription(Document document) {
         Elements itemDesc = document.select("div.keyfacts__description");
-        if (itemDesc.size() > 0) {
+        if (!itemDesc.isEmpty()) {
             return itemDesc.first().text();
         }
         return "";
@@ -158,9 +161,9 @@ public class LidlOffer extends Gathering {
 
     private String getMakerFromString(String descriptionName) {
         Stream<String> stream = possibleMakers.stream();
-        List<String> collect = stream.filter(s -> descriptionName.toUpperCase().contains(s.toUpperCase())).limit(1)
-                .collect(Collectors.toList());
-        if (collect.size() > 0) {
+        List<String> collect = stream.filter(s -> descriptionName.toUpperCase().contains(s.toUpperCase()))
+                .limit(1).toList();
+        if (!collect.isEmpty()) {
             return collect.get(0);
         }
         return "";
@@ -169,11 +172,11 @@ public class LidlOffer extends Gathering {
     private List<Lidl> getAllItemsUrl(Document doc) {
         List<Lidl> itemsUrl = new ArrayList<>();
         Elements elementsByClass = doc.getElementsByClass("ATheCampaign__SectionWrapper");
-        if (elementsByClass.size() != 0) {
+        if (!elementsByClass.isEmpty()) {
             elementsByClass.forEach(element -> {
                 Lidl lidl = new Lidl();
                 Elements aTheSectionHead = element.getElementsByClass("ATheSectionHead");
-                if (aTheSectionHead.size() > 0) {
+                if (!aTheSectionHead.isEmpty()) {
                     setKategorieName(lidl, aTheSectionHead);
                 }
                 setStartDayAndMainKategorie(doc, lidl);
@@ -188,8 +191,8 @@ public class LidlOffer extends Gathering {
     private String getMainKategorie(Document doc) {
         String mainKategorieName = "";
         Elements mainElement = doc.getElementsByClass("ATheHeroStage__OfferAnchor--current");
-        if (mainElement.size() > 0) {
-            mainKategorieName = mainElement.first().text();
+        if (!mainElement.isEmpty()) {
+            mainKategorieName = Objects.requireNonNull(mainElement.first()).text();
         }
         return mainKategorieName;
     }
@@ -204,20 +207,28 @@ public class LidlOffer extends Gathering {
         Elements aCampaignGrid__item = kategorieArea.getElementsByClass("ACampaignGrid__item");
         aCampaignGrid__item.forEach(element -> {
             Elements product = element.getElementsByAttributeValue("data-selector", "PRODUCT");
-            if (product.size() > 0) {
-                String first = product.first().attr("canonicalurl");
-                Lidl newLidl = copyNewLidl(lidl);
-                newLidl.setUrl(mainUrl + first);
-                itemsUrl.add(newLidl);
+            if (!product.isEmpty() ) {
+                String produktLink = mainUrl + product.first().attr("canonicalurl");
+                if (!itemsUrl.contains(produktLink) && !isContainsCart(produktLink)) {
+                    Lidl newLidl = copyNewLidl(lidl);
+                    newLidl.setUrl(produktLink);
+                    itemsUrl.add(newLidl);
+                }
             }
         });
     }
 
+    //Sucht, ob Produkt Link 'in den Warenkorb' beinhaltet.
+    private boolean isContainsCart(String itemCome) {
+        Document document = getDocument(itemCome);
+        Element addToCart = document.getElementById("addToCart");
+        return addToCart != null;
+    }
+
     private List<String> getURLs() {
         Document document = getDocument(angeboteUrl);
-
-        Elements select = document.getElementsByClass("ATheHeroStage__TabPanels").first().select("section");
-
+        Elements select = Objects.requireNonNull(document.getElementsByClass("ATheHeroStage__TabPanels")
+                .first()).select("section");
         return getAllURLs(select);
     }
 
@@ -225,11 +236,11 @@ public class LidlOffer extends Gathering {
         List<String> allURLs = new ArrayList<>();
         for (Element e : select) {
             Elements select1 = e.select("span:containsOwn(Lebensmittel)");
-            if (select1.size() > 0) {
+            if (!select1.isEmpty()) {
                 saveURLs(allURLs, e);
             }
             select1 = e.select("span:containsOwn(Diese Woche)");
-            if (select1.size() > 0) {
+            if (!select1.isEmpty()) {
                 saveURLs(allURLs, e);
             }
         }
@@ -242,16 +253,22 @@ public class LidlOffer extends Gathering {
             String href = childElement.select("a[href]").first().attr("href");
             if (checkItThisOnWeek(childElement)) {
                 String testUrl = href.contains(mainUrl) ? "" : mainUrl;
-                allURLs.add(testUrl + href);
+                String url = testUrl + href;
+                if (!allURLs.contains(url)) {
+                    allURLs.add(url);
+                }else {
+                    log.info(url);
+                }
             }
         }
+        log.info("Große : " + allURLs.size());
     }
 
     //Alle Kategorie durchsuchen
     private Boolean checkItThisOnWeek(Element e) {
         Elements arrayText = e.getElementsByClass("ATheHeroStage__OfferHeadlineText");
-        if (arrayText.size() > 0) {
-            String dateText = arrayText.first().text();
+        if (!arrayText.isEmpty()) {
+            String dateText = Objects.requireNonNull(arrayText.first()).text();
             if (dateText.contains("Testergebnisse")) {
                 return false;
             }
