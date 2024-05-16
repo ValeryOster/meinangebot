@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -34,4 +35,22 @@ public class Lidl extends AbstactEneties {
     @Transient
     @JsonProperty
     private String discounterName = "LIDL.";
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Lidl other = (Lidl) obj;
+        return Objects.equals(this.url, other.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * url.hashCode() + discounterName.hashCode();
+    }
 }
