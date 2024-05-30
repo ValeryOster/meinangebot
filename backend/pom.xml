@@ -179,11 +179,7 @@
             <artifactId>selenium-java</artifactId>
             <version>4.8.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>33.2.0-jre</version>
-        </dependency>
+
 
     </dependencies>
 
