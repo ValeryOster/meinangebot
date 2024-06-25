@@ -12,7 +12,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverLogLevel;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -31,16 +36,27 @@ import java.util.stream.Stream;
 @Component("netto")
 public class NettoOffer extends Gathering{
 
+    @Value("${third.arg}")
+    private String thirdArg;
     private List<String> possibleMakers;
     @Autowired
     private NettoRepo nettoRepo;
     @Autowired
     private ProductMakerRepo productMakerRepo;
 
+    @Value("${selenium.path}")
+    private String seleniumDriverPath;
+    @Value("${first.arg}")
+    private String firstArg;
+    @Value("${second.arg}")
+    private String secondArg;
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
     @Override
     public void startGathering() {
         String mainUrl = "https://www.netto-online.de/filialangebote";
-        Document document = getDocument(mainUrl);
+        Document document = getDocumentWithSelenium(mainUrl);
         assert document != null;
         Map<String, String> katerogieMap = getKategorieMap(document);
         if (katerogieMap.size() > 0) {
@@ -50,7 +66,7 @@ public class NettoOffer extends Gathering{
     }
 
     private void saveOffers(String katerogieMap, String url) {
-        Document document = getDocument(url);
+        Document document = getDocumentWithSelenium(url);
         if (document != null) {
             Elements elementsByClass = document.getElementsByClass("product-list__overflow-wrapper");
             if (elementsByClass.size() > 0) {
@@ -236,4 +252,35 @@ public class NettoOffer extends Gathering{
         }
         return document;
     }
+    public Document getDocumentWithSelenium(String url) {
+        Document parse;
+        System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(firstArg);
+
+        try {
+            options.setLogLevel(ChromeDriverLogLevel.ALL);
+            WebDriver driver = new ChromeDriver(options);
+            driver.manage().window().maximize();
+            driver.get(url);
+            Thread.sleep(2000);
+
+            driver.findElement(new By.ById("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll")).click();
+
+            Thread.sleep(2000);
+            WebElement element = driver.findElement(new By.ByCssSelector(".btn-primary.js-layer-storefinder.hasLayerEvent"));
+            element.click();
+
+            Thread.sleep(10000);
+
+        }catch (SessionNotCreatedException e) {
+            log.error(e.getMessage());
+            return null;
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+        }
+
+        return null;
+    }
+
 }
