@@ -9,7 +9,8 @@ class List<T> {
   providedIn: 'root'
 })
 export class OfferListService{
-  private discounters: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(['Lidl','Penny','Aldi','Netto', 'Edeka']);
+  private discounters: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(
+    ['Lidl','Penny','Aldi','Netto', 'Edeka', 'Globus']);
 
   constructor(public service: StartService) {}
 

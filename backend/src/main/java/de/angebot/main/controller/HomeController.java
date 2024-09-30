@@ -1,10 +1,7 @@
 package de.angebot.main.controller;
 
 import de.angebot.main.enities.*;
-import de.angebot.main.enities.discounters.Aldi;
-import de.angebot.main.enities.discounters.Lidl;
-import de.angebot.main.enities.discounters.Netto;
-import de.angebot.main.enities.discounters.Penny;
+import de.angebot.main.enities.discounters.*;
 import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +34,11 @@ public class HomeController {
     @GetMapping(path = "/netto")
     public List<Netto> getNetto() {
         return service.nettoCurrentOffers();
+    }
+
+    @GetMapping(path = "/globus")
+    public List<Globus> getGlobus() {
+        return service.globusCurrentOffers();
     }
 
     @PostMapping(path = "/auswahl")

@@ -18,8 +18,8 @@ export class HomeComponent implements OnInit {
     {id: 200, name: 'LIDL'},
     {id: 300, name: 'ALDI'},
     {id: 400, name: 'NETTO'},
-    {id: 400, name: 'EDEKA'}
-
+    {id: 500, name: 'EDEKA'},
+    {id: 600, name: 'GLOBUS'}
   ];
   private ausgewahl: Array<string>;
 

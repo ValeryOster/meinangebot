@@ -45,21 +45,6 @@ public class PennyOffer extends Gathering {
     @Autowired
     private PennyRepo pennyRepo;
 
-    @Value("${selenium.path}")
-    private String seleniumDriverPath;
-
-    @Value("${first.arg}")
-    private String firstArg;
-
-    @Value("${second.arg}")
-    private String secondArg;
-
-    @Value("${third.arg}")
-    private String thirdArg;
-
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
-
 
     @Override
     public void startGathering() {
@@ -202,6 +187,9 @@ public class PennyOffer extends Gathering {
         if (activeProfile.equals("prod")) {
             options.addArguments(secondArg,thirdArg);
         }
+        if (activeProfile.equals("dev")) {
+            options.setBinary("C:\\Users\\oster\\Desktop\\chrome-win64\\chrome.exe");
+        }
         try {
             WebDriver driver = new ChromeDriver(options);
             driver.get(url);
@@ -233,14 +221,10 @@ public class PennyOffer extends Gathering {
                 break;
             }
         }
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        //Scroll down till the bottom of the page
-        for (int i = 0; i < 3000; i += 100) {
-            js.executeScript("window.scrollBy(0," + i + ")");
-            Thread.sleep(100);
-        }
+        scrollPageDownWithJS( driver, 3000);
         return Jsoup.parse(driver.getPageSource());
     }
+
 
     @Override
     public String getDiscountName() {

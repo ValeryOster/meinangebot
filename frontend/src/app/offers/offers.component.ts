@@ -39,15 +39,13 @@ export class OffersComponent implements OnInit {
   }
 
   saveItemsToMap(value: Object) {
-
     let strings = Object.keys(value);
     this.discounters.clear();
     this.allOffersList.length = 0;
-    for (let i = 0; i < strings.length; i++) {
-      let offers = value[strings[i]];
+    for (const element of strings) {
+      let offers = value[element];
       let map = this.mapToDiscount(offers);
-      this.discounters.set(strings[i], map);
-      console.log(strings[i])
+      this.discounters.set(element, map);
       Array.prototype.push.apply(this.allOffersList, offers)
     }
   }
@@ -76,5 +74,9 @@ export class OffersComponent implements OnInit {
       }
     }
   }
+
+  log(val) { console.log(val); }
+
+  protected readonly console = console;
 }
 

@@ -37,6 +37,8 @@ public class GatherService {
     private EdekaOffer edekaOffer;
     @Autowired
     private EdekaRepo edekaRepo;
+    @Autowired
+    private GlobusRepo globusRepo;
 
     public void startGather(List<String> discounters) {
         // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
@@ -81,6 +83,9 @@ public class GatherService {
                     break;
                 case "EDEKA":
                     edekaRepo.deleteAllActuel();
+                    break;
+                case "GLOBUS":
+                    globusRepo.deleteAllActuel();
                     break;
             }
         });

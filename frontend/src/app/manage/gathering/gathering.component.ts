@@ -16,8 +16,8 @@ export class GatheringComponent implements OnInit {
     {id: 200, name: 'LIDL', isAktiv:false},
     {id: 300, name: 'ALDI', isAktiv:false},
     {id: 400, name: 'NETTO', isAktiv:false},
-    {id: 500, name: 'EDEKA', isAktiv:false}
-
+    {id: 500, name: 'EDEKA', isAktiv:false},
+    {id: 600, name: 'GLOBUS', isAktiv:false}
   ];
   discounters: Discounter[];
   buttonActive = true;

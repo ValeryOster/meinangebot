@@ -1,8 +1,8 @@
 package de.angebot.main.gathering.lidl;
 
 import de.angebot.main.common.GermanyDayOfWeek;
-import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.enities.ProductMaker;
+import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.errors.SiteParsingError;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.discounters.LidlRepo;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Component("lidl")
@@ -149,7 +148,7 @@ public class LidlOffer extends Gathering {
         if (select != null) {
             Element first = select.first();
             String nameWithProducer = first != null ? first.text() : "";
-            String maker = getMakerFromString(nameWithProducer);
+            String maker = Utils.getMakersNameFromList(possibleMakers,nameWithProducer);
             String target = "(?i)" + maker;
             String replace = nameWithProducer.replaceAll(target, "").trim();
             lidl.setProduktName(replace);
@@ -157,16 +156,6 @@ public class LidlOffer extends Gathering {
         } else {
             throw new SiteParsingError("Name ist nicht gefunden worden");
         }
-    }
-
-    private String getMakerFromString(String descriptionName) {
-        Stream<String> stream = possibleMakers.stream();
-        List<String> collect = stream.filter(s -> descriptionName.toUpperCase().contains(s.toUpperCase()))
-                .limit(1).toList();
-        if (!collect.isEmpty()) {
-            return collect.get(0);
-        }
-        return "";
     }
 
     private List<Lidl> getAllItemsUrl(Document doc) {

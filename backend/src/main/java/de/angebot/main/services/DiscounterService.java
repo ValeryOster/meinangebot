@@ -20,35 +20,36 @@ public class DiscounterService {
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
     private final EdekaRepo edekaRepo;
+    private final GlobusRepo globusRepo;
 
 
     @Autowired
-    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo, Discounters discounters) {
+    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo, GlobusRepo globusRepo, Discounters discounters) {
         this.pennyRepo = pennyRepo;
         this.lidlRepo = lidlRepo;
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
         this.edekaRepo = edekaRepo;
+        this.globusRepo = globusRepo;
     }
 
     public List<Penny> pennyCurrentOffers() {
         return pennyRepo.findCurrentOffers();
     }
-
     public List<Lidl> lidlCurrentOffers() {
         return lidlRepo.findCurrentOffers();
     }
-
     public List<Aldi> aldiCurrentOffers() {
         return aldiRepo.findCurrentOffers();
     }
-
     public List<Netto> nettoCurrentOffers() {
         return nettoRepo.findCurrentOffers();
     }
-
     public List<Edeka> edekaCurrentOffers() {
         return edekaRepo.findCurrentOffers();
+    }
+    public List<Globus> globusCurrentOffers() {
+        return globusRepo.findCurrentOffers();
     }
 
     public Map<String, List<? extends AbstactEneties>> getSelectedDiscounters(List<String> discounters) {
@@ -67,9 +68,9 @@ public class DiscounterService {
                 }
             }
             else if (discounter.equalsIgnoreCase("penny")) {
-                List<Penny> pennies = pennyCurrentOffers();
-                if (pennies.size() > 0) {
-                    discountersMap.put("Penny", pennies);
+                List<Penny> pennyList = pennyCurrentOffers();
+                if (pennyList.size() > 0) {
+                    discountersMap.put("Penny", pennyList);
                 }
             }
             else if (discounter.equalsIgnoreCase("aldi")) {
@@ -87,6 +88,11 @@ public class DiscounterService {
                 List<Edeka> edekaList = edekaCurrentOffers();
                 if (edekaList.size() > 0) {
                     discountersMap.put("Edeka", edekaList);
+                }
+            }else if (discounter.equalsIgnoreCase("globus")) {
+                List<Globus> globusList = globusCurrentOffers();
+                if (globusList.size() > 0) {
+                    discountersMap.put("Globus", globusList);
                 }
             }
         }

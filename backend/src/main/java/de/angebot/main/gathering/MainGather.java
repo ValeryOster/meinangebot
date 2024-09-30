@@ -4,6 +4,8 @@ import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.services.CommonGatherRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -64,4 +66,5 @@ public class MainGather {
     public List<CommonGather> getGatherReport() {
         return gatherRepo.findAll();
     }
+
 }

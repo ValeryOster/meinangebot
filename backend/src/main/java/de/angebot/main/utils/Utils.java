@@ -1,5 +1,6 @@
 package de.angebot.main.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -19,11 +20,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
+@Slf4j
 @Component
 public class Utils {
 
     private static String IMAGE_DESTINATION_FOLDER;
+    public static String REGEX_WITHOUT_NUMBERS = "[^0-9,]";
 
     public static void saveHtmlToDisk(Document document, String pfad) {
         if (pfad == null || pfad.isEmpty()) {
@@ -68,7 +72,7 @@ public class Utils {
             imageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
         }
         //delete all special character,
-        imageName = imageName.replaceAll("[^a-zA-Z0-9]+","");
+        imageName = imageName.replaceAll("[^a-zA-Z0-9]+", "");
         try {
             //open the stream from URL
             URL urlImage = new URL(strImageURL);
@@ -86,10 +90,11 @@ public class Utils {
                 os.write(buffer, 0, n);
             }
             os.close();
+            in.close();
 
-            return  "/" + storageName + "/" + endDate + "/" + imageName;
+            return "/" + storageName + "/" + endDate + "/" + imageName;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error: " + e.getMessage());
         }
         return "";
     }
@@ -118,11 +123,11 @@ public class Utils {
             return getSuitableDay(DayOfWeek.TUESDAY);
         } else if (str.toLowerCase().contains("mittwoch")) {
             return getSuitableDay(DayOfWeek.WEDNESDAY);
-        }else if (str.toLowerCase().contains("donnerstag")) {
+        } else if (str.toLowerCase().contains("donnerstag")) {
             return getSuitableDay(DayOfWeek.THURSDAY);
-        }else if (str.toLowerCase().contains("freitag")) {
+        } else if (str.toLowerCase().contains("freitag")) {
             return getSuitableDay(DayOfWeek.FRIDAY);
-        }else if (str.toLowerCase().contains("samstag")) {
+        } else if (str.toLowerCase().contains("samstag")) {
             return getNextSaturday();
         }
         return getNextMonday();
@@ -136,10 +141,10 @@ public class Utils {
         return LocalDate.now(ZoneId.of("Europe/Paris")).with(TemporalAdjusters.nextOrSame(dayOfWeek));
     }
 
-    public static boolean isContainExactWord(String fullString, String partWord){
-        String pattern = "\\b"+partWord+"\\b";
-        Pattern p=Pattern.compile(pattern);
-        Matcher m=p.matcher(fullString);
+    public static boolean isContainExactWord(String fullString, String partWord) {
+        String pattern = "\\b" + partWord + "\\b";
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(fullString);
         return m.find();
     }
 
@@ -152,6 +157,15 @@ public class Utils {
         return builder.toString();
     }
 
+    public static String getMakersNameFromList(List<String> possibleMakers, String descriptionName) {
+        Stream<String> stream = possibleMakers.stream();
+        List<String> collect = stream.filter(s -> descriptionName.toUpperCase().contains(s.toUpperCase()))
+                .limit(1).toList();
+        if (!collect.isEmpty()) {
+            return collect.get(0);
+        }
+        return "";
+    }
 
     @Value("${main.bilder}")
     public void setFoder(String folder) {

@@ -17,7 +17,7 @@
           </div>
         </ng-template>
         <ng-template [ngIf]="offer.discounterName.includes('Aldi')" class="searchLogo">
-          <div class="searchLogo" >
+          <div class="searchLogo">
             <link rel="stylesheet" type="text/css" href="../../assets/css/logo.css">
           </div>
         </ng-template>
@@ -31,13 +31,17 @@
             <img src="assets/edeka.svg" alt="image">
           </div>
         </ng-template>
-
-
+        <ng-template [ngIf]="offer.discounterName.includes('Globus')" class="searchLogo">
+          <div class="searchLogo">
+            <img src="assets/lidl.png" alt="image">
+          </div>
+        </ng-template>
+        {{log(offer)}}
 
         <mat-card-header>
           <div class="actuel">
-            <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{offer.vonDate | date:'dd.MM'}}
-            <span class="actuelBis">bis: </span> {{offer.bisDate | date:'dd.MM'}}
+            <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{ offer.vonDate | date:'dd.MM' }}
+            <span class="actuelBis">bis: </span> {{ offer.bisDate | date:'dd.MM' }}
             <mat-icon class="addIcon" (click)="addToBucket(offer)">playlist_add</mat-icon>
             <span class="advice">add</span>
             <a href="{{offer.url}}" class="dicounterLinkIcon">
@@ -51,14 +55,14 @@
 
             <div class="card-info">
               <div class="name">
-                <h4>{{offer.produktName}}</h4>
+                <h4>{{ offer.produktName }}</h4>
               </div>
               <div class="prise">
                 <div class="oldprise" *ngIf="!(offer.produktRegularPrise === 'null')">
-                  {{offer.produktRegularPrise}}
+                  {{ offer.produktRegularPrise }}
                 </div>
                 <div class="actuelprise">
-                  {{offer.produktPrise}}
+                  {{ offer.produktPrise }}
                 </div>
               </div>
             </div>
@@ -86,7 +90,7 @@
             </div>
           </ng-template>
           <ng-template [ngIf]="discounter.key === 'Aldi'">
-            <div >
+            <div>
               <b class="aldi">
                 ALDI
               </b>
@@ -107,7 +111,7 @@
 
         <div class="kategorie" *ngFor="let kategori of discounter.value|keyvalue ">
           <div id="{{kategori.key}}" class="kategorieName">
-            {{kategori.key}}
+            {{ kategori.key }}
           </div>
           <div class="cards">
             <div *ngFor="let offer of kategori.value">
@@ -115,8 +119,8 @@
               <mat-card class="simple-card" role="group">
                 <mat-card-header>
                   <div class="actuel">
-                    <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{offer.vonDate | date:'dd.MM'}}
-                    <span class="actuelBis">bis: </span> {{offer.bisDate | date:'dd.MM'}}
+                    <span class="actuelVon" *ngIf="offer.vonDate">von: </span> {{ offer.vonDate | date:'dd.MM' }}
+                    <span class="actuelBis">bis: </span> {{ offer.bisDate | date:'dd.MM' }}
                     <mat-icon class="addIcon" (click)="addToBucket(offer)">playlist_add</mat-icon>
                     <span class="advice">add</span>
                     <a href="{{offer.url}}" class="dicounterLinkIcon">
@@ -130,14 +134,14 @@
 
                     <div class="card-info">
                       <div class="name">
-                        <h4>{{offer.produktName}}</h4>
+                        <h4>{{ offer.produktName }}</h4>
                       </div>
                       <div class="prise">
                         <div class="oldprise" *ngIf="!(offer.produktRegularPrise === 'null')">
-                          {{offer.produktRegularPrise}}
+                          {{ offer.produktRegularPrise }}
                         </div>
                         <div class="actuelprise">
-                          {{offer.produktPrise}}
+                          {{ offer.produktPrise }}
                         </div>
                       </div>
                     </div>
