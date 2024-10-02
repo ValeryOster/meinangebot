@@ -4,6 +4,7 @@ import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.aldi.AldiOffer;
 import de.angebot.main.gathering.edeka.EdekaOffer;
+import de.angebot.main.gathering.globus.GlobusOffer;
 import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
@@ -39,6 +40,8 @@ public class GatherService {
     private EdekaRepo edekaRepo;
     @Autowired
     private GlobusRepo globusRepo;
+    @Autowired
+    private GlobusOffer globusOffer;
 
     public void startGather(List<String> discounters) {
         // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
@@ -59,6 +62,8 @@ public class GatherService {
                 case "EDEKA":
                     mainGather.addToGatherList(edekaOffer);
                     break;
+                case "GLOBUS":
+                    mainGather.addToGatherList(globusOffer);
             }
         }
         mainGather.startGather();

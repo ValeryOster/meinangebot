@@ -20,8 +20,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,14 +33,14 @@ public class GlobusOffer extends Gathering implements ErrorHandler {
     @Autowired
     private ProductMakerRepo productMakerRepo;
 
-    String mainUrl = "https://www.globus.de/produkte/angebote-der-woche/";
+    String mainUrl = "https://produkte.globus.de/essen/angebote-der-woche/";
     List<String> offerUrlList = new ArrayList<>();
     private List<String> possibleMakers;
 
     @Override
     public void startGathering() {
         initialize();
-        getDocumentWithSelenium(mainUrl);
+        Document document = getDocument(mainUrl);
         saveURLsToDB(offerUrlList);
     }
 
@@ -143,19 +143,6 @@ public class GlobusOffer extends Gathering implements ErrorHandler {
         return "Globus";
     }
 
-    public Document getDocument(String url) {
-        Document document = null;
-        try {
-            Map<String, String> cookies = new HashMap<>();
-            cookies.put("Cookie", "marktFirm=1001; marktName=St.%20Wendel; marktAbb=WND; defaultStore=0");
-            document = Jsoup.connect(url).cookies(cookies).get();
-            Utils.saveHtmlToDisk(document, "C:/Users/oster/Desktop/ProjektAngebote/Dokument.html");
-        } catch (IOException e) {
-            log.error("!!! Url ist nicht erreichbar");
-            errorMessage.send(e.getMessage());
-        }
-        return document;
-    }
 
     public void getDocumentWithSelenium(String url) {
         Document parse = null;
@@ -174,9 +161,8 @@ public class GlobusOffer extends Gathering implements ErrorHandler {
             driver.get(url);
             driver.manage().window().maximize();
             Thread.sleep(2000);
-            driver.findElement(new By.ById("CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll")).click();
+            driver.findElement(new By.ByCssSelector("button[data-editor='buttonAccept']")).click();
             Thread.sleep(2000);
-            chooseStore(driver);
             for (int i = 0; i < 30; i++) {
                 scrollPageDownWithJS(driver, 1000);
                 saveOfferToList(driver.getPageSource());
@@ -190,21 +176,6 @@ public class GlobusOffer extends Gathering implements ErrorHandler {
         } finally {
             driver.close();
         }
-    }
-
-    private void chooseStore(WebDriver driver) throws InterruptedException {
-        for (int i = 0; i < 5; i++) {
-            try {
-                WebElement element = driver.findElement(new By.ByCssSelector("div[data-store-name='Essen']"));
-                WebElement element1 = element.findElement(new By.ByCssSelector("a[class='button--green']"));
-                element1.click();
-                break;
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
-            Thread.sleep(500);
-        }
-        Thread.sleep(2000);
     }
 
     private void saveOfferToList(String pageSource) {
