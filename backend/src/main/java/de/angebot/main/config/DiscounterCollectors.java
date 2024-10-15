@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class Discounters {
+public class DiscounterCollectors {
 
     @Autowired
     private Map<String, Gathering> discounters;
 
-    public Discounters() {}
+    public DiscounterCollectors() {}
 
     public void setDiscounters(Map<String, Gathering> discounters) {
         this.discounters = discounters;

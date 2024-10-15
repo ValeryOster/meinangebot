@@ -5,6 +5,7 @@ import de.angebot.main.services.ItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class SelectedItemsController {
         if (userId > 0) {
             return itemsService.getAllSelectedItemForWeek(userId);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @PostMapping(path = "/delete")

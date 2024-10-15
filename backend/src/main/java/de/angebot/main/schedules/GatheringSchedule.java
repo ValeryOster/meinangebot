@@ -1,6 +1,6 @@
 package de.angebot.main.schedules;
 
-import de.angebot.main.config.Discounters;
+import de.angebot.main.config.DiscounterCollectors;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.common.Gathering;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class GatheringSchedule {
     private final MainGather mainGather;
-    private final Discounters discounters;
+    private final DiscounterCollectors discounters;
     @Autowired
-    public GatheringSchedule(MainGather mainGather, Discounters discounters) {
+    public GatheringSchedule(MainGather mainGather, DiscounterCollectors discounters) {
         this.mainGather = mainGather;
         this.discounters = discounters;
     }

@@ -1,10 +1,9 @@
 package de.angebot.main.controller;
 
-import de.angebot.main.enities.*;
-import de.angebot.main.enities.discounters.Aldi;
-import de.angebot.main.enities.discounters.Lidl;
-import de.angebot.main.enities.discounters.Netto;
-import de.angebot.main.enities.discounters.Penny;
+import de.angebot.main.config.DiscounterEnum;
+import de.angebot.main.controller.json.Item;
+import de.angebot.main.enities.AbstactEneties;
+import de.angebot.main.enities.discounters.*;
 import de.angebot.main.services.DiscounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,30 +20,39 @@ public class HomeController {
 
     @GetMapping(path = "/penny")
     public List<Penny> getPenny() {
-        return service.pennyCurrentOffers();
+        return service.getManager().getDiscounter(DiscounterEnum.PENNY).findCurrentOffers();
     }
 
     @GetMapping(path = "/lidl")
     public List<Lidl> getLidl() {
-        return service.lidlCurrentOffers();
+        return service.getManager().getDiscounter(DiscounterEnum.LIDL).findCurrentOffers();
     }
 
     @GetMapping(path = "/aldi")
     public List<Aldi> getAldi() {
-        return service.aldiCurrentOffers();
+        return service.getManager().getDiscounter(DiscounterEnum.ALDI).findCurrentOffers();
     }
 
     @GetMapping(path = "/netto")
     public List<Netto> getNetto() {
-        return service.nettoCurrentOffers();
+        return service.getManager().getDiscounter(DiscounterEnum.NETTO).findCurrentOffers();
+    }
+ @GetMapping(path = "/edeka")
+    public List<Edeka> getEdeka() {
+        return service.getManager().getDiscounter(DiscounterEnum.EDEKA).findCurrentOffers();
     }
 
     @PostMapping(path = "/auswahl")
-    public Map<String, List<? extends AbstactEneties>> getSelectedDiscouters(@RequestBody List<String> discounters) {
+    public Map<DiscounterEnum, List<? extends AbstactEneties>> getSelectedDiscounters(@RequestBody List<DiscounterEnum> discounters) {
         if (discounters.size() > 0) {
-            Map<String, List<? extends AbstactEneties>> selectedDiscounters = service.getSelectedDiscounters(discounters);
+            Map<DiscounterEnum, List<? extends AbstactEneties>> selectedDiscounters = service.getSelectedDiscounters(discounters);
             return selectedDiscounters;
         }
         return null;
+    }
+
+    @GetMapping(path = "/auswahl/{id}")
+    public Item getSelectedItemById(@RequestBody Item item) {
+        return service.getSelectedItemById(item);
     }
 }

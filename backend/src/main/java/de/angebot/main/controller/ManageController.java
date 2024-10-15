@@ -1,9 +1,7 @@
 package de.angebot.main.controller;
 
 
-import de.angebot.main.common.ItemsCategory;
 import de.angebot.main.enities.services.CommonGather;
-import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.services.GatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +31,6 @@ public class ManageController {
     @PreAuthorize("hasRole('ADMIN')")
     public List<CommonGather> getAll(MultipartFile file) {
         return service.findAll();
-    }
-
-    @GetMapping("/sortkategorie")
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<Penny> getUnsortingKategorie() {
-        return pennyRepo.findAllNotDefaultCategorieName(ItemsCategory.getKategorieList());
     }
 
     @PostMapping("/del")
