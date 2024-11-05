@@ -10,13 +10,15 @@ import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.util.Lists;
+import org.jsoup.nodes.Document;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,7 +27,10 @@ import java.util.List;
 
 @Slf4j
 @Component("edeka")
-public class EdekaOffer extends Gathering{
+public class EdekaOffer extends Gathering {
+    private static final String CHROME_BINARY = "C:\\Users\\oster\\Desktop\\chrome-win64\\chrome.exe";
+    private final String mainUrl = "https://www.edeka.de/api/offers?limit=999&marketId=8002195";
+    private final String OFFER_URL = "https://www.edeka.de/eh/rhein-ruhr/edeka-frischecenter-burkowski-altendorfer-stra%C3%9Fe-230/angebote.jsp";
 
     @Autowired
     private ProductMakerRepo productMakerRepo;
@@ -33,29 +38,23 @@ public class EdekaOffer extends Gathering{
     @Autowired
     private EdekaRepo edekaRepo;
 
-    private final String mainUrl = "https://www.edeka.de/api/offers?limit=999&marketId=8002195";
-    private final String OFFER_URL = "https://www.edeka.de/eh/rhein-ruhr/edeka-frischecenter-burkowski-altendorfer-stra%C3%9Fe-230/angebote.jsp";
 
     @Override
     public void startGathering() {
-        try {
-            JsonNode jsonNode = getJsonFromURL(new URL(mainUrl));
-            ArrayList<JsonNode> offers = Lists.newArrayList(jsonNode.get("offers").elements());
-            LocalDate dateFrom = getDate(jsonNode, true);
-            for (JsonNode offer : offers) {
-                Edeka edeka = new Edeka();
-                setProductNameUndMaker(offer, edeka);
-                edeka.setProduktPrise(offer.get("price").get("value").asText());
-                edeka.setProduktDescription(getDescription(offer));
-                edeka.setKategorie(offer.get("category").get("name").asText());
-                edeka.setBisDate(getDate(offer, false));
-                edeka.setVonDate(dateFrom);
-                edeka.setImageLink(getImageLink(offer));
-                edeka.setUrl(OFFER_URL);
-                edekaRepo.save(edeka);
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
+        JsonNode jsonNode = getDocumentWithSelenium();
+        ArrayList<JsonNode> offers = Lists.newArrayList(jsonNode.get("offers").elements());
+        LocalDate dateFrom = getDate(jsonNode, true);
+        for (JsonNode offer : offers) {
+            Edeka edeka = new Edeka();
+            setProductNameUndMaker(offer, edeka);
+            edeka.setProduktPrise(offer.get("price").get("value").asText());
+            edeka.setProduktDescription(getDescription(offer));
+            edeka.setKategorie(offer.get("category").get("name").asText());
+            edeka.setBisDate(getDate(offer, false));
+            edeka.setVonDate(dateFrom);
+            edeka.setImageLink(getImageLink(offer));
+            edeka.setUrl(OFFER_URL);
+            edekaRepo.save(edeka);
         }
     }
 
@@ -80,7 +79,7 @@ public class EdekaOffer extends Gathering{
             if (!offer.get("validFrom").asText().isEmpty()) {
                 return LocalDate.parse(offer.get("validFrom").asText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
-            }else {
+        } else {
             if (!offer.get("validTill").asText().isEmpty()) {
                 return LocalDate.parse(offer.get("validTill").asText(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             }
@@ -88,7 +87,7 @@ public class EdekaOffer extends Gathering{
         return null;
     }
 
-    private void setProductNameUndMaker(JsonNode offer, Edeka edeka ) {
+    private void setProductNameUndMaker(JsonNode offer, Edeka edeka) {
         List<String> collect = productMakerRepo.findAll().stream().filter(ProductMaker::getValid)
                 .map(ProductMaker::getMakerName).toList();
         String title = offer.get("title").asText();
@@ -102,12 +101,33 @@ public class EdekaOffer extends Gathering{
         }
     }
 
-    public static JsonNode getJsonFromURL(URL url) throws IOException {
-        URLConnection urlConnection = url.openConnection();
-        urlConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readTree(urlConnection.getInputStream());
+    public JsonNode getDocumentWithSelenium() {
+        Document parse = null;
+        System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(firstArg);
+        if (activeProfile.equals("prod")) {
+            options.addArguments(secondArg, thirdArg);
+        }else {
+            options.setBinary(CHROME_BINARY);
+        }
+        WebDriver driver = new ChromeDriver(options);
+        try {
+            driver.get(mainUrl);
+            driver.manage().window().maximize();
+            String pre = driver.findElement(By.tagName("pre")).getText();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(pre);
+            Thread.sleep(3000);
+            return jsonNode;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        } finally {
+            driver.close();
+        }
     }
+
     @Override
     public String getDiscountName() {
         return "Edeka";

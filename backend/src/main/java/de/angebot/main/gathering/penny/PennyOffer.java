@@ -45,21 +45,6 @@ public class PennyOffer extends Gathering {
     @Autowired
     private PennyRepo pennyRepo;
 
-    @Value("${selenium.path}")
-    private String seleniumDriverPath;
-
-    @Value("${first.arg}")
-    private String firstArg;
-
-    @Value("${second.arg}")
-    private String secondArg;
-
-    @Value("${third.arg}")
-    private String thirdArg;
-
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
-
 
     @Override
     public void startGathering() {
