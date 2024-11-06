@@ -122,6 +122,7 @@ public class EdekaOffer extends Gathering {
             return jsonNode;
         } catch (Exception e) {
             log.error(e.getMessage());
+            log.error(driver.getPageSource());
             return null;
         } finally {
             driver.close();
