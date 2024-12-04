@@ -29,5 +29,5 @@ public class Aldi extends AbstactEneties {
 
     @Transient
     @JsonProperty
-    private String discounterName = "Aldi";
+    private String discounterName = "ALDI";
 }

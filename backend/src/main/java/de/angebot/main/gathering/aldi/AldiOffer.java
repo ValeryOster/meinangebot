@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Slf4j
-@Component("aldi")
+@Component("ALDI")
 public class AldiOffer extends Gathering {
 
     @Autowired

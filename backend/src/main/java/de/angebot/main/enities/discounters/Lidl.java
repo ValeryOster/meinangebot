@@ -34,7 +34,7 @@ public class Lidl extends AbstactEneties {
 
     @Transient
     @JsonProperty
-    private String discounterName = "LIDL.";
+    private String discounterName = "LIDL";
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

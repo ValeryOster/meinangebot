@@ -39,7 +39,7 @@ export class OffersComponent implements OnInit {
   }
 
   saveItemsToMap(value: Object) {
-
+    console.log(value);
     let strings = Object.keys(value);
     this.discounters.clear();
     this.allOffersList.length = 0;

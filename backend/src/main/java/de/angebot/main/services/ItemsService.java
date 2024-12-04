@@ -42,7 +42,7 @@ public class ItemsService {
                 case "aldi":
                     aldiRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
-                case "lidl.":
+                case "lidl":
                     lidlRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "netto":

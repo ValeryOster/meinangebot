@@ -37,7 +37,7 @@ public class HomeController {
     public List<Netto> getNetto() {
         return service.getManager().getDiscounter(DiscounterEnum.NETTO).findCurrentOffers();
     }
- @GetMapping(path = "/edeka")
+    @GetMapping(path = "/edeka")
     public List<Edeka> getEdeka() {
         return service.getManager().getDiscounter(DiscounterEnum.EDEKA).findCurrentOffers();
     }

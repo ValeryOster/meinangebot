@@ -1,11 +1,11 @@
 package de.angebot.main.config;
 
 public enum DiscounterEnum {
-    PENNY("Penny"),
-    LIDL("Lidl"),
-    ALDI("Aldi"),
-    NETTO("Netto"),
-    EDEKA("Edeka");
+    PENNY("PENNY"),
+    LIDL("LIDL"),
+    ALDI("ALDI"),
+    NETTO("NETTO"),
+    EDEKA("EDEKA");
 
     private final String discounter;
 

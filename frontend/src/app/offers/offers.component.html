@@ -6,7 +6,7 @@
   <div class="cards">
     <div *ngFor="let offer of allOffersList|filter:search">
       <mat-card class="simple-card" role="group">
-        <ng-template [ngIf]="offer.discounterName.includes('LIDL.')">
+        <ng-template [ngIf]="offer.discounterName.includes('LIDL')">
           <div class="searchLogo">
             <img src="assets/lidl.png" alt="image">
           </div>
@@ -16,17 +16,17 @@
             <img src="assets/penny.png" alt="image">
           </div>
         </ng-template>
-        <ng-template [ngIf]="offer.discounterName.includes('Aldi')" class="searchLogo">
+        <ng-template [ngIf]="offer.discounterName.includes('ALDI')" class="searchLogo">
           <div class="searchLogo" >
             <link rel="stylesheet" type="text/css" href="../../assets/css/logo.css">
           </div>
         </ng-template>
-        <ng-template [ngIf]="offer.discounterName.includes('Netto')" class="searchLogo">
+        <ng-template [ngIf]="offer.discounterName.includes('NETTO')" class="searchLogo">
           <div class="searchLogo">
             <img src="assets/netto.svg" alt="image">
           </div>
         </ng-template>
-        <ng-template [ngIf]="offer.discounterName.includes('Edeka')" class="searchLogo">
+        <ng-template [ngIf]="offer.discounterName.includes('EDEKA')" class="searchLogo">
           <div class="searchLogo">
             <img src="assets/edeka.svg" alt="image">
           </div>
@@ -75,29 +75,29 @@
     <div *ngFor="let discounter of discounters|keyvalue" class="mainOffer">
       <mat-tab>
         <ng-template mat-tab-label>
-          <ng-template [ngIf]="discounter.key === 'Lidl'">
+          <ng-template [ngIf]="discounter.key === 'LIDL'">
             <div class="logos">
               <img src="assets/lidl.png" alt="image">
             </div>
           </ng-template>
-          <ng-template [ngIf]="discounter.key === 'Penny'">
+          <ng-template [ngIf]="discounter.key === 'PENNY'">
             <div class="logos">
               <img src="assets/penny.png" alt="image">
             </div>
           </ng-template>
-          <ng-template [ngIf]="discounter.key === 'Aldi'">
+          <ng-template [ngIf]="discounter.key === 'ALDI'">
             <div >
               <b class="aldi">
                 ALDI
               </b>
             </div>
           </ng-template>
-          <ng-template [ngIf]="discounter.key === 'Netto'">
+          <ng-template [ngIf]="discounter.key === 'NETTO'">
             <div class="logos">
               <img src="assets/netto.svg" alt="image">
             </div>
           </ng-template>
-          <ng-template [ngIf]="discounter.key === 'Edeka'">
+          <ng-template [ngIf]="discounter.key === 'EDEKA'">
             <div class="edeka">
               EDEKA
             </div>

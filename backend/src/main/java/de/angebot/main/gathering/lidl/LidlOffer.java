@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-@Component("lidl")
+@Component("LIDL")
 public class LidlOffer extends Gathering {
     private final String mainUrl = "https://www.lidl.de";
     private String angeboteUrl = "";
