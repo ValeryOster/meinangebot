@@ -26,7 +26,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "rxjs": "~6.5.4",
     "rxjs-compat": "^6.6.7",
-    "sweetalert2": "^11.4.17",
+    "sweetalert2": "11.14.2",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },
