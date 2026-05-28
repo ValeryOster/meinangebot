@@ -103,12 +103,8 @@ public class EdekaOffer extends Gathering {
 
     public JsonNode getDocumentWithSelenium() {
         Document parse = null;
-        System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments(firstArg);
-        if (activeProfile.equals("prod")) {
-            options.addArguments(secondArg, thirdArg);
-        }else {
+        ChromeOptions options = createChromeOptions();
+        if (!isProdProfile()) {
             options.setBinary(CHROME_BINARY);
         }
         WebDriver driver = new ChromeDriver(options);

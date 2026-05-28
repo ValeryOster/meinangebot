@@ -61,10 +61,11 @@ public class WebSecurityConfig  {
 			.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
+				.and()
 				.authorizeHttpRequests()
-				.requestMatchers("/**").permitAll()
-				.requestMatchers("/manage/**").authenticated()
+				.requestMatchers("/manage/**").hasRole("ADMIN")
+				.requestMatchers("/api/auth/**", "/home/**", "/", "/index.html", "/static/**", "/assets/**").permitAll()
+				.anyRequest().permitAll()
 			.and()
 				.httpBasic();
 

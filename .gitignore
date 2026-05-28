@@ -7,3 +7,5 @@
 /meinangebot.iml
 /frontend/frontend.iml
 /backend/backend.iml
+.DS_Store
+**/.DS_Store

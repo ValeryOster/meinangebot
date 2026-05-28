@@ -20,16 +20,13 @@ $frontendApp-warn: mat-palette($mat-red);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$frontendApp-theme: mat-light-theme((
-  color: (
-    primary: $frontendApp-primary,
-    accent: $frontendApp-accent,
-    warn: $frontendApp-warn,
-  )
-));
+$frontendApp-theme: mat-light-theme(
+  $frontendApp-primary,
+  $frontendApp-accent,
+  $frontendApp-warn
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($frontendApp-theme);
-

@@ -2,7 +2,7 @@ package de.angebot.main.security.payload.request;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 @Data
 public class LoginRequest {

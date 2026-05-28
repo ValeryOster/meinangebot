@@ -181,12 +181,7 @@ public class PennyOffer extends Gathering {
 
     public Document getDocumentWithSelenium(String url) {
         Document parse = null;
-        System.setProperty("webdriver.chrome.driver", seleniumDriverPath);
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments(firstArg);
-        if (activeProfile.equals("prod")) {
-            options.addArguments(secondArg,thirdArg);
-        }
+        ChromeOptions options = createChromeOptions();
         try {
             WebDriver driver = new ChromeDriver(options);
             driver.get(url);
@@ -232,4 +227,3 @@ public class PennyOffer extends Gathering {
         return "Penny";
     }
 }
-

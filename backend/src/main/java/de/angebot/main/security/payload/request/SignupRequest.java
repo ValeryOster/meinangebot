@@ -3,7 +3,7 @@ package de.angebot.main.security.payload.request;
 import lombok.Data;
 
 import java.util.Set;
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 @Data
 public class SignupRequest {
