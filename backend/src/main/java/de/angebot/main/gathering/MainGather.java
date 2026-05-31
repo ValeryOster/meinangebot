@@ -32,7 +32,11 @@ public class MainGather {
                 try {
                     gathering.startGathering();
                 } catch (RuntimeException error) {
-                    log.error("Es ist ein KRITISCHE Fehler auf Seite --> " + gathering.getDiscountName());
+                    log.error(
+                            "Es ist ein KRITISCHE Fehler auf Seite --> {}",
+                            gathering.getDiscountName(),
+                            error
+                    );
                 }
                 log.info("++++++++++++ " + gathering.getDiscountName() + " Ended   +++++++++++++++");
             }

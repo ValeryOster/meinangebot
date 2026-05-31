@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       }
     },error => {
-      Swal.fire("Error", error.error.message.replace("Error:", " "), 'error');
+      Swal.fire("Error", this.getErrorMessage(error), 'error');
 
     });
   }
@@ -75,9 +75,19 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['']);
       }
     }, error => {
-      Swal.fire("Error", error.error.message.replace("Error:", " "), 'error');
+      Swal.fire("Error", this.getErrorMessage(error), 'error');
 
     });
+  }
+
+  private getErrorMessage(error): string {
+    const message = error && error.error && error.error.message
+      ? error.error.message
+      : error && error.error && error.error.error
+        ? error.error.error
+        : 'Request failed';
+
+    return String(message).replace('Error:', ' ').trim();
   }
 
   changeView(str: string) {

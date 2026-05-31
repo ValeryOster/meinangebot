@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -63,11 +64,14 @@ public class WebSecurityConfig  {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeHttpRequests()
-				.requestMatchers("/manage/**").hasRole("ADMIN")
-				.requestMatchers("/api/auth/**", "/home/**", "/", "/index.html", "/static/**", "/assets/**").permitAll()
-				.anyRequest().permitAll()
-			.and()
-				.httpBasic();
+					.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+					.requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
+					.requestMatchers("/manage/**").hasRole("ADMIN")
+					.requestMatchers("/home/**", "/", "/index.html", "/static/**", "/assets/**", "/error").permitAll()
+					.anyRequest().permitAll()
+				.and()
+					.httpBasic().disable()
+					.formLogin().disable();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();

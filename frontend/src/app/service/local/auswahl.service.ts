@@ -68,7 +68,12 @@ export class AuswahlService implements OnInit {
           Swal.fire("Success", "Erfolgreich gespeichert", 'success');
         }
       }, error => {
-        Swal.fire("Error", error.error.message.replace("Error:", " "), 'error');
+        const message = error && error.error && error.error.message
+          ? error.error.message
+          : error && error.error && error.error.error
+            ? error.error.error
+            : 'Request failed';
+        Swal.fire("Error", String(message).replace("Error:", " ").trim(), 'error');
       });
     }
   }
