@@ -29,8 +29,6 @@ public class PennyOffer extends Gathering {
     private SaveUtil saveUtil;
     @Value("${penny.mainUrl}")
     private String mainUrl;
-    @Value("#{'${penny.categories:top-angebote}'.split(',')}")
-    private List<String> categories;
     @Autowired
     private PennyRepo pennyRepo;
     @Autowired
@@ -45,22 +43,34 @@ public class PennyOffer extends Gathering {
         int year = startDate.get(isoWeek.weekBasedYear());
         int week = startDate.get(isoWeek.weekOfWeekBasedYear());
 
-        categories.stream()
-                .map(String::trim)
-                .filter(StringUtils::hasText)
-                .forEach(category -> saveOffers(category, year, week, startDate, endDate));
+        saveOffers(year, week, startDate, endDate);
     }
 
-    private void saveOffers(String category, int year, int week, LocalDate startDate, LocalDate endDate) {
-        List<PennyOfferDto> offers = pennyApiClient.fetchOffers(category, year, week);
+    private void saveOffers(int year, int week, LocalDate startDate, LocalDate endDate) {
+        List<PennyOfferDto> offers = pennyApiClient.fetchOffers(year, week);
         if (offers.isEmpty()) {
-            log.error("No Penny offers found for category '{}' and week '{}-{}'.", category, year, week);
+            log.error("No Penny offers found for week '{}-{}'.", year, week);
             return;
         }
 
         offers.stream()
                 .map(offer -> toPenny(offer, startDate, endDate))
-                .forEach(pennyRepo::save);
+                .forEach(this::saveIfNotExists);
+    }
+
+    private void saveIfNotExists(Penny penny) {
+        boolean exists = pennyRepo.existsByProduktNameAndProduktMakerAndVonDateAndKategorie(
+                penny.getProduktName(),
+                penny.getProduktMaker(),
+                penny.getVonDate(),
+                penny.getKategorie()
+        );
+        if (exists) {
+            log.info("Penny offer already exists and will be skipped: '{}' / '{}' / '{}' / '{}'",
+                    penny.getProduktName(), penny.getProduktMaker(), penny.getVonDate(), penny.getKategorie());
+            return;
+        }
+        pennyRepo.save(penny);
     }
 
     private String saveItemMaker(String strings) {
@@ -74,15 +84,18 @@ public class PennyOffer extends Gathering {
     private Penny toPenny(PennyOfferDto offer, LocalDate startDate, LocalDate endDate) {
         Penny penny = new Penny();
         List<String> nameParts = Utils.splittToNameOrMaker(offer.getTitle());
+        String productMaker = nameParts.get(0);
+        String productName = nameParts.get(1).isBlank() ? offer.getTitle() : nameParts.get(1);
+        String category = textPrettyPrint(offer.getCategory());
 
         penny.setVonDate(startDate);
         penny.setBisDate(endDate);
         penny.setImageLink(Utils.downloadImage(offer.getImageUrl(), "penny", endDate, ""));
-        penny.setProduktMaker(saveItemMaker(nameParts.get(0)));
-        penny.setProduktName(nameParts.get(1).isBlank() ? offer.getTitle() : nameParts.get(1));
+        penny.setProduktMaker(saveItemMaker(productMaker));
+        penny.setProduktName(productName);
         penny.setProduktPrise(offer.getPrice());
         penny.setProduktRegularPrise(offer.getRegularPrice());
-        penny.setKategorie(textPrettyPrint(offer.getCategory()));
+        penny.setKategorie(category);
         penny.setUrl(toAbsoluteUrl(offer.getLinkHref()));
 
         return penny;
