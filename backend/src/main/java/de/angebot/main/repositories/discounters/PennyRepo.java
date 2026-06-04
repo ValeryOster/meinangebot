@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,13 @@ public interface PennyRepo extends CrudRepository<Penny, Long> {
 
     @Query(value = "SELECT p FROM Penny p WHERE p.kategorie not in :categorie")
     List<Penny> findAllNotDefaultCategorieName(@Param("categorie") List<String> kategorie);
+
+    boolean existsByProduktNameAndProduktMakerAndVonDateAndKategorie(
+            String produktName,
+            String produktMaker,
+            LocalDate vonDate,
+            String kategorie
+    );
 
     @Query(value= "delete from Penny p where p.bisDate >= CURRENT_DATE")
     void deleteAllActuel();
