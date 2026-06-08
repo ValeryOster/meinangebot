@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -22,19 +23,24 @@ public class MainApplication {
     }
 
     @Bean
-    public ServletWebServerFactory servletContainer() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
-            @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection collection = new SecurityCollection();
-                collection.addPattern("/*");
-                securityConstraint.addCollection(collection);
-                context.addConstraint(securityConstraint);
-            }
-        };
-        tomcat.addAdditionalTomcatConnectors(redirectConnector());
+    public ServletWebServerFactory servletContainer(
+            @Value("${server.http-redirect.enabled:true}") boolean httpRedirectEnabled) {
+        TomcatServletWebServerFactory tomcat = httpRedirectEnabled
+                ? new TomcatServletWebServerFactory() {
+                    @Override
+                    protected void postProcessContext(Context context) {
+                        SecurityConstraint securityConstraint = new SecurityConstraint();
+                        securityConstraint.setUserConstraint("CONFIDENTIAL");
+                        SecurityCollection collection = new SecurityCollection();
+                        collection.addPattern("/*");
+                        securityConstraint.addCollection(collection);
+                        context.addConstraint(securityConstraint);
+                    }
+                }
+                : new TomcatServletWebServerFactory();
+        if (httpRedirectEnabled) {
+            tomcat.addAdditionalTomcatConnectors(redirectConnector());
+        }
 
         return tomcat;
     }

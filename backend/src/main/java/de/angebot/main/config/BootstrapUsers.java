@@ -54,10 +54,13 @@ public class BootstrapUsers implements CommandLineRunner {
             return;
         }
 
-        User admin = new User(adminUsername, adminEmail, passwordEncoder.encode(adminPassword));
+        User admin = userRepository.findByEmail(adminEmail)
+                .orElseGet(() -> new User(adminUsername, adminEmail, passwordEncoder.encode(adminPassword)));
+        admin.setUsername(adminUsername);
+        admin.setPassword(passwordEncoder.encode(adminPassword));
         admin.setRoles(Set.of(userRole, adminRole));
         userRepository.save(admin);
-        log.info("Bootstrap admin user '{}' created.", adminUsername);
+        log.info("Bootstrap admin user '{}' is available.", adminUsername);
     }
 
     private Role ensureRole(ERole roleName) {

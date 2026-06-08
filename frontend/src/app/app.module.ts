@@ -22,6 +22,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {AuswahlComponent} from './auswahl/auswahl.component';
 import {DellastitmesComponent} from './manage/dellastitmes/dellastitmes.component';
 import {FilterPipe} from './pipes/filter.pipe';
+import {LidlOffersComponent} from './lidl-offers/lidl-offers.component';
+import {LidlOfferDetailComponent} from './lidl-offers/lidl-offer-detail.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import {FilterPipe} from './pipes/filter.pipe';
     LoginComponent,
     AuswahlComponent,
     DellastitmesComponent,
-    FilterPipe
+    FilterPipe,
+    LidlOffersComponent,
+    LidlOfferDetailComponent
   ],
   imports: [
     BrowserModule,

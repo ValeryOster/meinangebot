@@ -67,7 +67,7 @@ public class WebSecurityConfig  {
 					.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 					.requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
 					.requestMatchers("/manage/**").hasRole("ADMIN")
-					.requestMatchers("/home/**", "/", "/index.html", "/static/**", "/assets/**", "/error").permitAll()
+                    .requestMatchers("/home/**", "/api/offers/**", "/", "/index.html", "/static/**", "/assets/**", "/error").permitAll()
 					.anyRequest().permitAll()
 				.and()
 					.httpBasic().disable()

@@ -6,9 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LidlRepo extends CrudRepository<Lidl, Long> {
+
+    Optional<Lidl> findFirstByUrl(String url);
 
     @Query(value = "SELECT l FROM Lidl l WHERE l.bisDate >= CURRENT_DATE")
     List<Lidl> findCurrentOffers();
