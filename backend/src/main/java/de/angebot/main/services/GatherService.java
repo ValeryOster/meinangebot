@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class GatherService {
@@ -41,7 +42,7 @@ public class GatherService {
     public void startGather(List<String> discounters) {
         // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
         for (String discounter : discounters) {
-            switch (discounter) {
+            switch (discounter.toUpperCase(Locale.ROOT)) {
                 case "LIDL":
                     mainGather.addToGatherList(lidlOffer);
                     break;
@@ -66,7 +67,7 @@ public class GatherService {
     }
     public void deleteLastInputs(List<String> discounters) {
         discounters.forEach(discounter -> {
-            switch (discounter) {
+            switch (discounter.toUpperCase(Locale.ROOT)) {
                 case "LIDL":
                     lidlRepo.deleteAllActuel();
                     break;
