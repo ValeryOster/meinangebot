@@ -5,22 +5,21 @@ import de.angebot.main.gathering.common.Gathering;
 import de.angebot.main.repositories.services.CommonGatherRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@Configuration
 public class MainGather {
-    private final List<Gathering> gatherList = new ArrayList<>();
+    private final List<Gathering> gatherList = Collections.synchronizedList(new ArrayList<>());
     @Autowired
     private CommonGatherRepo gatherRepo;
 

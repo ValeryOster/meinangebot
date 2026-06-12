@@ -1,6 +1,5 @@
 package de.angebot.main.services;
 
-import de.angebot.main.config.Discounters;
 import de.angebot.main.enities.AbstactEneties;
 import de.angebot.main.enities.discounters.*;
 import de.angebot.main.repositories.discounters.*;
@@ -23,7 +22,7 @@ public class DiscounterService {
 
 
     @Autowired
-    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo, Discounters discounters) {
+    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo) {
         this.pennyRepo = pennyRepo;
         this.lidlRepo = lidlRepo;
         this.aldiRepo = aldiRepo;
@@ -59,33 +58,32 @@ public class DiscounterService {
     public Map<String, List<? extends AbstactEneties>>  getOffersFromList(List<String> discounters) {
         Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
         for (String discounter : discounters) {
-            // TODO: 18.09.2022 Change to switch with Patter
             if (discounter.equalsIgnoreCase("lidl")) {
                 List<Lidl> lidl = lidlCurrentOffers();
-                if (lidl.size() > 0) {
+                if (!lidl.isEmpty()) {
                     discountersMap.put("Lidl", lidl);
                 }
             }
             else if (discounter.equalsIgnoreCase("penny")) {
                 List<Penny> pennies = pennyCurrentOffers();
-                if (pennies.size() > 0) {
+                if (!pennies.isEmpty()) {
                     discountersMap.put("Penny", pennies);
                 }
             }
             else if (discounter.equalsIgnoreCase("aldi")) {
                 List<Aldi> aldiList = aldiCurrentOffers();
-                if (aldiList.size() > 0) {
+                if (!aldiList.isEmpty()) {
                     discountersMap.put("Aldi", aldiList);
                 }
             }
             else if (discounter.equalsIgnoreCase("netto")) {
                 List<Netto> nettoList = nettoCurrentOffers();
-                if (nettoList.size() > 0) {
+                if (!nettoList.isEmpty()) {
                     discountersMap.put("Netto", nettoList);
                 }
             } else if (discounter.equalsIgnoreCase("edeka")) {
                 List<Edeka> edekaList = edekaCurrentOffers();
-                if (edekaList.size() > 0) {
+                if (!edekaList.isEmpty()) {
                     discountersMap.put("Edeka", edekaList);
                 }
             }

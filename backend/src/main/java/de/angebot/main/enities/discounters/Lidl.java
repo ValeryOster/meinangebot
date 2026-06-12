@@ -34,7 +34,7 @@ public class Lidl extends AbstactEneties {
 
     @Transient
     @JsonProperty
-    private String discounterName = "LIDL.";
+    private String discounterName = "lidl";
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -51,6 +51,6 @@ public class Lidl extends AbstactEneties {
 
     @Override
     public int hashCode() {
-        return 31 * url.hashCode() + discounterName.hashCode();
+        return Objects.hash(url, discounterName);
     }
 }

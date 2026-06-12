@@ -6,7 +6,6 @@ import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.services.GatherService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +16,14 @@ import java.util.List;
 @RequestMapping("/manage")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ManageController {
-    @Autowired
-    private GatherService service;
 
-    @Autowired
-    private PennyRepo pennyRepo;
+    private final GatherService service;
+    private final PennyRepo pennyRepo;
+
+    public ManageController(GatherService service, PennyRepo pennyRepo) {
+        this.service = service;
+        this.pennyRepo = pennyRepo;
+    }
 
     @PostMapping("/gather")
     @PreAuthorize("hasRole('ADMIN')")

@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +21,6 @@ import java.util.stream.Stream;
 @Slf4j
 @Setter
 @Component("penny")
-@Configuration
 public class PennyOffer extends Gathering {
 
     @Autowired

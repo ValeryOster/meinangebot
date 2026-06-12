@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +24,8 @@ public interface AldiRepo extends CrudRepository<Aldi, Long> {
 
     Optional<Aldi> findByUrlAndVonDateAndKategorie(String url, LocalDate vonDate, String kategorie);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
+    @Transactional
     @Query(value= "delete from Aldi a where a.bisDate >= CURRENT_DATE")
     void deleteAllActuel();
 }

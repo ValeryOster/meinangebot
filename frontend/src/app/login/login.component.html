@@ -38,7 +38,7 @@
     </div>
 
     <div id="signup"  [className]="newAccountCssClass ? 'is-selected' : ''">
-      <form class="form" [formGroup]="singupForm" (ngSubmit)="singup()">
+      <form class="form" [formGroup]="singupForm" (ngSubmit)="signup()">
         <p class="fieldset">
           <label class="image-replace username" for="signupUsername">Username</label>
           <input class="full-width has-padding has-border" id="signupUsername" type="text" placeholder="Username" formControlName="signupUsername">

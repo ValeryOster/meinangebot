@@ -67,8 +67,9 @@ public class WebSecurityConfig  {
 					.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 					.requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
 					.requestMatchers("/manage/**").hasRole("ADMIN")
+					.requestMatchers("/selected/**").authenticated()
                     .requestMatchers("/home/**", "/api/offers/**", "/", "/index.html", "/static/**", "/assets/**", "/error").permitAll()
-					.anyRequest().permitAll()
+					.anyRequest().authenticated()
 				.and()
 					.httpBasic().disable()
 					.formLogin().disable();

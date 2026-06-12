@@ -1,9 +1,11 @@
 package de.angebot.main.repositories.discounters;
 
 import de.angebot.main.enities.discounters.Lidl;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,8 @@ public interface LidlRepo extends CrudRepository<Lidl, Long> {
     @Query(value = "SELECT l FROM Lidl l WHERE l.bisDate >= CURRENT_DATE")
     List<Lidl> findCurrentOffers();
 
+    @Modifying(clearAutomatically = true)
+    @Transactional
     @Query(value= "delete from Lidl l where l.bisDate >= CURRENT_DATE")
     void deleteAllActuel();
 

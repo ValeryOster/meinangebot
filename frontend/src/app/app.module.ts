@@ -55,7 +55,7 @@ import {LidlOfferDetailComponent} from './lidl-offers/lidl-offer-detail.componen
     MatInputModule,
     MatIconModule
   ],
-  providers: [authInterceptorProviders, AuswahlComponent, OffersComponent],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {

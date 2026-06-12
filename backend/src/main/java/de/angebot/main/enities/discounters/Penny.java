@@ -27,7 +27,7 @@ public class Penny extends AbstactEneties {
 
     @Transient
     @JsonProperty
-    private String discounterName = "PENNY.";
+    private String discounterName = "penny";
 
 
 }

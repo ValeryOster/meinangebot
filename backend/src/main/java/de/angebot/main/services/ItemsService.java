@@ -38,24 +38,26 @@ public class ItemsService {
     public List<Object> getAllSelectedItemForWeek(Long userId) {
         List<Object> itemsList = new ArrayList<>();
         for (SelectedItem item : itemsRepo.findCurrentOffersByUserId(userId)) {
-            switch (item.getDiscounterName().toLowerCase()) {
+            // Normalize: lowercase, remove trailing dot (e.g. "LIDL." → "lidl", "PENNY." → "penny")
+            String name = item.getDiscounterName().toLowerCase().replace(".", "").trim();
+            switch (name) {
                 case "aldi":
                     aldiRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
-                case "lidl.":
+                case "lidl":
                     lidlRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "netto":
                     nettoRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
-                case "penny.":
+                case "penny":
                     pennyRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "edeka":
                     edekaRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
-
                 default:
+                    log.warn("Unknown discounterName '{}' for SelectedItem id={}", item.getDiscounterName(), item.getId());
                     break;
             }
         }
@@ -83,8 +85,6 @@ public class ItemsService {
 
     private SelectedItem mapJsonSelectedItemToSelectedItem(Item item, JsonSelectedItemsListAndUserId selectedItems) {
         SelectedItem selectedItem = new SelectedItem();
-        new SelectedItem();
-
         selectedItem.setDiscounterName(item.getDiscounterName());
         selectedItem.setExpiryDate(item.getBisDate());
         selectedItem.setSaveDate(LocalDate.now());
@@ -95,12 +95,11 @@ public class ItemsService {
 
     public void deleteSelectedItem(JsonSelectedItemsListAndUserId selectedItems) {
         for (Item item : selectedItems.getAuswahlListe()) {
-            SelectedItem deleteItem = itemsRepo.findSelectedItemByItemId(item.getId(), selectedItems.getUserId());
-            try {
-                itemsRepo.delete(deleteItem);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
+            itemsRepo.findSelectedItemByItemId(item.getId(), selectedItems.getUserId())
+                    .ifPresentOrElse(
+                            itemsRepo::delete,
+                            () -> log.warn("SelectedItem not found for itemId={}, userId={}", item.getId(), selectedItems.getUserId())
+                    );
         }
     }
 }

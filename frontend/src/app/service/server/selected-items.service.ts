@@ -15,7 +15,7 @@ export class SelectedItemsService {
   }
 
   getSelectedItems(userId:any): Observable<Offer[]> {
-    let url = this.url + 'itmes';
+    let url = this.url + 'items';
     return this.http.post<Offer[]>(url, userId);
   }
 

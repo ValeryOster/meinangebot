@@ -62,8 +62,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  singup() {
-    this.authService.singup(
+  signup() {
+    this.authService.signup(
       {
         username: this.singupF.signupUsername.value,
         email: this.singupF.signupEmail.value,

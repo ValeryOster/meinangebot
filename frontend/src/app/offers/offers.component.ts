@@ -22,7 +22,7 @@ export class OffersComponent implements OnInit {
 
   constructor(public service: StartService, public auswahlService: AuswahlService, public offerService: OfferListService) {
     this.search = ""
-    auswahlService.ngOnInit();
+    auswahlService.init();
   }
 
 
@@ -47,7 +47,6 @@ export class OffersComponent implements OnInit {
       let offers = value[strings[i]];
       let map = this.mapToDiscount(offers);
       this.discounters.set(strings[i], map);
-      console.log(strings[i])
       Array.prototype.push.apply(this.allOffersList, offers)
     }
   }

@@ -1,4 +1,4 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
 import {Offer} from "../server/start.service";
 import {SelectedItemsService} from "../server/selected-items.service";
@@ -9,7 +9,7 @@ import {SessionStorageService} from "./session-storage.service";
 @Injectable({
   providedIn: 'root'
 })
-export class AuswahlService implements OnInit {
+export class AuswahlService {
 
   private valueObs: BehaviorSubject<Offer[]> = new BehaviorSubject<Offer[]>(null);
 
@@ -22,8 +22,8 @@ export class AuswahlService implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-
+  /** Call once from a component that triggers user-specific item loading. */
+  init(): void {
     if (this.auth.isAuthenticated()) {
       this.itemsService.getSelectedItems(this.auth.getUser().id).subscribe(value => {
         if (this.valueObs.getValue() != null && this.valueObs.getValue().length > 0) {
@@ -35,14 +35,13 @@ export class AuswahlService implements OnInit {
     }
   }
 
-  private setIsSaved(value: Offer[]):Offer[] {
+  private setIsSaved(value: Offer[]): Offer[] {
     value.forEach(val => val.isSaved = true);
-
-    return value
+    return value;
   }
 
   public setValue(value: Offer[]): void {
-    this.storage.setItems(value);
+    this.storage.replaceItems(value);
     this.valueObs.next(value);
   }
 
@@ -58,7 +57,7 @@ export class AuswahlService implements OnInit {
       }
     });
     this.valueObs.next(mainValue);
-    this.storage.setItems(mainValue);
+    this.storage.replaceItems(mainValue);
   }
 
   public saveSelectedItems() {

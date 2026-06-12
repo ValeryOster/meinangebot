@@ -8,7 +8,6 @@ import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
 import de.angebot.main.repositories.discounters.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,28 +15,42 @@ import java.util.Locale;
 
 @Service
 public class GatherService {
-    @Autowired
-    private MainGather mainGather;
-    @Autowired
-    private PennyOffer pennyOffer;
-    @Autowired
-    private LidlOffer lidlOffer;
-    @Autowired
-    private AldiOffer aldiOffer;
-    @Autowired
-    private LidlRepo lidlRepo;
-    @Autowired
-    private PennyRepo pennyRepo;
-    @Autowired
-    private AldiRepo aldiRepo;
-    @Autowired
-    private NettoOffer nettoOffer;
-    @Autowired
-    private NettoRepo nettoRepo;
-    @Autowired
-    private EdekaOffer edekaOffer;
-    @Autowired
-    private EdekaRepo edekaRepo;
+
+    private final MainGather mainGather;
+    private final PennyOffer pennyOffer;
+    private final LidlOffer lidlOffer;
+    private final AldiOffer aldiOffer;
+    private final NettoOffer nettoOffer;
+    private final EdekaOffer edekaOffer;
+    private final LidlRepo lidlRepo;
+    private final PennyRepo pennyRepo;
+    private final AldiRepo aldiRepo;
+    private final NettoRepo nettoRepo;
+    private final EdekaRepo edekaRepo;
+
+    public GatherService(MainGather mainGather,
+                         PennyOffer pennyOffer,
+                         LidlOffer lidlOffer,
+                         AldiOffer aldiOffer,
+                         NettoOffer nettoOffer,
+                         EdekaOffer edekaOffer,
+                         LidlRepo lidlRepo,
+                         PennyRepo pennyRepo,
+                         AldiRepo aldiRepo,
+                         NettoRepo nettoRepo,
+                         EdekaRepo edekaRepo) {
+        this.mainGather = mainGather;
+        this.pennyOffer = pennyOffer;
+        this.lidlOffer = lidlOffer;
+        this.aldiOffer = aldiOffer;
+        this.nettoOffer = nettoOffer;
+        this.edekaOffer = edekaOffer;
+        this.lidlRepo = lidlRepo;
+        this.pennyRepo = pennyRepo;
+        this.aldiRepo = aldiRepo;
+        this.nettoRepo = nettoRepo;
+        this.edekaRepo = edekaRepo;
+    }
 
     public void startGather(List<String> discounters) {
         // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
@@ -62,9 +75,11 @@ public class GatherService {
         }
         mainGather.startGather();
     }
+
     public List<CommonGather> findAll() {
         return mainGather.getGatherReport();
     }
+
     public void deleteLastInputs(List<String> discounters) {
         discounters.forEach(discounter -> {
             switch (discounter.toUpperCase(Locale.ROOT)) {

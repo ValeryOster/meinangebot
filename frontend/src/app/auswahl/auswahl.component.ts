@@ -17,7 +17,6 @@ export class AuswahlComponent {
 
     selectedService.getValue().subscribe(value => {
       this.selectedList = value;
-      console.log(value);
     });
   }
 
@@ -34,7 +33,6 @@ export class AuswahlComponent {
   }
 
   getColor(offer: Offer) {
-    console.log(offer);
     return undefined;
   }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ public interface NettoRepo extends CrudRepository<Netto, Long> {
     @Override
     List<Netto> findAll();
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
+    @Transactional
     @Query(value= "delete from Netto a where a.bisDate >= CURRENT_DATE")
     void deleteAllActuel();
 

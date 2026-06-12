@@ -17,7 +17,7 @@ public class SelectedItemsController {
     @Autowired
     public SelectedItemsController(ItemsService itemsService) {this.itemsService = itemsService;}
 
-    @PostMapping(path = "/itmes")
+    @PostMapping(path = "/items")
     public List<Object> getAllSelectedItems(@RequestBody Long userId) {
         if (userId > 0) {
             return itemsService.getAllSelectedItemForWeek(userId);

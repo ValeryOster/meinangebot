@@ -9,7 +9,6 @@ import de.angebot.main.repositories.discounters.EdekaRepo;
 import de.angebot.main.repositories.services.ProductMakerRepo;
 import de.angebot.main.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Lists;
 import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -42,7 +41,8 @@ public class EdekaOffer extends Gathering {
     @Override
     public void startGathering() {
         JsonNode jsonNode = getDocumentWithSelenium();
-        ArrayList<JsonNode> offers = Lists.newArrayList(jsonNode.get("offers").elements());
+        ArrayList<JsonNode> offers = new ArrayList<>();
+        jsonNode.get("offers").elements().forEachRemaining(offers::add);
         LocalDate dateFrom = getDate(jsonNode, true);
         for (JsonNode offer : offers) {
             Edeka edeka = new Edeka();

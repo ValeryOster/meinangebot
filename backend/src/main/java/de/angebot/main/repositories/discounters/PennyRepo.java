@@ -1,10 +1,12 @@
 package de.angebot.main.repositories.discounters;
 
 import de.angebot.main.enities.discounters.Penny;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +30,8 @@ public interface PennyRepo extends CrudRepository<Penny, Long> {
             String kategorie
     );
 
+    @Modifying(clearAutomatically = true)
+    @Transactional
     @Query(value= "delete from Penny p where p.bisDate >= CURRENT_DATE")
     void deleteAllActuel();
 }
