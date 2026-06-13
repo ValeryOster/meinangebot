@@ -1,0 +1,128 @@
+.lidl-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.lidl-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.lidl-logo {
+  height: 48px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.filters input,
+.filters select {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.offer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.offer-card {
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.offer-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.offer-card img {
+  height: 180px;
+  object-fit: contain;
+  background: #f7f7f7;
+}
+
+.discount-badge {
+  display: inline-block;
+  background: #0074D9;
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.offer-card h2 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.brand {
+  color: #0074D9;
+  font-weight: 600;
+  margin: 0;
+}
+
+.category {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.current-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.validity {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.state-message {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.state-message.error {
+  color: #c0392b;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}

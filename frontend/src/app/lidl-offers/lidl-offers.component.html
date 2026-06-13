@@ -1,0 +1,60 @@
+<div class="lidl-page">
+  <header class="lidl-header">
+    <img src="assets/lidl.png" alt="Lidl" class="lidl-logo">
+    <h1>Lidl Angebote</h1>
+    <p class="subtitle">{{ totalElements }} aktuelle Angebote</p>
+  </header>
+
+  <section class="filters">
+    <input
+      type="search"
+      [(ngModel)]="search"
+      (keyup.enter)="onSearch()"
+      placeholder="Produkte suchen..."
+      aria-label="Suche">
+
+    <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()" aria-label="Kategorie">
+      <option value="">Alle Kategorien</option>
+      <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+    </select>
+
+    <select [(ngModel)]="sort" (change)="onSortChange()" aria-label="Sortierung">
+      <option value="discount">Rabatt (höchster zuerst)</option>
+      <option value="price">Preis (aufsteigend)</option>
+      <option value="price-desc">Preis (absteigend)</option>
+      <option value="title">Name (A-Z)</option>
+      <option value="validto">Gültig bis</option>
+    </select>
+
+    <button mat-raised-button color="primary" (click)="onSearch()">Suchen</button>
+  </section>
+
+  <div *ngIf="loading" class="state-message">Angebote werden geladen...</div>
+  <div *ngIf="error" class="state-message error">{{ error }}</div>
+  <div *ngIf="!loading && !error && offers.length === 0" class="state-message">
+    Keine Angebote gefunden.
+  </div>
+
+  <div class="offer-grid" *ngIf="!loading && offers.length > 0">
+    <mat-card *ngFor="let offer of offers" class="offer-card" (click)="openDetail(offer)">
+      <img mat-card-image [src]="offer.imageUrl" [alt]="offer.title" loading="lazy">
+      <mat-card-content>
+        <span class="discount-badge" *ngIf="offer.discountPercent > 0">-{{ offer.discountPercent }}%</span>
+        <h2>{{ offer.title }}</h2>
+        <p class="brand" *ngIf="offer.brand">{{ offer.brand }}</p>
+        <p class="category">{{ offer.category }}</p>
+        <div class="prices">
+          <span class="current-price">{{ formatPrice(offer.currentPrice) }}</span>
+          <span class="old-price" *ngIf="offer.originalPrice">{{ formatPrice(offer.originalPrice) }}</span>
+        </div>
+        <p class="validity" *ngIf="offer.validTo">gültig bis {{ offer.validTo | date:'dd.MM.yyyy' }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <footer class="pagination" *ngIf="totalPages > 1">
+    <button mat-button [disabled]="page === 0" (click)="previousPage()">Zurück</button>
+    <span>Seite {{ page + 1 }} / {{ totalPages }}</span>
+    <button mat-button [disabled]="page >= totalPages - 1" (click)="nextPage()">Weiter</button>
+  </footer>
+</div>

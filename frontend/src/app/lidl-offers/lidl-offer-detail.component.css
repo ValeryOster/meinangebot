@@ -1,0 +1,76 @@
+.detail-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.detail-card {
+  margin-top: 1rem;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.detail-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  background: #f7f7f7;
+  border-radius: 4px;
+}
+
+.discount-badge {
+  display: inline-block;
+  background: #0074D9;
+  color: #fff;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.prices {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  margin: 1rem 0;
+}
+
+.current-price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.brand, .category, .action-week, .branch {
+  color: #555;
+}
+
+.description {
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.state-message {
+  text-align: center;
+  padding: 2rem;
+}
+
+.state-message.error {
+  color: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+}

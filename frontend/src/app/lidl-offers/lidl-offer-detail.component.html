@@ -1,0 +1,42 @@
+<div class="detail-page">
+  <button mat-button (click)="goBack()">← Zurück zur Übersicht</button>
+
+  <div *ngIf="loading" class="state-message">Angebot wird geladen...</div>
+  <div *ngIf="error" class="state-message error">{{ error }}</div>
+
+  <mat-card *ngIf="offer && !loading" class="detail-card">
+    <div class="detail-layout">
+      <img [src]="offer.imageUrl" [alt]="offer.title" class="detail-image">
+      <div class="detail-content">
+        <span class="discount-badge" *ngIf="offer.discountPercent > 0">-{{ offer.discountPercent }}%</span>
+        <h1>{{ offer.title }}</h1>
+        <p class="brand" *ngIf="offer.brand">Marke: {{ offer.brand }}</p>
+        <p class="category">Kategorie: {{ offer.category }}</p>
+        <p class="action-week" *ngIf="offer.actionWeek">Aktionswoche: {{ offer.actionWeek }}</p>
+        <p class="branch" *ngIf="offer.storeBranch">{{ offer.storeBranch }}</p>
+        <p class="source" *ngIf="offer.offerSource">Quelle: {{ offer.offerSource }}</p>
+        <p *ngIf="offer.leafletPage">Prospektseite: {{ offer.leafletPage }}</p>
+
+        <div class="prices">
+          <span class="current-price">{{ formatPrice(offer.currentPrice) }}</span>
+          <span class="old-price" *ngIf="offer.originalPrice">{{ formatPrice(offer.originalPrice) }}</span>
+        </div>
+
+        <p *ngIf="offer.validFrom || offer.validTo">
+          Angebotszeitraum:
+          <span *ngIf="offer.validFrom">{{ offer.validFrom | date:'dd.MM.yyyy' }}</span>
+          <span *ngIf="offer.validFrom && offer.validTo"> – </span>
+          <span *ngIf="offer.validTo">{{ offer.validTo | date:'dd.MM.yyyy' }}</span>
+        </p>
+
+        <p *ngIf="offer.ean">EAN/IAN: {{ offer.ean }}</p>
+
+        <div class="description" *ngIf="offer.description" [innerHTML]="offer.description"></div>
+
+        <a *ngIf="offer.sourceUrl" [href]="offer.sourceUrl" target="_blank" rel="noopener">
+          Auf lidl.de ansehen
+        </a>
+      </div>
+    </div>
+  </mat-card>
+</div>
