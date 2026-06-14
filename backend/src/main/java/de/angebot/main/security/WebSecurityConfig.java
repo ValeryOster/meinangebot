@@ -38,11 +38,6 @@ public class WebSecurityConfig  {
 		return new AuthTokenFilter();
 	}
 
-//
-//	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//	}
-
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
@@ -68,8 +63,7 @@ public class WebSecurityConfig  {
 					.requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
 					.requestMatchers("/manage/**").hasRole("ADMIN")
 					.requestMatchers("/selected/**").authenticated()
-                    .requestMatchers("/home/**", "/api/offers/**", "/", "/index.html", "/static/**", "/assets/**", "/error").permitAll()
-					.anyRequest().authenticated()
+					.anyRequest().permitAll()
 				.and()
 					.httpBasic().disable()
 					.formLogin().disable();
