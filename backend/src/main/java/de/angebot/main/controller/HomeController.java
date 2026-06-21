@@ -2,7 +2,6 @@ package de.angebot.main.controller;
 
 import de.angebot.main.enities.*;
 import de.angebot.main.enities.discounters.Aldi;
-import de.angebot.main.enities.discounters.Lidl;
 import de.angebot.main.enities.discounters.Netto;
 import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.services.DiscounterService;
@@ -22,11 +21,6 @@ public class HomeController {
     @GetMapping(path = "/penny")
     public List<Penny> getPenny() {
         return service.pennyCurrentOffers();
-    }
-
-    @GetMapping(path = "/lidl")
-    public List<Lidl> getLidl() {
-        return service.lidlCurrentOffers();
     }
 
     @GetMapping(path = "/aldi")

@@ -18,18 +18,16 @@ import java.util.List;
 public class ItemsService {
 
     private final PennyRepo pennyRepo;
-    private final LidlRepo lidlRepo;
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
     private final EdekaRepo edekaRepo;
     private final SelectedItemsRepo itemsRepo;
 
     @Autowired
-    public ItemsService(AldiRepo aldiRepo, NettoRepo nettoRepo, LidlRepo lidlRepo, PennyRepo pennyRepo,
+    public ItemsService(AldiRepo aldiRepo, NettoRepo nettoRepo, PennyRepo pennyRepo,
                         EdekaRepo edekaRepo, SelectedItemsRepo itemsRepo) {
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
-        this.lidlRepo = lidlRepo;
         this.pennyRepo = pennyRepo;
         this.edekaRepo = edekaRepo;
         this.itemsRepo = itemsRepo;
@@ -43,9 +41,6 @@ public class ItemsService {
             switch (name) {
                 case "aldi":
                     aldiRepo.findById(item.getItemId()).ifPresent(itemsList::add);
-                    break;
-                case "lidl":
-                    lidlRepo.findById(item.getItemId()).ifPresent(itemsList::add);
                     break;
                 case "netto":
                     nettoRepo.findById(item.getItemId()).ifPresent(itemsList::add);

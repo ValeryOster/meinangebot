@@ -13,11 +13,9 @@ export class GatheringComponent implements OnInit {
   form: FormGroup;
   discounterBox = [
     {id: 100, name: 'PENNY', isAktiv:false},
-    {id: 200, name: 'LIDL', isAktiv:false},
     {id: 300, name: 'ALDI', isAktiv:false},
     {id: 400, name: 'NETTO', isAktiv:false},
     {id: 500, name: 'EDEKA', isAktiv:false}
-
   ];
   discounters: Discounter[];
   buttonActive = true;

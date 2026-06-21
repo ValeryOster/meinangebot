@@ -41,19 +41,9 @@ export class StartService {
     return this.http.get<Offer>(url);
   }
 
-  getLidlById(id: any): Observable<Offer> {
-    let url = this.url + 'lidl/'+id;
-    return this.http.get<Offer>(url);
-  }
-
   getAldiById(id: any): Observable<Offer> {
     let url = this.url + 'aldi/'+id;
     return this.http.get<Offer>(url);
-  }
-
-  getLidl(): Observable<Offer[]> {
-    let url = this.url + 'lidl';
-    return this.http.get<Offer[]>(url);
   }
 
   getSelectedDiskounters(string:any): Observable<Offer[]> {

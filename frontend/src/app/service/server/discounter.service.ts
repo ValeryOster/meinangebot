@@ -9,7 +9,6 @@ export class Discounter {
   discount: {
     Penny: string;
     Netto: string;
-    Lidl: string;
   };
   duration: string;
   expiryDate: string;

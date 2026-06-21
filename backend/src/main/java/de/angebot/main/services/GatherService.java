@@ -20,7 +20,6 @@ public class GatherService {
     private final AldiOffer aldiOffer;
     private final NettoOffer nettoOffer;
     private final EdekaOffer edekaOffer;
-    private final LidlRepo lidlRepo;
     private final PennyRepo pennyRepo;
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
@@ -31,7 +30,6 @@ public class GatherService {
                          AldiOffer aldiOffer,
                          NettoOffer nettoOffer,
                          EdekaOffer edekaOffer,
-                         LidlRepo lidlRepo,
                          PennyRepo pennyRepo,
                          AldiRepo aldiRepo,
                          NettoRepo nettoRepo,
@@ -41,7 +39,6 @@ public class GatherService {
         this.aldiOffer = aldiOffer;
         this.nettoOffer = nettoOffer;
         this.edekaOffer = edekaOffer;
-        this.lidlRepo = lidlRepo;
         this.pennyRepo = pennyRepo;
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
@@ -76,9 +73,6 @@ public class GatherService {
     public void deleteLastInputs(List<String> discounters) {
         discounters.forEach(discounter -> {
             switch (discounter.toUpperCase(Locale.ROOT)) {
-                case "LIDL":
-                    lidlRepo.deleteAllActuel();
-                    break;
                 case "PENNY":
                     pennyRepo.deleteAllActuel();
                     break;

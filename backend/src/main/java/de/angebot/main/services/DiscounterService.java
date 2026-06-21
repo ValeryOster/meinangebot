@@ -15,16 +15,13 @@ import java.util.Map;
 @Service
 public class DiscounterService {
     private final PennyRepo pennyRepo;
-    private final LidlRepo lidlRepo;
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
     private final EdekaRepo edekaRepo;
 
-
     @Autowired
-    public DiscounterService(PennyRepo pennyRepo, LidlRepo lidlRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo) {
+    public DiscounterService(PennyRepo pennyRepo, AldiRepo aldiRepo, NettoRepo nettoRepo, EdekaRepo edekaRepo) {
         this.pennyRepo = pennyRepo;
-        this.lidlRepo = lidlRepo;
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
         this.edekaRepo = edekaRepo;
@@ -32,10 +29,6 @@ public class DiscounterService {
 
     public List<Penny> pennyCurrentOffers() {
         return pennyRepo.findCurrentOffers();
-    }
-
-    public List<Lidl> lidlCurrentOffers() {
-        return lidlRepo.findCurrentOffers();
     }
 
     public List<Aldi> aldiCurrentOffers() {
@@ -58,13 +51,7 @@ public class DiscounterService {
     public Map<String, List<? extends AbstactEneties>>  getOffersFromList(List<String> discounters) {
         Map<String, List<? extends AbstactEneties>> discountersMap = new HashMap<>();
         for (String discounter : discounters) {
-            if (discounter.equalsIgnoreCase("lidl")) {
-                List<Lidl> lidl = lidlCurrentOffers();
-                if (!lidl.isEmpty()) {
-                    discountersMap.put("Lidl", lidl);
-                }
-            }
-            else if (discounter.equalsIgnoreCase("penny")) {
+            if (discounter.equalsIgnoreCase("penny")) {
                 List<Penny> pennies = pennyCurrentOffers();
                 if (!pennies.isEmpty()) {
                     discountersMap.put("Penny", pennies);

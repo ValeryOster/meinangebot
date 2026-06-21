@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
   form: FormGroup;
   discounterBox = [
     {id: 100, name: 'PENNY'},
-    {id: 200, name: 'LIDL'},
     {id: 300, name: 'ALDI'},
     {id: 400, name: 'NETTO'},
     {id: 500, name: 'EDEKA'}
