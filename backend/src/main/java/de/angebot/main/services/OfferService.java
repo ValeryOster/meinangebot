@@ -35,8 +35,9 @@ public class OfferService {
                                        String sort,
                                        int page,
                                        int size) {
+        int cappedSize = Math.min(size, 100);
         Specification<Offer> spec = buildSpecification(retailer, search, category);
-        Pageable pageable = PageRequest.of(page, size, resolveSort(sort));
+        Pageable pageable = PageRequest.of(page, cappedSize, resolveSort(sort));
         return offerRepository.findAll(spec, pageable).map(OfferDto::fromEntity);
     }
 

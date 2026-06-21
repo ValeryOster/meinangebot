@@ -5,7 +5,6 @@ import de.angebot.main.controller.dto.OfferDto;
 import de.angebot.main.controller.dto.PageResponse;
 import de.angebot.main.services.OfferService;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/offers")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class OfferController {
 
     private final OfferService offerService;

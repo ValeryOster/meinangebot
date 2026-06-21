@@ -4,7 +4,6 @@ import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.MainGather;
 import de.angebot.main.gathering.aldi.AldiOffer;
 import de.angebot.main.gathering.edeka.EdekaOffer;
-import de.angebot.main.gathering.lidl.LidlOffer;
 import de.angebot.main.gathering.netto.NettoOffer;
 import de.angebot.main.gathering.penny.PennyOffer;
 import de.angebot.main.repositories.discounters.*;
@@ -18,7 +17,6 @@ public class GatherService {
 
     private final MainGather mainGather;
     private final PennyOffer pennyOffer;
-    private final LidlOffer lidlOffer;
     private final AldiOffer aldiOffer;
     private final NettoOffer nettoOffer;
     private final EdekaOffer edekaOffer;
@@ -30,7 +28,6 @@ public class GatherService {
 
     public GatherService(MainGather mainGather,
                          PennyOffer pennyOffer,
-                         LidlOffer lidlOffer,
                          AldiOffer aldiOffer,
                          NettoOffer nettoOffer,
                          EdekaOffer edekaOffer,
@@ -41,7 +38,6 @@ public class GatherService {
                          EdekaRepo edekaRepo) {
         this.mainGather = mainGather;
         this.pennyOffer = pennyOffer;
-        this.lidlOffer = lidlOffer;
         this.aldiOffer = aldiOffer;
         this.nettoOffer = nettoOffer;
         this.edekaOffer = edekaOffer;
@@ -56,9 +52,6 @@ public class GatherService {
         // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
         for (String discounter : discounters) {
             switch (discounter.toUpperCase(Locale.ROOT)) {
-                case "LIDL":
-                    mainGather.addToGatherList(lidlOffer);
-                    break;
                 case "PENNY":
                     mainGather.addToGatherList(pennyOffer);
                     break;

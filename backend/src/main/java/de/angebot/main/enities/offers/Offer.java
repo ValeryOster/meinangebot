@@ -1,7 +1,9 @@
 package de.angebot.main.enities.offers;
 
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
@@ -77,6 +79,7 @@ public class Offer {
     private Integer leafletPage;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(columnDefinition = "LONGTEXT")
     private String rawJson;
 }
