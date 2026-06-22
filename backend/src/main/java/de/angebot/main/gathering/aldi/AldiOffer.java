@@ -475,9 +475,17 @@ public class AldiOffer extends Gathering {
         }
         try {
             if (value.matches("\\d+")) {
-                return Instant.ofEpochSecond(Long.parseLong(value))
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate();
+                long numeric = Long.parseLong(value);
+                // Aldi API returns timestamps in either seconds (10 digits) or milliseconds (13 digits).
+                // Passing milliseconds to ofEpochSecond() would produce dates in year ~57000.
+                Instant instant = value.length() >= 12
+                        ? Instant.ofEpochMilli(numeric)
+                        : Instant.ofEpochSecond(numeric);
+                return instant.atZone(ZoneId.of("Europe/Berlin")).toLocalDate();
+            }
+            // Handle ISO datetime strings like "2026-06-15T00:00:00" or "2026-06-15T00:00:00Z"
+            if (value.length() > 10 && value.charAt(10) == 'T') {
+                return LocalDate.parse(value.substring(0, 10));
             }
             return LocalDate.parse(value);
         } catch (DateTimeParseException | NumberFormatException e) {
