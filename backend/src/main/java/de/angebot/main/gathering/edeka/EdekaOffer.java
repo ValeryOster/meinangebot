@@ -38,8 +38,17 @@ public class EdekaOffer extends Gathering {
     private EdekaRepo edekaRepo;
 
 
+    /**
+     * Deaktiviert: Die Edeka-API (/api/offers) antwortet seit 2026 mit HTTP 403,
+     * auch für normale Browser. Für eine Wiederaufnahme wird eine neue Quelle benötigt.
+     */
     @Override
-    public void startGathering() {
+    public boolean isEnabled() {
+        return false;
+    }
+
+    @Override
+    public int startGathering() {
         JsonNode jsonNode = getDocumentWithSelenium();
         ArrayList<JsonNode> offers = new ArrayList<>();
         jsonNode.get("offers").elements().forEachRemaining(offers::add);
@@ -56,6 +65,7 @@ public class EdekaOffer extends Gathering {
             edeka.setUrl(OFFER_URL);
             edekaRepo.save(edeka);
         }
+        return offers.size();
     }
 
     private String getImageLink(JsonNode offer) {

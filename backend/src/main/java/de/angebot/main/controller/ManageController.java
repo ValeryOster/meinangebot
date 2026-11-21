@@ -8,9 +8,11 @@ import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.services.GatherService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/manage")
@@ -27,13 +29,22 @@ public class ManageController {
 
     @PostMapping("/gather")
     @PreAuthorize("hasRole('ADMIN')")
-    public void startGathering(@RequestBody List<String> string) {
-        service.startGather(string);
+    public ResponseEntity<Map<String, Object>> startGathering(@RequestBody List<String> discounters) {
+        Map<String, Object> result = service.startGather(discounters);
+        boolean started = Boolean.TRUE.equals(result.get("started"));
+        return started ? ResponseEntity.accepted().body(result)
+                : ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+    }
+
+    @GetMapping("/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Map<String, Object> getStatus() {
+        return service.getStatus();
     }
 
     @GetMapping("/start")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<CommonGather> getAll(MultipartFile file) {
+    public List<CommonGather> getAll() {
         return service.findAll();
     }
 

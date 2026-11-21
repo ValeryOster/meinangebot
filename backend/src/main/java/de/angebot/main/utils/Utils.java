@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -64,8 +65,8 @@ public class Utils {
         if (imageName == null || imageName.isEmpty()) {
             imageName = strImageURL.substring(strImageURL.lastIndexOf("/") + 1);
         }
-        //delete all special character,
-        imageName = imageName.replaceAll("[^a-zA-Z0-9]+","");
+        //delete all special character (Punkt bleibt erhalten, damit die Dateiendung z. B. ".webp" bleibt)
+        imageName = imageName.replaceAll("[^a-zA-Z0-9.]+","");
         try {
             //open the stream from URL
             URL urlImage = new URL(strImageURL);
@@ -89,6 +90,26 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    /**
+     * Speichert bereits geladene Bilddaten im Bilderordner.
+     *
+     * @return Pfad für die Oberfläche, z. B. "/netto/2026-11-28/bild.webp", oder "" bei Fehler
+     */
+    public static String saveImage(byte[] data, String storageName, LocalDate endDate, String imageName) {
+        if (data == null || data.length == 0 || imageName == null || imageName.isEmpty()) {
+            return "";
+        }
+        String fileName = imageName.replaceAll("[^a-zA-Z0-9.]+", "");
+        try {
+            Path folder = Files.createDirectories(Paths.get(IMAGE_DESTINATION_FOLDER, storageName, String.valueOf(endDate)));
+            Files.write(folder.resolve(fileName), data);
+            return "/" + storageName + "/" + endDate + "/" + fileName;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public static LocalDate getDate(int var) {

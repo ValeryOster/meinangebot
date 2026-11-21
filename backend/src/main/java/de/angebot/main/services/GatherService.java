@@ -1,69 +1,86 @@
 package de.angebot.main.services;
 
+import de.angebot.main.config.Discounters;
 import de.angebot.main.enities.services.CommonGather;
 import de.angebot.main.gathering.MainGather;
-import de.angebot.main.gathering.aldi.AldiOffer;
-import de.angebot.main.gathering.edeka.EdekaOffer;
-import de.angebot.main.gathering.netto.NettoOffer;
-import de.angebot.main.gathering.penny.PennyOffer;
-import de.angebot.main.repositories.discounters.*;
+import de.angebot.main.gathering.common.Gathering;
+import de.angebot.main.repositories.discounters.AldiRepo;
+import de.angebot.main.repositories.discounters.EdekaRepo;
+import de.angebot.main.repositories.discounters.NettoRepo;
+import de.angebot.main.repositories.discounters.PennyRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+@Slf4j
 @Service
 public class GatherService {
 
     private final MainGather mainGather;
-    private final PennyOffer pennyOffer;
-    private final AldiOffer aldiOffer;
-    private final NettoOffer nettoOffer;
-    private final EdekaOffer edekaOffer;
+    private final Discounters discounters;
     private final PennyRepo pennyRepo;
     private final AldiRepo aldiRepo;
     private final NettoRepo nettoRepo;
     private final EdekaRepo edekaRepo;
 
     public GatherService(MainGather mainGather,
-                         PennyOffer pennyOffer,
-                         AldiOffer aldiOffer,
-                         NettoOffer nettoOffer,
-                         EdekaOffer edekaOffer,
+                         Discounters discounters,
                          PennyRepo pennyRepo,
                          AldiRepo aldiRepo,
                          NettoRepo nettoRepo,
                          EdekaRepo edekaRepo) {
         this.mainGather = mainGather;
-        this.pennyOffer = pennyOffer;
-        this.aldiOffer = aldiOffer;
-        this.nettoOffer = nettoOffer;
-        this.edekaOffer = edekaOffer;
+        this.discounters = discounters;
         this.pennyRepo = pennyRepo;
         this.aldiRepo = aldiRepo;
         this.nettoRepo = nettoRepo;
         this.edekaRepo = edekaRepo;
     }
 
-    public void startGather(List<String> discounters) {
-        // TODO: 12.03.2021 Umbauen -> Enum mit Autowired anstatt for
-        for (String discounter : discounters) {
-            switch (discounter.toUpperCase(Locale.ROOT)) {
-                case "PENNY":
-                    mainGather.addToGatherList(pennyOffer);
-                    break;
-                case "ALDI":
-                    mainGather.addToGatherList(aldiOffer);
-                    break;
-                case "NETTO":
-                    mainGather.addToGatherList(nettoOffer);
-                    break;
-                case "EDEKA":
-                    mainGather.addToGatherList(edekaOffer);
-                    break;
-            }
+    /**
+     * Startet das Sammeln für die gewählten Discounter im Hintergrund.
+     *
+     * @return Statusmeldung für die Oberfläche
+     */
+    public Map<String, Object> startGather(List<String> names) {
+        List<Gathering> selected = new ArrayList<>();
+        List<String> skipped = new ArrayList<>();
+        for (String name : names == null ? List.<String>of() : names) {
+            discounters.findByName(name)
+                    .filter(Gathering::isEnabled)
+                    .ifPresentOrElse(selected::add, () -> skipped.add(name));
         }
-        mainGather.startGather();
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        if (selected.isEmpty()) {
+            result.put("started", false);
+            result.put("message", "Kein aktiver Discounter ausgewählt.");
+        } else if (mainGather.startAsync(selected)) {
+            result.put("started", true);
+            result.put("message", "Sammeln gestartet: " + selected.stream().map(Gathering::getDiscountName).toList());
+        } else {
+            result.put("started", false);
+            result.put("message", "Es läuft bereits ein Sammel-Lauf.");
+        }
+        if (!skipped.isEmpty()) {
+            result.put("skipped", skipped);
+        }
+        return result;
+    }
+
+    public Map<String, Object> getStatus() {
+        Map<String, Object> status = new LinkedHashMap<>();
+        status.put("running", mainGather.isRunning());
+        status.put("current", mainGather.getCurrentDiscounter());
+        status.put("startedAt", mainGather.getStartedAt());
+        status.put("available", discounters.getEnabledDiscountersGather().stream()
+                .map(Gathering::getDiscountName).sorted().toList());
+        return status;
     }
 
     public List<CommonGather> findAll() {
@@ -73,18 +90,11 @@ public class GatherService {
     public void deleteLastInputs(List<String> discounters) {
         discounters.forEach(discounter -> {
             switch (discounter.toUpperCase(Locale.ROOT)) {
-                case "PENNY":
-                    pennyRepo.deleteAllActuel();
-                    break;
-                case "ALDI":
-                    aldiRepo.deleteAllActuel();
-                    break;
-                case "NETTO":
-                    nettoRepo.deleteAllActuel();
-                    break;
-                case "EDEKA":
-                    edekaRepo.deleteAllActuel();
-                    break;
+                case "PENNY" -> pennyRepo.deleteAllActuel();
+                case "ALDI" -> aldiRepo.deleteAllActuel();
+                case "NETTO" -> nettoRepo.deleteAllActuel();
+                case "EDEKA" -> edekaRepo.deleteAllActuel();
+                default -> log.warn("Unbekannter Discounter: {}", discounter);
             }
         });
     }

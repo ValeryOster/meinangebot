@@ -17,3 +17,15 @@ input{
   display: inline;
   width: 5%;
 }
+
+.choice {
+  margin-right: 16px;
+}
+
+.info {
+  color: #1b5e20;
+}
+
+.error {
+  color: #b71c1c;
+}

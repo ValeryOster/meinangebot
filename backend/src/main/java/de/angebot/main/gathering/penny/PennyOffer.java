@@ -3,6 +3,7 @@ package de.angebot.main.gathering.penny;
 
 import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.gathering.common.Gathering;
+import de.angebot.main.gathering.common.GatheringException;
 import de.angebot.main.repositories.discounters.PennyRepo;
 import de.angebot.main.utils.SaveUtil;
 import de.angebot.main.utils.Utils;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.time.temporal.WeekFields;
 import java.util.stream.Stream;
@@ -34,29 +37,35 @@ public class PennyOffer extends Gathering {
 
 
     @Override
-    public void startGathering() {
+    public int startGathering() {
         LocalDate startDate = Utils.getNextMonday();
-        LocalDate endDate = Utils.getNextSaturday();
+        // Samstag derselben Angebotswoche (nicht "nächster Samstag ab heute": an einem Samstag wäre das heute)
+        LocalDate endDate = startDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
         WeekFields isoWeek = WeekFields.ISO;
         int year = startDate.get(isoWeek.weekBasedYear());
         int week = startDate.get(isoWeek.weekOfWeekBasedYear());
 
-        saveOffers(year, week, startDate, endDate);
+        return saveOffers(year, week, startDate, endDate);
     }
 
-    private void saveOffers(int year, int week, LocalDate startDate, LocalDate endDate) {
+    private int saveOffers(int year, int week, LocalDate startDate, LocalDate endDate) {
         List<PennyOfferDto> offers = pennyApiClient.fetchOffers(year, week);
         if (offers.isEmpty()) {
-            log.error("No Penny offers found for week '{}-{}'.", year, week);
-            return;
+            throw new GatheringException("Keine Penny-Angebote für KW " + year + "-" + week
+                    + " gefunden (API nicht erreichbar oder leer, siehe Log).");
         }
 
-        offers.stream()
-                .map(offer -> toPenny(offer, startDate, endDate))
-                .forEach(this::saveIfNotExists);
+        int saved = 0;
+        for (PennyOfferDto offer : offers) {
+            if (saveIfNotExists(toPenny(offer, startDate, endDate))) {
+                saved++;
+            }
+        }
+        log.info("Penny: {} Angebote gelesen, {} neu gespeichert.", offers.size(), saved);
+        return saved;
     }
 
-    private void saveIfNotExists(Penny penny) {
+    private boolean saveIfNotExists(Penny penny) {
         boolean exists = pennyRepo.existsByProduktNameAndProduktMakerAndVonDateAndKategorie(
                 penny.getProduktName(),
                 penny.getProduktMaker(),
@@ -66,9 +75,10 @@ public class PennyOffer extends Gathering {
         if (exists) {
             log.info("Penny offer already exists and will be skipped: '{}' / '{}' / '{}' / '{}'",
                     penny.getProduktName(), penny.getProduktMaker(), penny.getVonDate(), penny.getKategorie());
-            return;
+            return false;
         }
         pennyRepo.save(penny);
+        return true;
     }
 
     private String saveItemMaker(String strings) {

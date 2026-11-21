@@ -6,16 +6,23 @@ import {environment} from "../../../environments/environment";
 export class Discounter {
   id: number;
   gatherDate: string;
-  discount: {
-    Penny: string;
-    Netto: string;
-  };
-  duration: string;
+  /** Ergebnis je Discounter, z. B. {"Penny": "120 neue Angebote", "Netto": "FEHLER: ..."} */
+  discount: { [name: string]: string };
+  duration: number;
   expiryDate: string;
+}
 
-  getDate():string{
-    return this.expiryDate;
-  }
+export interface GatherStartResponse {
+  started: boolean;
+  message: string;
+  skipped?: string[];
+}
+
+export interface GatherStatus {
+  running: boolean;
+  current: string | null;
+  startedAt: string | null;
+  available: string[];
 }
 
 @Injectable({
@@ -34,9 +41,12 @@ export class DiscounterService {
     return this.http.get<Discounter[]>(url)
   }
 
-  startGather(selectedOrderIds: any[]) {
-    let url = this.url + 'gather';
-    return this.http.post(url, selectedOrderIds);
+  startGather(discounters: string[]): Observable<GatherStartResponse> {
+    return this.http.post<GatherStartResponse>(this.url + 'gather', discounters);
+  }
+
+  getStatus(): Observable<GatherStatus> {
+    return this.http.get<GatherStatus>(this.url + 'status');
   }
 
   delLastInputs(list: any[]) {

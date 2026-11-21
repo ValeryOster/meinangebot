@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.angebot.main.enities.discounters.Aldi;
 import de.angebot.main.enities.offers.Offer;
 import de.angebot.main.gathering.common.Gathering;
+import de.angebot.main.gathering.common.GatheringException;
 import de.angebot.main.repositories.discounters.AldiRepo;
 import de.angebot.main.repositories.offers.OfferRepository;
 import de.angebot.main.utils.Utils;
@@ -71,10 +72,16 @@ public class AldiOffer extends Gathering {
     }
 
     @Override
-    public void startGathering() {
+    public int startGathering() {
         String html = fetchHtml();
+        if (!StringUtils.hasText(html)) {
+            throw new GatheringException("Aldi-Seite " + OFFER_URL + " nicht erreichbar (siehe Log).");
+        }
         List<JsonNode> jsonNodes = extractJson(html);
         List<RawAldiOffer> rawOffers = parseOffers(jsonNodes);
+        if (rawOffers.isEmpty()) {
+            throw new GatheringException("Keine Aldi-Angebote in der Seite gefunden – Seitenstruktur geändert?");
+        }
         int inserted = 0;
         int skipped = 0;
 
@@ -97,6 +104,7 @@ public class AldiOffer extends Gathering {
         }
 
         log.info("Aldi offers parsed: {}, inserted: {}, skipped: {}", rawOffers.size(), inserted, skipped);
+        return inserted;
     }
 
     public String fetchHtml() {

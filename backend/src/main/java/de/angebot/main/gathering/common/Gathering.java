@@ -43,7 +43,18 @@ public abstract class Gathering implements ErrorHandler {
         return environment.acceptsProfiles(Profiles.of("prod"));
     }
 
-    public abstract void startGathering() throws RuntimeException;
+    /**
+     * Sammelt die Angebote und speichert sie.
+     *
+     * @return Anzahl neu gespeicherter Angebote
+     * @throws GatheringException wenn die Quelle nicht gelesen werden konnte
+     */
+    public abstract int startGathering();
+
+    /** Deaktivierte Sammler werden weder per Zeitplan noch manuell gestartet. */
+    public boolean isEnabled() {
+        return true;
+    }
 
     public abstract String getDiscountName();
 
