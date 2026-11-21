@@ -5,7 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -78,8 +77,7 @@ public class Offer {
     /** Prospektseite, auf der das Produkt verlinkt ist. */
     private Integer leafletPage;
 
-    @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "TEXT")
     private String rawJson;
 }
