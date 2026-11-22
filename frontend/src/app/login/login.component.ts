@@ -1,37 +1,44 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {Router} from '@angular/router';
-import {AuthService} from "../service/security/auth.service";
-import {TokenStorageService} from "../service/security/token-storage.service";
+import { Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../service/security/auth.service';
+import { TokenStorageService } from '../service/security/token-storage.service';
 import Swal from 'sweetalert2';
+
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
+  // Angular 22 nutzt standardmäßig OnPush; der bestehende Code setzt auf die bisherige Prüfung
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup;
   singupForm: FormGroup;
-  container = "container";
+  container = 'container';
   singInCssClass: boolean = true;
   newAccountCssClass: boolean = false;
   passwortCssClass: boolean = false;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder,
-              private router: Router, private token: TokenStorageService) {
-  }
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private token: TokenStorageService,
+  ) {}
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       loginUsername: [''],
-      loginPassword: ['']
+      loginPassword: [''],
     });
     this.singupForm = this.formBuilder.group({
       signupUsername: [''],
       signupEmail: [''],
-      signupPassword: ['']
+      signupPassword: [''],
     });
   }
 
@@ -44,48 +51,53 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.login(
-      {
+    this.authService
+      .login({
         username: this.loginF.loginUsername.value,
-        password: this.loginF.loginPassword.value
-      }
-    ).subscribe(success => {
-      if (success) {
-        this.token.saveToken(success.token);
-        this.token.saveUser(success);
-        this.token.saveRoles(success.roles)
-        this.router.navigate(['/']);
-      }
-    },error => {
-      Swal.fire("Error", this.getErrorMessage(error), 'error');
-
-    });
+        password: this.loginF.loginPassword.value,
+      })
+      .subscribe(
+        (success) => {
+          if (success) {
+            this.token.saveToken(success.token);
+            this.token.saveUser(success);
+            this.token.saveRoles(success.roles);
+            this.router.navigate(['/']);
+          }
+        },
+        (error) => {
+          Swal.fire('Error', this.getErrorMessage(error), 'error');
+        },
+      );
   }
 
   signup() {
-    this.authService.signup(
-      {
+    this.authService
+      .signup({
         username: this.singupF.signupUsername.value,
         email: this.singupF.signupEmail.value,
-        password: this.singupF.signupPassword.value
-      }
-    ).subscribe(success => {
-      if (success) {
-        Swal.fire("Success", success.message.replace("Success:", " "), 'success');
-        this.router.navigate(['']);
-      }
-    }, error => {
-      Swal.fire("Error", this.getErrorMessage(error), 'error');
-
-    });
+        password: this.singupF.signupPassword.value,
+      })
+      .subscribe(
+        (success) => {
+          if (success) {
+            Swal.fire('Success', success.message.replace('Success:', ' '), 'success');
+            this.router.navigate(['']);
+          }
+        },
+        (error) => {
+          Swal.fire('Error', this.getErrorMessage(error), 'error');
+        },
+      );
   }
 
   private getErrorMessage(error): string {
-    const message = error && error.error && error.error.message
-      ? error.error.message
-      : error && error.error && error.error.error
-        ? error.error.error
-        : 'Request failed';
+    const message =
+      error && error.error && error.error.message
+        ? error.error.message
+        : error && error.error && error.error.error
+          ? error.error.error
+          : 'Request failed';
 
     return String(message).replace('Error:', ' ').trim();
   }
@@ -95,11 +107,11 @@ export class LoginComponent implements OnInit {
       this.singInCssClass = true;
       this.newAccountCssClass = false;
       this.passwortCssClass = false;
-    }else if(str === 'newAccount'){
+    } else if (str === 'newAccount') {
       this.singInCssClass = false;
       this.newAccountCssClass = true;
       this.passwortCssClass = false;
-    }else if (str === 'vorgotPWD') {
+    } else if (str === 'vorgotPWD') {
       this.singInCssClass = false;
       this.newAccountCssClass = false;
       this.passwortCssClass = true;

@@ -64,7 +64,7 @@ button{
   .show_only{
     display: none;
   }
-  .mat-card-lg-image {
+  .mat-mdc-card-lg-image {
     width: 60px;
     height: 60px;
   }

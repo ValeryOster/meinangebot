@@ -8,7 +8,7 @@
   }
 }
 
-.mat-tab-group {
+.mat-mdc-tab-group {
   margin-top: 30px;
 }
 
@@ -222,9 +222,7 @@ ul {
   bottom: 5px;
 }
 
-::ng-deep .mat-tab-group.mat-primary .mat-ink-bar {
-  background-color: rgb(86, 112, 107) !important;
-}
+/* Farbe des aktiven Tab-Unterstrichs: siehe styles.css (.mat-mdc-tab-group) */
 
 .logos {
   width: 140px;
@@ -261,7 +259,7 @@ ul {
   font-size: 50px;
 }
 
-.mat-tab-labels {
+.mat-mdc-tab-labels {
   position: relative;
   z-index: 0;
 }
@@ -360,7 +358,7 @@ ul {
     top: 5px;
   }
 
-  .mat-card-content {
+  .mat-mdc-card-content {
     display: flex;
   }
 

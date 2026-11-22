@@ -1,71 +1,111 @@
 <div class="user-modal is-visible">
   <div class="user-modal-container">
-    <ul class="switcher" *ngIf="!passwortCssClass">
-      <li><a (click)="changeView('singIn')" [className]="singInCssClass ? 'selected' : '' ">Sign
-        in</a></li>
-      <li><a (click)="changeView('newAccount')" [className]="newAccountCssClass ? 'selected' : '' ">New
-        account</a></li>
-    </ul>
+    @if (!passwortCssClass) {
+      <ul class="switcher">
+        <li>
+          <a (click)="changeView('singIn')" [className]="singInCssClass ? 'selected' : ''"
+            >Sign in</a
+          >
+        </li>
+        <li>
+          <a (click)="changeView('newAccount')" [className]="newAccountCssClass ? 'selected' : ''"
+            >New account</a
+          >
+        </li>
+      </ul>
+    }
     <div id="login" [className]="singInCssClass ? 'is-selected' : ''">
       <form class="form" [formGroup]="loginForm" (ngSubmit)="login()">
         <p class="fieldset">
           <label class="image-replace username" for="loginUsername">Username</label>
-          <input class="full-width has-padding has-border" id="loginUsername" type="text" placeholder="Username"
-                 formControlName="loginUsername">
-          <span class="error-message">Your username can only contain numeric and alphabetic symbols!</span>
+          <input
+            class="full-width has-padding has-border"
+            id="loginUsername"
+            type="text"
+            placeholder="Username"
+            formControlName="loginUsername"
+          />
+          <span class="error-message"
+            >Your username can only contain numeric and alphabetic symbols!</span
+          >
         </p>
 
         <p class="fieldset">
           <label class="image-replace password" for="loginPassword">Password</label>
-          <input class="full-width has-padding has-border" id="loginPassword" type="password" placeholder="Password" formControlName="loginPassword">
+          <input
+            class="full-width has-padding has-border"
+            id="loginPassword"
+            type="password"
+            placeholder="Password"
+            formControlName="loginPassword"
+          />
           <a href="" class="hide-password">Show</a>
           <span class="error-message">Wrong password! Try again.</span>
         </p>
 
         <p class="fieldset">
-          <input type="checkbox" id="remember-me" checked>
+          <input type="checkbox" id="remember-me" checked />
           <label for="remember-me">Remember me</label>
         </p>
 
         <p class="fieldset">
-          <input class="full-width" type="submit" value="Login">
+          <input class="full-width" type="submit" value="Login" />
         </p>
       </form>
 
-      <p
-        class="form-bottom-message"><a (click)="changeView('vorgotPWD')" style="color: black">Forgot your
-        password?</a></p>
+      <p class="form-bottom-message">
+        <a (click)="changeView('vorgotPWD')" style="color: black">Forgot your password?</a>
+      </p>
     </div>
 
-    <div id="signup"  [className]="newAccountCssClass ? 'is-selected' : ''">
+    <div id="signup" [className]="newAccountCssClass ? 'is-selected' : ''">
       <form class="form" [formGroup]="singupForm" (ngSubmit)="signup()">
         <p class="fieldset">
           <label class="image-replace username" for="signupUsername">Username</label>
-          <input class="full-width has-padding has-border" id="signupUsername" type="text" placeholder="Username" formControlName="signupUsername">
-          <span class="error-message">Your username can only contain numeric and alphabetic symbols!</span>
+          <input
+            class="full-width has-padding has-border"
+            id="signupUsername"
+            type="text"
+            placeholder="Username"
+            formControlName="signupUsername"
+          />
+          <span class="error-message"
+            >Your username can only contain numeric and alphabetic symbols!</span
+          >
         </p>
 
         <p class="fieldset">
           <label class="image-replace email" for="signupEmail">E-mail</label>
-          <input class="full-width has-padding has-border" id="signupEmail" type="email" placeholder="E-mail"
-                 formControlName="signupEmail">
+          <input
+            class="full-width has-padding has-border"
+            id="signupEmail"
+            type="email"
+            placeholder="E-mail"
+            formControlName="signupEmail"
+          />
           <span class="error-message">Enter a valid email address!</span>
         </p>
 
         <p class="fieldset">
           <label class="image-replace password" for="signupPassword">Password</label>
-          <input class="full-width has-padding has-border" id="signupPassword" type="password" placeholder="Password" formControlName="signupPassword">
+          <input
+            class="full-width has-padding has-border"
+            id="signupPassword"
+            type="password"
+            placeholder="Password"
+            formControlName="signupPassword"
+          />
           <a href="" class="hide-password">Show</a>
           <span class="error-message">Your password has to be at least 6 characters long!</span>
         </p>
 
         <p class="fieldset">
-          <input type="checkbox" id="accept-terms">
+          <input type="checkbox" id="accept-terms" />
           <label for="accept-terms">I agree to the <a class="accept-terms" href="">Terms</a></label>
         </p>
 
         <p class="fieldset">
-          <input class="full-width has-padding" type="submit" value="Create account">
+          <input class="full-width has-padding" type="submit" value="Create account" />
         </p>
       </form>
 
@@ -73,18 +113,25 @@
     </div>
 
     <div id="reset-password" [className]="passwortCssClass ? 'is-selected' : ''">
-      <p class="form-message">Lost your password? Please enter your email address.
-        <br> You will receive a link to create a new password.</p>
+      <p class="form-message">
+        Lost your password? Please enter your email address. <br />
+        You will receive a link to create a new password.
+      </p>
 
       <form class="form">
         <p class="fieldset">
           <label class="image-replace email" for="reset-email">E-mail</label>
-          <input class="full-width has-padding has-border" id="reset-email" type="email" placeholder="E-mail">
+          <input
+            class="full-width has-padding has-border"
+            id="reset-email"
+            type="email"
+            placeholder="E-mail"
+          />
           <span class="error-message">An account with this email does not exist!</span>
         </p>
 
         <p class="fieldset">
-          <input class="full-width has-padding" type="submit" value="Reset password">
+          <input class="full-width has-padding" type="submit" value="Reset password" />
         </p>
       </form>
 

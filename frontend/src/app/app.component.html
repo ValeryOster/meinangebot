@@ -1,38 +1,43 @@
 <nav class="navbar">
-  <h1 *ngIf="!auth.isAuthenticated()">
-    <a [routerLink]="['/']">Discounter Angebote</a>
-  </h1>
-  <h3 class="userName" *ngIf="auth.isAuthenticated()">
-      Hallo {{auth.getUser().username}}
-  </h3>
+  @if (!auth.isAuthenticated()) {
+    <h1>
+      <a [routerLink]="['/']">Discounter Angebote</a>
+    </h1>
+  }
+  @if (auth.isAuthenticated()) {
+    <h3 class="userName">Hallo {{ auth.getUser().username }}</h3>
+  }
 
-
-  <ul [ngClass]="{'smart-menu':toggle}" (click)="openMenu()">
-    <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+  <ul [ngClass]="{ 'smart-menu': toggle }" (click)="openMenu()">
+    <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <a [routerLink]="['/']">Home</a>
     </li>
     <li routerLinkActive="active">
       <a routerLink="/auswahl">
         Auswahl
         <fa-icon [icon]="filmIcon"></fa-icon>
-        <span class="auswahl_zahl" *ngIf="ausgewahl?.length > 0">
-          {{this.ausgewahl.length}}
-        </span>
+        @if (ausgewahl?.length > 0) {
+          <span class="auswahl_zahl">
+            {{ this.ausgewahl.length }}
+          </span>
+        }
       </a>
     </li>
-    <li *ngIf="auth.getRoles() != null && auth.getRoles().indexOf('ROLE_ADMIN') >= 0" routerLinkActive="active"><a
-    [routerLink]="['/manage']">Managing</a></li>
-    <li *ngIf="!auth.isAuthenticated()"><button class="btn" (click)="goToLogin()">Login</button></li>
-    <li *ngIf="auth.isAuthenticated()"><button class="btn" (click)="auth.signOut()">Logout</button></li>
+    @if (auth.getRoles() != null && auth.getRoles().indexOf('ROLE_ADMIN') >= 0) {
+      <li routerLinkActive="active"><a [routerLink]="['/manage']">Managing</a></li>
+    }
+    @if (!auth.isAuthenticated()) {
+      <li><button class="btn" (click)="goToLogin()">Login</button></li>
+    }
+    @if (auth.isAuthenticated()) {
+      <li><button class="btn" (click)="auth.signOut()">Logout</button></li>
+    }
   </ul>
   <button class="menu-open">
-    <img class="menu_image" src="assets/menu.svg" alt="Open menu" (click)="openMenu()">
+    <img class="menu_image" src="assets/menu.svg" alt="Open menu" (click)="openMenu()" />
   </button>
 </nav>
 
 <div class="container">
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>
-
-
-

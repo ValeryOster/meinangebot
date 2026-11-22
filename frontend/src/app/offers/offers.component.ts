@@ -1,17 +1,26 @@
-import {Component, OnInit,} from '@angular/core';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Offer, StartService} from "../service/server/start.service";
 import {environment} from "../../environments/environment";
 import {AuswahlService} from "../service/local/auswahl.service";
 import {OfferListService} from "../service/offerslist/offer-list.service";
+import {DatePipe, KeyValuePipe, NgTemplateOutlet} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {FilterPipe} from '../pipes/filter.pipe';
 
 @Component({
   selector: 'app-offers',
+  // Angular 22 nutzt standardmäßig OnPush; der bestehende Code setzt auf die bisherige Prüfung
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [DatePipe, KeyValuePipe, NgTemplateOutlet, FormsModule, MatTabsModule, MatCardModule, MatIconModule, FilterPipe],
   templateUrl: './offers.component.html',
   styleUrls: ['./offers.component.css']
 })
 
 export class OffersComponent implements OnInit {
-  discounters: Map<string, Map<string, string>> = new Map<string, Map<string, string>>();
+  discounters: Map<string, Map<string, Offer[]>> = new Map<string, Map<string, Offer[]>>();
 
   //for searching presentation
   allOffersList: Array<Offer> = [];
@@ -51,8 +60,8 @@ export class OffersComponent implements OnInit {
     }
   }
 
-  mapToDiscount(offers: Offer[]) {
-    let discounterMap = new Map();
+  mapToDiscount(offers: Offer[]): Map<string, Offer[]> {
+    let discounterMap = new Map<string, Offer[]>();
     offers = offers.sort((a, b) => (a.kategorie < b.kategorie ? -1 : 1))
 
     let kat = offers.map(value1 => value1.kategorie).filter(
@@ -65,6 +74,15 @@ export class OffersComponent implements OnInit {
     })
 
     return discounterMap;
+  }
+
+  /** Logo-Datei je Discounter (für die Suchergebnisse); null = Textlogo */
+  logoFor(offer: Offer): string | null {
+    const name = (offer.discounterName || '').toLowerCase();
+    if (name.includes('penny')) return 'assets/penny.png';
+    if (name.includes('netto')) return 'assets/netto.svg';
+    if (name.includes('edeka')) return 'assets/edeka.svg';
+    return null;
   }
 
   addToBucket(offerNew: Offer) {

@@ -1,10 +1,11 @@
 <div class="auswahl_diskounter">
   <form [formGroup]="form" (ngSubmit)="submit()" class="checkboxForm">
-    <label formArrayName="dicounters" *ngFor="let dicounter of ordersFormArray.controls;let i = index"
-           class="discounterLabel">
-      <input type="checkbox" [formControlName]="i">
-      {{discounterBox[i].name}}
-    </label>
+    @for (dicounter of ordersFormArray.controls; track dicounter; let i = $index) {
+      <label formArrayName="dicounters" class="discounterLabel">
+        <input type="checkbox" [formControlName]="i" />
+        {{ discounterBox[i].name }}
+      </label>
+    }
     <button class="btn">Auswahl</button>
   </form>
 </div>
@@ -13,6 +14,6 @@
   <app-offers></app-offers>
 </div>
 
-<a href="#" id="scroll-to-top" class="back-to-top" style="display: inline;">
+<a href="#" id="scroll-to-top" class="back-to-top" style="display: inline">
   <fa-icon [icon]="arrowUp"></fa-icon>
 </a>

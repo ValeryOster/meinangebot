@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 * {
   box-sizing: border-box;
   margin: 0;
@@ -157,3 +156,28 @@ hr {
 /*}*/
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Angular Material 3 an das bisherige Aussehen (Material 9) angleichen */
+.mat-mdc-tab-group {
+  --mat-tab-active-indicator-color: rgb(86, 112, 107);
+  --mat-tab-active-hover-indicator-color: rgb(86, 112, 107);
+  --mat-tab-active-focus-indicator-color: rgb(86, 112, 107);
+  --mat-tab-inactive-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-inactive-hover-label-text-color: rgba(0, 0, 0, 0.87);
+  --mat-tab-active-label-text-color: rgba(0, 0, 0, 0.87);
+  --mat-tab-active-hover-label-text-color: rgba(0, 0, 0, 0.87);
+  --mat-tab-active-focus-label-text-color: rgba(0, 0, 0, 0.87);
+}
+.mat-mdc-card {
+  --mat-card-elevated-container-color: #ffffff;
+  --mat-card-elevated-container-shape: 4px;
+}
+/* Karte wie in Material 9: seitlicher Innenabstand 16px, Schriftgröße 14px */
+.mat-mdc-card {
+  padding: 0 16px;
+  font-size: 14px;
+}
+.mat-mdc-card-header,
+.mat-mdc-card-content {
+  padding: 0;
+}

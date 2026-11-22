@@ -1,22 +1,36 @@
 <div class="gather-form">
-  <label *ngFor="let choice of choices" class="choice">
-    <input type="checkbox" [(ngModel)]="choice.selected" [disabled]="status?.running">
-    {{choice.name}}
-  </label>
+  @for (choice of choices; track choice) {
+    <label class="choice">
+      <input type="checkbox" [(ngModel)]="choice.selected" [disabled]="status?.running" />
+      {{ choice.name }}
+    </label>
+  }
   <div>
     <label class="choice">
-      <input type="checkbox" [(ngModel)]="confirmed" [disabled]="status?.running"> Aktiviere
+      <input type="checkbox" [(ngModel)]="confirmed" [disabled]="status?.running" /> Aktiviere
     </label>
     <button class="btn" type="button" [disabled]="!canStart" (click)="submit()">Sammeln</button>
   </div>
 
-  <p *ngIf="status?.running" class="info">
-    Sammeln läuft<span *ngIf="status.current"> – aktuell: <b>{{status.current}}</b></span> …
-  </p>
-  <p *ngIf="message && !status?.running" class="info">{{message}}</p>
-  <p *ngIf="error" class="error">{{error}}</p>
+  @if (status?.running) {
+    <p class="info">
+      Sammeln läuft
+      @if (status.current) {
+        <span>
+          – aktuell: <b>{{ status.current }}</b></span
+        >
+      }
+      …
+    </p>
+  }
+  @if (message && !status?.running) {
+    <p class="info">{{ message }}</p>
+  }
+  @if (error) {
+    <p class="error">{{ error }}</p>
+  }
 </div>
-<hr>
+<hr />
 
 <div>
   <table>
@@ -26,15 +40,19 @@
       <th>Dauer</th>
       <th>Ergebnis</th>
     </tr>
-    <tr *ngFor="let report of sortedReports">
-      <td>{{report.gatherDate}}</td>
-      <td>{{report.expiryDate}}</td>
-      <td>{{report.duration / 1000 | number:'1.0-0'}} s</td>
-      <td>
-        <div *ngFor="let entry of report.discount | keyvalue" [class.error]="isError(entry.value)">
-          <b>{{entry.key}}:</b> {{entry.value}}
-        </div>
-      </td>
-    </tr>
+    @for (report of sortedReports; track report) {
+      <tr>
+        <td>{{ report.gatherDate }}</td>
+        <td>{{ report.expiryDate }}</td>
+        <td>{{ report.duration / 1000 | number: '1.0-0' }} s</td>
+        <td>
+          @for (entry of report.discount | keyvalue; track entry) {
+            <div [class.error]="isError(entry.value)">
+              <b>{{ entry.key }}:</b> {{ entry.value }}
+            </div>
+          }
+        </td>
+      </tr>
+    }
   </table>
 </div>

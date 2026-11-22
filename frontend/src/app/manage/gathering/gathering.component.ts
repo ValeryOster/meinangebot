@@ -1,8 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Subscription, timer} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {Discounter, DiscounterService, GatherStartResponse, GatherStatus} from '../../service/server/discounter.service';
+import {DecimalPipe, KeyValuePipe} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 interface DiscounterChoice {
   name: string;
@@ -11,6 +13,9 @@ interface DiscounterChoice {
 
 @Component({
   selector: 'app-gathering',
+  // Angular 22 nutzt standardmäßig OnPush; der bestehende Code setzt auf die bisherige Prüfung
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [DecimalPipe, KeyValuePipe, FormsModule],
   templateUrl: './gathering.component.html',
   styleUrls: ['./gathering.component.css']
 })

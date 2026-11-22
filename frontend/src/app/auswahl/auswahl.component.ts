@@ -1,27 +1,32 @@
-import {Component} from '@angular/core';
-import {Offer} from "../service/server/start.service";
-import {environment} from "../../environments/environment";
-import {AuswahlService} from "../service/local/auswahl.service";
-import {TokenStorageService} from "../service/security/token-storage.service";
+import { Component, ChangeDetectionStrategy} from '@angular/core';
+import { Offer } from '../service/server/start.service';
+import { environment } from '../../environments/environment';
+import { AuswahlService } from '../service/local/auswahl.service';
+import { TokenStorageService } from '../service/security/token-storage.service';
 
 @Component({
   selector: 'app-auswahl',
+  // Angular 22 nutzt standardmäßig OnPush; der bestehende Code setzt auf die bisherige Prüfung
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [],
   templateUrl: './auswahl.component.html',
-  styleUrls: ['./auswahl.component.css']
+  styleUrls: ['./auswahl.component.css'],
 })
 export class AuswahlComponent {
   selectedList: Offer[] = [];
   url = environment.apiUrl;
 
-  constructor(private selectedService: AuswahlService , public auth: TokenStorageService) {
-
-    selectedService.getValue().subscribe(value => {
+  constructor(
+    private selectedService: AuswahlService,
+    public auth: TokenStorageService,
+  ) {
+    selectedService.getValue().subscribe((value) => {
       this.selectedList = value;
     });
   }
 
   delete(offer: Offer) {
-    this.selectedService.delete(offer)
+    this.selectedService.delete(offer);
   }
 
   saveInArray(value: Offer) {

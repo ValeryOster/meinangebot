@@ -163,3 +163,27 @@ dropdb angebot && createdb -O angebot angebot
    SELECT setval(pg_get_serial_sequence('role',  'id'), COALESCE((SELECT MAX(id) FROM role), 0) + 1, false);
    ```
 6. Запустить приложение и проверить сайт. Старую MySQL-базу удалить только после проверки.
+
+---
+
+## Frontend (Angular 22)
+
+Frontend собирается автоматически при `mvn clean install`: Maven сам скачивает
+Node.js 24 в `frontend/target/node/` и выполняет `npm ci` и `npm run build`.
+
+Для работы над интерфейсом с мгновенной перезагрузкой:
+
+```bash
+# 1. Backend запущен (MainApplication (dev), порт 8080)
+# 2. В отдельном терминале:
+cd frontend
+npm ci          # один раз; нужен Node.js 22.22+ или 24.15+ (brew install node@24)
+npm start       # http://localhost:4200, запросы к API проксируются на :8080
+```
+
+Если после обновления сборка frontend падает, удалите старые папки и соберите заново:
+
+```bash
+rm -rf frontend/node frontend/target frontend/node_modules frontend/dist frontend/.angular
+mvn clean install -DskipTests
+```
