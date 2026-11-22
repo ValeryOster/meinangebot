@@ -11,4 +11,6 @@ public interface ProductMakerRepo extends CrudRepository<ProductMaker,Long> {
 
     @Override
     List<ProductMaker> findAll();
+
+    boolean existsByMakerName(String makerName);
 }

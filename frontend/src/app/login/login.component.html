@@ -35,11 +35,13 @@
           <input
             class="full-width has-padding has-border"
             id="loginPassword"
-            type="password"
+            [type]="showLoginPassword ? 'text' : 'password'"
             placeholder="Password"
             formControlName="loginPassword"
           />
-          <a href="" class="hide-password">Show</a>
+          <a class="hide-password" role="button" (click)="showLoginPassword = !showLoginPassword">{{
+            showLoginPassword ? 'Hide' : 'Show'
+          }}</a>
           <span class="error-message">Wrong password! Try again.</span>
         </p>
 
@@ -91,17 +93,19 @@
           <input
             class="full-width has-padding has-border"
             id="signupPassword"
-            type="password"
+            [type]="showSignupPassword ? 'text' : 'password'"
             placeholder="Password"
             formControlName="signupPassword"
           />
-          <a href="" class="hide-password">Show</a>
+          <a class="hide-password" role="button" (click)="showSignupPassword = !showSignupPassword">{{
+            showSignupPassword ? 'Hide' : 'Show'
+          }}</a>
           <span class="error-message">Your password has to be at least 6 characters long!</span>
         </p>
 
         <p class="fieldset">
           <input type="checkbox" id="accept-terms" />
-          <label for="accept-terms">I agree to the <a class="accept-terms" href="">Terms</a></label>
+          <label for="accept-terms">I agree to the <span class="accept-terms">Terms</span></label>
         </p>
 
         <p class="fieldset">
@@ -118,7 +122,7 @@
         You will receive a link to create a new password.
       </p>
 
-      <form class="form">
+      <form class="form" (submit)="resetPassword($event)">
         <p class="fieldset">
           <label class="image-replace email" for="reset-email">E-mail</label>
           <input
@@ -135,8 +139,8 @@
         </p>
       </form>
 
-      <p class="form-bottom-message"><a href="/login">Back to log-in</a></p>
+      <p class="form-bottom-message"><a role="button" (click)="changeView('singIn')">Back to log-in</a></p>
     </div>
-    <a href="" class="close-form">Close</a>
+    <a routerLink="/" class="close-form">Close</a>
   </div>
 </div>

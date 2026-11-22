@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 @Component
 @Slf4j
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = JsonMapper.builder().build();
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,

@@ -9,5 +9,6 @@ import java.util.List;
 @NoArgsConstructor
 public class JsonSelectedItemsListAndUserId {
     private List<Item> auswahlListe;
+    /** Wird vom Server ignoriert – der Benutzer kommt aus dem JWT. Nur noch aus Kompatibilitätsgründen vorhanden. */
     private Long userId;
 }

@@ -47,7 +47,7 @@ export class OffersComponent implements OnInit {
     });
   }
 
-  saveItemsToMap(value: Object) {
+  saveItemsToMap(value: { [discounter: string]: Offer[] }) {
 
     let strings = Object.keys(value);
     this.discounters.clear();

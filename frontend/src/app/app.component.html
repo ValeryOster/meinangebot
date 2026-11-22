@@ -30,7 +30,7 @@
       <li><button class="btn" (click)="goToLogin()">Login</button></li>
     }
     @if (auth.isAuthenticated()) {
-      <li><button class="btn" (click)="auth.signOut()">Logout</button></li>
+      <li><button class="btn" (click)="logout()">Logout</button></li>
     }
   </ul>
   <button class="menu-open">

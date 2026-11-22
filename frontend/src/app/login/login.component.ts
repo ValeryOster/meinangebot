@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AuthService } from '../service/security/auth.service';
 import { TokenStorageService } from '../service/security/token-storage.service';
 import Swal from 'sweetalert2';
@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   selector: 'app-login',
   // Angular 22 nutzt standardmäßig OnPush; der bestehende Code setzt auf die bisherige Prüfung
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit {
   singInCssClass: boolean = true;
   newAccountCssClass: boolean = false;
   passwortCssClass: boolean = false;
+  showLoginPassword = false;
+  showSignupPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -100,6 +102,12 @@ export class LoginComponent implements OnInit {
           : 'Request failed';
 
     return String(message).replace('Error:', ' ').trim();
+  }
+
+  /** Passwort-Zurücksetzen gibt es im Backend noch nicht – Hinweis statt Seiten-Neuladen. */
+  resetPassword(event: Event) {
+    event.preventDefault();
+    Swal.fire('Info', 'Das Zurücksetzen des Passworts ist noch nicht verfügbar. Bitte wende dich an den Administrator.', 'info');
   }
 
   changeView(str: string) {

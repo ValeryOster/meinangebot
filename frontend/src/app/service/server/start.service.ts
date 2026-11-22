@@ -25,29 +25,13 @@ export class Offer {
   providedIn: 'root'
 })
 export class StartService {
-  private url = environment.apiUrl+'/home/';
+  private url = environment.apiUrl + '/home/';
 
   constructor(private http: HttpClient) {
   }
 
-  getPenny(): Observable<Offer[]> {
-    let url = this.url + 'penny';
-
-    return this.http.get<Offer[]>(url)
-  }
-
-  getPennyById(id: any): Observable<Offer> {
-    let url = this.url + 'penny/'+id;
-    return this.http.get<Offer>(url);
-  }
-
-  getAldiById(id: any): Observable<Offer> {
-    let url = this.url + 'aldi/'+id;
-    return this.http.get<Offer>(url);
-  }
-
-  getSelectedDiskounters(string:any): Observable<Offer[]> {
-    let url = this.url + 'auswahl';
-    return this.http.post<Offer[]>(url, string);
+  /** Aktuelle Angebote der gewählten Discounter, gruppiert nach Discounter ("Penny" → Angebote). */
+  getSelectedDiskounters(discounters: string[]): Observable<{ [discounter: string]: Offer[] }> {
+    return this.http.post<{ [discounter: string]: Offer[] }>(this.url + 'auswahl', discounters);
   }
 }

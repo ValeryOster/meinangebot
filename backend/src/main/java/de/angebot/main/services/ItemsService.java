@@ -1,13 +1,12 @@
 package de.angebot.main.services;
 
 import de.angebot.main.controller.json.Item;
-import de.angebot.main.controller.json.JsonSelectedItemsListAndUserId;
 import de.angebot.main.enities.selected.SelectedItem;
 import de.angebot.main.repositories.discounters.*;
 import de.angebot.main.repositories.selected.SelectedItemsRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class ItemsService {
     private final EdekaRepo edekaRepo;
     private final SelectedItemsRepo itemsRepo;
 
-    @Autowired
     public ItemsService(AldiRepo aldiRepo, NettoRepo nettoRepo, PennyRepo pennyRepo,
                         EdekaRepo edekaRepo, SelectedItemsRepo itemsRepo) {
         this.aldiRepo = aldiRepo;
@@ -59,42 +57,38 @@ public class ItemsService {
         return itemsList;
     }
 
-    public Boolean saveSelectedItems(JsonSelectedItemsListAndUserId selectedItems) {
-        deleteAllCurrentItemsWithUserId(selectedItems.getUserId());
-        for (Item item : selectedItems.getAuswahlListe()) {
-            SelectedItem selectedItem = mapJsonSelectedItemToSelectedItem(item, selectedItems);
-            try {
-                itemsRepo.save(selectedItem);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                return false;
-            }
+    /** Ersetzt die aktuelle Auswahl des Benutzers vollständig (alles oder nichts). */
+    @Transactional
+    public void saveSelectedItems(Long userId, List<Item> items) {
+        itemsRepo.deleteAll(itemsRepo.findCurrentOffersByUserId(userId));
+        if (items == null) {
+            return;
         }
-        return true;
+        for (Item item : items) {
+            itemsRepo.save(toSelectedItem(item, userId));
+        }
     }
 
-    private void deleteAllCurrentItemsWithUserId(Long userId) {
-        List<SelectedItem> currentOffersByUserId = itemsRepo.findCurrentOffersByUserId(userId);
-        itemsRepo.deleteAll(currentOffersByUserId);
+    @Transactional
+    public void deleteSelectedItems(Long userId, List<Item> items) {
+        if (items == null) {
+            return;
+        }
+        for (Item item : items) {
+            itemsRepo.findSelectedItemByItemId(item.getId(), userId)
+                    .ifPresentOrElse(
+                            itemsRepo::delete,
+                            () -> log.warn("SelectedItem not found for itemId={}, userId={}", item.getId(), userId));
+        }
     }
 
-    private SelectedItem mapJsonSelectedItemToSelectedItem(Item item, JsonSelectedItemsListAndUserId selectedItems) {
+    private SelectedItem toSelectedItem(Item item, Long userId) {
         SelectedItem selectedItem = new SelectedItem();
         selectedItem.setDiscounterName(item.getDiscounterName());
         selectedItem.setExpiryDate(item.getBisDate());
         selectedItem.setSaveDate(LocalDate.now());
         selectedItem.setItemId(item.getId());
-        selectedItem.setUserId(selectedItems.getUserId());
+        selectedItem.setUserId(userId);
         return selectedItem;
-    }
-
-    public void deleteSelectedItem(JsonSelectedItemsListAndUserId selectedItems) {
-        for (Item item : selectedItems.getAuswahlListe()) {
-            itemsRepo.findSelectedItemByItemId(item.getId(), selectedItems.getUserId())
-                    .ifPresentOrElse(
-                            itemsRepo::delete,
-                            () -> log.warn("SelectedItem not found for itemId={}, userId={}", item.getId(), selectedItems.getUserId())
-                    );
-        }
     }
 }

@@ -5,7 +5,6 @@ import de.angebot.main.enities.discounters.Aldi;
 import de.angebot.main.enities.discounters.Netto;
 import de.angebot.main.enities.discounters.Penny;
 import de.angebot.main.services.DiscounterService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,10 +12,12 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/home")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HomeController {
-    @Autowired
-    private DiscounterService service;
+    private final DiscounterService service;
+
+    public HomeController(DiscounterService service) {
+        this.service = service;
+    }
 
     @GetMapping(path = "/penny")
     public List<Penny> getPenny() {

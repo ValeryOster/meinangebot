@@ -1,33 +1,28 @@
-import { Injectable } from '@angular/core';
-import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {Offer} from "./start.service";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {Offer} from './start.service';
 
+/** Gespeicherte Auswahl des angemeldeten Benutzers (der Server bestimmt den Benutzer aus dem JWT). */
 @Injectable({
   providedIn: 'root'
 })
 export class SelectedItemsService {
-
-  private url = environment.apiUrl+'/selected/';
+  private url = environment.apiUrl + '/selected/';
 
   constructor(private http: HttpClient) {
   }
 
-  getSelectedItems(userId:any): Observable<Offer[]> {
-    let url = this.url + 'items';
-    return this.http.post<Offer[]>(url, userId);
+  getSelectedItems(): Observable<Offer[]> {
+    return this.http.get<Offer[]>(this.url + 'items');
   }
 
-  saveSelectedItems(auswahlListe: Offer[], userId:any) {
-    let url = this.url + 'save';
-    let body = {auswahlListe, userId};
-    return this.http.post<any>(url, body);
+  saveSelectedItems(auswahlListe: Offer[]): Observable<boolean> {
+    return this.http.post<boolean>(this.url + 'save', {auswahlListe});
   }
 
-  deleteSelectedItem(auswahlListe: Offer[], userId:any) {
-    let url = this.url + 'delete';
-    let body = {auswahlListe, userId};
-    return this.http.post<any>(url, body);
+  deleteSelectedItem(auswahlListe: Offer[]): Observable<void> {
+    return this.http.post<void>(this.url + 'delete', {auswahlListe});
   }
 }

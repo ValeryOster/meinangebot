@@ -16,7 +16,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/manage")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ManageController {
 
     private final GatherService service;

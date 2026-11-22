@@ -25,7 +25,7 @@ export class AuswahlService {
   /** Call once from a component that triggers user-specific item loading. */
   init(): void {
     if (this.auth.isAuthenticated()) {
-      this.itemsService.getSelectedItems(this.auth.getUser().id).subscribe(value => {
+      this.itemsService.getSelectedItems().subscribe(value => {
         if (this.valueObs.getValue() != null && this.valueObs.getValue().length > 0) {
           this.addValue(this.setIsSaved(value))
         } else {
@@ -62,7 +62,7 @@ export class AuswahlService {
 
   public saveSelectedItems() {
     if (this.auth.isAuthenticated()) {
-      this.itemsService.saveSelectedItems(this.valueObs.getValue(), this.auth.getUser().id).subscribe(success => {
+      this.itemsService.saveSelectedItems(this.valueObs.getValue()).subscribe(success => {
         if (success) {
           Swal.fire("Success", "Erfolgreich gespeichert", 'success');
         }
@@ -81,7 +81,7 @@ export class AuswahlService {
     this.setValue(this.valueObs.getValue().filter(value => value.id != offer.id))
     if (this.auth.isAuthenticated()) {
       let offers = [offer]
-      this.itemsService.deleteSelectedItem(offers, this.auth.getUser().id).subscribe();
+      this.itemsService.deleteSelectedItem(offers).subscribe();
     }
   }
 }

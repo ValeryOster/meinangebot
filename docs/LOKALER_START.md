@@ -98,6 +98,8 @@ Bootstrap admin user 'admin' is available.
 | `DB_PASSWORD` | `angebot` | пароль БД |
 | `SERVER_PORT` | `8080` | порт приложения |
 | `APP_ADMIN_PASSWORD` | `admin123456` | пароль пользователя `admin` |
+| `APP_JWT_SECRET` | ключ только для разработки | ключ подписи JWT (на сервере обязателен) |
+| `NETTO_STORE_ID` | `9103` | магазин Netto, чьи акции собираются |
 | `JPA_DDL_AUTO` | `validate` | не менять: схемой управляет Flyway |
 
 ## Частые ошибки
@@ -129,12 +131,16 @@ dropdb angebot && createdb -O angebot angebot
 
 1. Установить PostgreSQL 16 на сервере, создать пользователя и базу (как в шаге 2,
    но с надёжным паролем).
-2. Задать переменные окружения для приложения:
+2. Задать переменные окружения для приложения (без них приложение не стартует):
    ```
    DB_URL=jdbc:postgresql://localhost:5432/angebot
    DB_USERNAME=angebot
    DB_PASSWORD=<надёжный пароль>
+   APP_JWT_SECRET=<новый ключ: openssl rand -base64 64 | tr -d '\n'>
+   SSL_KEY_STORE_PASSWORD=<пароль keystore.p12>
    ```
+   Старые значения `jwtSecret` и пароля keystore были в git — их нужно считать
+   раскрытыми: сгенерируйте новый `APP_JWT_SECRET` и по возможности новый сертификат/keystore.
 3. Один раз запустить новую версию на **пустой** базе — Flyway создаст схему.
    Затем остановить приложение.
 4. Перенести данные из MySQL с помощью [pgloader](https://pgloader.io)
@@ -187,3 +193,58 @@ npm start       # http://localhost:4200, запросы к API проксиру�
 rm -rf frontend/node frontend/target frontend/node_modules frontend/dist frontend/.angular
 mvn clean install -DskipTests
 ```
+
+---
+
+## HTTPS lokal (порт 443)
+
+Профиль `https` включается вместе с `dev`:
+
+- `https://localhost` — приложение (порт 443)
+- `http://localhost` — автоматически перенаправляется на HTTPS (порт 80)
+
+### 1. Сертификат для localhost (один раз)
+
+Сертификат лежит в `certs/` (папка в `.gitignore`, в git не попадает). Если его нет:
+
+```bash
+cd ~/IdeaProjects/meinangebot
+mkdir -p certs
+keytool -genkeypair -alias localhost -keyalg RSA -keysize 2048 -validity 825 \
+  -storetype PKCS12 -keystore certs/localhost.p12 -storepass changeit \
+  -dname "CN=localhost, OU=Entwicklung, O=meinangebot" \
+  -ext "SAN=dns:localhost,ip:127.0.0.1" -ext "EKU=serverAuth"
+keytool -exportcert -rfc -alias localhost -keystore certs/localhost.p12 \
+  -storepass changeit -file certs/localhost.crt
+```
+
+### 2. Доверие сертификату в macOS (один раз, иначе браузер покажет предупреждение)
+
+```bash
+sudo security add-trusted-cert -d -r trustSSL -p ssl \
+  -k /Library/Keychains/System.keychain certs/localhost.crt
+```
+
+После этого перезапустите браузер. Chrome и Safari используют связку ключей macOS;
+в Firefox сертификат нужно импортировать отдельно (Настройки → Сертификаты).
+
+### 3. Запуск
+
+- IntelliJ: конфигурация **MainApplication (dev, https)**
+- Терминал (из корня проекта):
+  ```bash
+  java -jar backend/target/angebotapp.jar --spring.profiles.active=dev,https
+  ```
+
+Открыть: https://localhost
+
+| Переменная | По умолчанию | Назначение |
+|---|---|---|
+| `HTTPS_PORT` | `443` | порт HTTPS |
+| `HTTP_PORT` | `80` | порт HTTP (перенаправление) |
+| `HTTP_REDIRECT_ENABLED` | `true` | перенаправлять HTTP → HTTPS |
+| `SSL_KEY_STORE` | `file:certs/localhost.p12` | путь к сертификату |
+| `SSL_KEY_STORE_PASSWORD` | `changeit` | пароль сертификата |
+
+Если порт 443 или 80 занят (`Port 443 was already in use`) — остановите другую программу
+или задайте, например, `HTTPS_PORT=8443` и `HTTP_PORT=8080`.

@@ -1,8 +1,8 @@
 package de.angebot.main.gathering.aldi;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import de.angebot.main.enities.discounters.Aldi;
 import de.angebot.main.enities.offers.Offer;
 import de.angebot.main.gathering.common.Gathering;
@@ -257,7 +257,7 @@ public class AldiOffer extends Gathering {
                     continue;
                 }
                 for (JsonNode productIdNode : productIds) {
-                    String productId = productIdNode.asText("");
+                    String productId = productIdNode.asString("");
                     JsonNode product = productMap.path(productId);
                     if (product.isMissingNode() || product.isNull()) {
                         log.error("Aldi product id '{}' was referenced but not found in algoliaDataMap.", productId);
@@ -322,8 +322,8 @@ public class AldiOffer extends Gathering {
         }
 
         JsonNode apiData = node.at("/props/pageProps/apiData");
-        if (apiData.isTextual()) {
-            Optional<JsonNode> apiDataNode = parseJson(apiData.asText(), true);
+        if (apiData.isString()) {
+            Optional<JsonNode> apiDataNode = parseJson(apiData.asString(), true);
             if (apiDataNode.isPresent()) {
                 return findOfferResponse(apiDataNode.get());
             }
@@ -334,7 +334,7 @@ public class AldiOffer extends Gathering {
         }
 
         if (node.isArray()) {
-            if (node.size() >= 2 && "OFFER_GET".equals(node.get(0).asText(""))) {
+            if (node.size() >= 2 && "OFFER_GET".equals(node.get(0).asString(""))) {
                 JsonNode response = node.get(1).path("res");
                 if (isOfferResponse(response)) {
                     return Optional.of(response);
@@ -373,7 +373,7 @@ public class AldiOffer extends Gathering {
         }
         try {
             return Optional.of(objectMapper.readTree(value));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             if (logErrors) {
                 log.error("Aldi embedded JSON could not be parsed: {}", e.getOriginalMessage());
             }
@@ -443,7 +443,7 @@ public class AldiOffer extends Gathering {
         if (value.isMissingNode() || value.isNull()) {
             return "";
         }
-        return value.asText("").trim();
+        return value.asString("").trim();
     }
 
     private BigDecimal priceValue(JsonNode node, String... fields) {
@@ -452,11 +452,11 @@ public class AldiOffer extends Gathering {
             if (value.isNumber()) {
                 return value.decimalValue();
             }
-            if (value.isTextual() && StringUtils.hasText(value.asText())) {
+            if (value.isString() && StringUtils.hasText(value.asString())) {
                 try {
-                    return new BigDecimal(value.asText().replace(",", ".").replaceAll("[^0-9.]", ""));
+                    return new BigDecimal(value.asString().replace(",", ".").replaceAll("[^0-9.]", ""));
                 } catch (NumberFormatException e) {
-                    log.error("Aldi price '{}' could not be parsed.", value.asText());
+                    log.error("Aldi price '{}' could not be parsed.", value.asString());
                 }
             }
         }

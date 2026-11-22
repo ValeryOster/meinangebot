@@ -9,3 +9,6 @@
 /backend/backend.iml
 .DS_Store
 **/.DS_Store
+
+# Lokale Zertifikate (privater Schlüssel)
+/certs/

@@ -37,6 +37,13 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void { }
 
+  /** Abmelden: Token und die Auswahl des bisherigen Benutzers verwerfen. */
+  logout() {
+    this.auth.signOut();
+    this.auswahlService.setValue([]);
+    this.router.navigate(['/']);
+  }
+
   goToLogin() {
     this.router.navigate(['/login']);
   }

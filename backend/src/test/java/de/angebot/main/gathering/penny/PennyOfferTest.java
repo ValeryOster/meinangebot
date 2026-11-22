@@ -1,21 +1,21 @@
 package de.angebot.main.gathering.penny;
 
+import org.junit.jupiter.api.Test;
 
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 class PennyOfferTest {
 
-    @Autowired
-    PennyOffer pennyOffer;
+    @Test
+    void textPrettyPrint_capitalizesWordsButNotConnectors() {
+        assertThat(PennyOffer.textPrettyPrint("obst-und-gemuese")).isEqualTo("Obst und Gemuese");
+        assertThat(PennyOffer.textPrettyPrint("food-highlights-fuer-alle")).isEqualTo("Food Highlights fuer Alle");
+    }
 
-//    @Test
-    public void startGathering() {
-        pennyOffer.startGathering();
-
+    @Test
+    void textPrettyPrint_handlesDoubleSeparatorsAndEmptyValues() {
+        assertThat(PennyOffer.textPrettyPrint("obst--und  gemuese-")).isEqualTo("Obst und Gemuese");
+        assertThat(PennyOffer.textPrettyPrint("")).isEmpty();
+        assertThat(PennyOffer.textPrettyPrint(null)).isEmpty();
     }
 }

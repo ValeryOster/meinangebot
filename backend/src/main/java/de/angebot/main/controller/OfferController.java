@@ -25,7 +25,7 @@ public class OfferController {
 
     @GetMapping
     public PageResponse<OfferDto> searchOffers(
-            @RequestParam(defaultValue = "lidl") String retailer,
+            @RequestParam(defaultValue = "aldi-nord") String retailer,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String category,
             @RequestParam(defaultValue = "discount") String sort,
@@ -41,7 +41,7 @@ public class OfferController {
     }
 
     @GetMapping("/categories")
-    public List<String> getCategories(@RequestParam(defaultValue = "lidl") String retailer) {
+    public List<String> getCategories(@RequestParam(defaultValue = "aldi-nord") String retailer) {
         return offerService.getCategories(retailer);
     }
 }

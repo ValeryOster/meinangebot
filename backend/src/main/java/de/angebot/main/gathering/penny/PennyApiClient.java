@@ -1,7 +1,8 @@
 package de.angebot.main.gathering.penny;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -51,7 +52,7 @@ public class PennyApiClient {
 
     public List<PennyOfferDto> fetchOffers(String category, int year, int week) {
         String yearWeek = String.format("%d-%02d", year, week);
-        URI uri = UriComponentsBuilder.fromHttpUrl(mainUrl)
+        URI uri = UriComponentsBuilder.fromUriString(mainUrl)
                 .pathSegment(".rest", "offers", "by-category", yearWeek, category)
                 .build()
                 .toUri();
@@ -133,7 +134,7 @@ public class PennyApiClient {
         try {
             String category = text(objectMapper.readTree(productData), "category");
             return category.isBlank() ? fallbackCategory : category;
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             log.error("Penny productData could not be parsed: {}", e.getMessage());
             return fallbackCategory;
         }
@@ -151,7 +152,7 @@ public class PennyApiClient {
 
     private String text(JsonNode node, String field) {
         JsonNode value = node.path(field);
-        return value.isMissingNode() || value.isNull() ? "" : value.asText("").trim();
+        return value.isMissingNode() || value.isNull() ? "" : value.asString("").trim();
     }
 
     private List<String> normalizeCategories(List<String> categories) {

@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.time.temporal.WeekFields;
-import java.util.stream.Stream;
 
 @Slf4j
 @Setter
@@ -109,21 +108,23 @@ public class PennyOffer extends Gathering {
         return penny;
     }
 
-    private String textPrettyPrint(String kategorie) {
+    /** "obst-und-gemuese" → "Obst und Gemuese" (Bindewörter bleiben klein). */
+    static String textPrettyPrint(String kategorie) {
         if (!StringUtils.hasText(kategorie)) {
             return "";
         }
-        List<String> konnektor = Stream.of("und", "fuer", "seit").toList();
-        StringBuilder prettyKategorie = new StringBuilder();
-        String[] split = kategorie.replace("-", " ").split(" ");
-        for (String word : split) {
-            if (!konnektor.contains(word)) {
-                prettyKategorie.append(" ").append(word.substring(0, 1).toUpperCase()).append(word.substring(1));
-            } else {
-                prettyKategorie.append(" ").append(word);
+        List<String> connectors = List.of("und", "fuer", "seit");
+        StringBuilder pretty = new StringBuilder();
+        for (String word : kategorie.replace("-", " ").trim().split("\\s+")) {
+            if (word.isEmpty()) {
+                continue;
             }
+            if (pretty.length() > 0) {
+                pretty.append(' ');
+            }
+            pretty.append(connectors.contains(word) ? word : Character.toUpperCase(word.charAt(0)) + word.substring(1));
         }
-        return prettyKategorie.toString().trim();
+        return pretty.toString();
     }
 
     private String toAbsoluteUrl(String linkHref) {
